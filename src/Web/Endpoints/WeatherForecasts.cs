@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Application.WeatherForecasts.Queries.GetWeatherForecasts;
+﻿using SyriacSources.Backend.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 
-namespace SyriacResources.Backend.Web.Endpoints;
+namespace SyriacSources.Backend.Web.Endpoints;
 
 public class WeatherForecasts : EndpointGroupBase
 {

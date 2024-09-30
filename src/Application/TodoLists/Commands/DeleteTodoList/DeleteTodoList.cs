@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
 
-namespace SyriacResources.Backend.Application.TodoLists.Commands.DeleteTodoList;
+namespace SyriacSources.Backend.Application.TodoLists.Commands.DeleteTodoList;
 
 public record DeleteTodoListCommand(int Id) : IRequest;
 

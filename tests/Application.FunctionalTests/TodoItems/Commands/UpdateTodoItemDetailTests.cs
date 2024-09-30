@@ -1,11 +1,11 @@
-﻿using SyriacResources.Backend.Application.TodoItems.Commands.CreateTodoItem;
-using SyriacResources.Backend.Application.TodoItems.Commands.UpdateTodoItem;
-using SyriacResources.Backend.Application.TodoItems.Commands.UpdateTodoItemDetail;
-using SyriacResources.Backend.Application.TodoLists.Commands.CreateTodoList;
-using SyriacResources.Backend.Domain.Entities;
-using SyriacResources.Backend.Domain.Enums;
+﻿using SyriacSources.Backend.Application.TodoItems.Commands.CreateTodoItem;
+using SyriacSources.Backend.Application.TodoItems.Commands.UpdateTodoItem;
+using SyriacSources.Backend.Application.TodoItems.Commands.UpdateTodoItemDetail;
+using SyriacSources.Backend.Application.TodoLists.Commands.CreateTodoList;
+using SyriacSources.Backend.Domain.Entities;
+using SyriacSources.Backend.Domain.Enums;
 
-namespace SyriacResources.Backend.Application.FunctionalTests.TodoItems.Commands;
+namespace SyriacSources.Backend.Application.FunctionalTests.TodoItems.Commands;
 
 using static Testing;
 

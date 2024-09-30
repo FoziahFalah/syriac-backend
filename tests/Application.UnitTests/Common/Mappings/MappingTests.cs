@@ -1,14 +1,14 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using AutoMapper;
-using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Application.Common.Models;
-using SyriacResources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
-using SyriacResources.Backend.Application.TodoLists.Queries.GetTodos;
-using SyriacResources.Backend.Domain.Entities;
+using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+using SyriacSources.Backend.Application.TodoLists.Queries.GetTodos;
+using SyriacSources.Backend.Domain.Entities;
 using NUnit.Framework;
 
-namespace SyriacResources.Backend.Application.UnitTests.Common.Mappings;
+namespace SyriacSources.Backend.Application.UnitTests.Common.Mappings;
 
 public class MappingTests
 {

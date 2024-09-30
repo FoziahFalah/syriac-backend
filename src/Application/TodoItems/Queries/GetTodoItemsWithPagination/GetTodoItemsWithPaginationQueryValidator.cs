@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+﻿namespace SyriacSources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 
 public class GetTodoItemsWithPaginationQueryValidator : AbstractValidator<GetTodoItemsWithPaginationQuery>
 {

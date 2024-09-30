@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>SyriacResources.Backend.Infrastructure</RootNamespace>
-    <AssemblyName>SyriacResources.Backend.Infrastructure</AssemblyName>
+    <RootNamespace>SyriacSources.Backend.Infrastructure</RootNamespace>
+    <AssemblyName>SyriacSources.Backend.Infrastructure</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

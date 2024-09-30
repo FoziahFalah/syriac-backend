@@ -1,11 +1,11 @@
-﻿using SyriacResources.Backend.Application.Common.Behaviours;
-using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Application.TodoItems.Commands.CreateTodoItem;
+﻿using SyriacSources.Backend.Application.Common.Behaviours;
+using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.TodoItems.Commands.CreateTodoItem;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
-namespace SyriacResources.Backend.Application.UnitTests.Common.Behaviours;
+namespace SyriacSources.Backend.Application.UnitTests.Common.Behaviours;
 
 public class RequestLoggerTests
 {

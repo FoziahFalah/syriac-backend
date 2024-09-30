@@ -1,9 +1,9 @@
-﻿using SyriacResources.Backend.Domain.Common;
+﻿using SyriacSources.Backend.Domain.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace SyriacResources.Backend.Infrastructure.Data.Interceptors;
+namespace SyriacSources.Backend.Infrastructure.Data.Interceptors;
 
 public class DispatchDomainEventsInterceptor : SaveChangesInterceptor
 {

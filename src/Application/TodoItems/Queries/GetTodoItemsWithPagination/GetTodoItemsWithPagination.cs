@@ -1,8 +1,8 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Application.Common.Mappings;
-using SyriacResources.Backend.Application.Common.Models;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Mappings;
+using SyriacSources.Backend.Application.Common.Models;
 
-namespace SyriacResources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+namespace SyriacSources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 
 public record GetTodoItemsWithPaginationQuery : IRequest<PaginatedList<TodoItemBriefDto>>
 {

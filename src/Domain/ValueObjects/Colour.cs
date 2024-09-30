@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Domain.ValueObjects;
+﻿namespace SyriacSources.Backend.Domain.ValueObjects;
 
 public class Colour(string code) : ValueObject
 {

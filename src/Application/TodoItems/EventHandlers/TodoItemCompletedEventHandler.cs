@@ -1,7 +1,7 @@
-﻿using SyriacResources.Backend.Domain.Events;
+﻿using SyriacSources.Backend.Domain.Events;
 using Microsoft.Extensions.Logging;
 
-namespace SyriacResources.Backend.Application.TodoItems.EventHandlers;
+namespace SyriacSources.Backend.Application.TodoItems.EventHandlers;
 
 public class TodoItemCompletedEventHandler : INotificationHandler<TodoItemCompletedEvent>
 {
@@ -14,7 +14,7 @@ public class TodoItemCompletedEventHandler : INotificationHandler<TodoItemComple
 
     public Task Handle(TodoItemCompletedEvent notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("SyriacResources.Backend Domain Event: {DomainEvent}", notification.GetType().Name);
+        _logger.LogInformation("SyriacSources.Backend Domain Event: {DomainEvent}", notification.GetType().Name);
 
         return Task.CompletedTask;
     }

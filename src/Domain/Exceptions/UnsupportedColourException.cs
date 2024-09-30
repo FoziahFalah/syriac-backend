@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Domain.Exceptions;
+﻿namespace SyriacSources.Backend.Domain.Exceptions;
 
 public class UnsupportedColourException : Exception
 {

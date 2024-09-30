@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Application.Common.Models;
+﻿using SyriacSources.Backend.Application.Common.Models;
 
-namespace SyriacResources.Backend.Application.TodoLists.Queries.GetTodos;
+namespace SyriacSources.Backend.Application.TodoLists.Queries.GetTodos;
 
 public class TodosVm
 {

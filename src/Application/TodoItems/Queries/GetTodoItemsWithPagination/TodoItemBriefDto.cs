@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Domain.Entities;
+﻿using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacResources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+namespace SyriacSources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 
 public class TodoItemBriefDto
 {

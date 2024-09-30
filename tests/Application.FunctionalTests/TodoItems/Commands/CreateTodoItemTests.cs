@@ -1,9 +1,9 @@
-﻿using SyriacResources.Backend.Application.Common.Exceptions;
-using SyriacResources.Backend.Application.TodoItems.Commands.CreateTodoItem;
-using SyriacResources.Backend.Application.TodoLists.Commands.CreateTodoList;
-using SyriacResources.Backend.Domain.Entities;
+﻿using SyriacSources.Backend.Application.Common.Exceptions;
+using SyriacSources.Backend.Application.TodoItems.Commands.CreateTodoItem;
+using SyriacSources.Backend.Application.TodoLists.Commands.CreateTodoList;
+using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacResources.Backend.Application.FunctionalTests.TodoItems.Commands;
+namespace SyriacSources.Backend.Application.FunctionalTests.TodoItems.Commands;
 
 using static Testing;
 

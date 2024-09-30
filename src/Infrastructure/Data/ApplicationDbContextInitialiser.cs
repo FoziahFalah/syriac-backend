@@ -1,14 +1,14 @@
 ﻿using System.Runtime.InteropServices;
-using SyriacResources.Backend.Domain.Constants;
-using SyriacResources.Backend.Domain.Entities;
-using SyriacResources.Backend.Infrastructure.Identity;
+using SyriacSources.Backend.Domain.Constants;
+using SyriacSources.Backend.Domain.Entities;
+using SyriacSources.Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace SyriacResources.Backend.Infrastructure.Data;
+namespace SyriacSources.Backend.Infrastructure.Data;
 
 public static class InitialiserExtensions
 {

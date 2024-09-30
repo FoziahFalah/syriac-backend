@@ -1,9 +1,9 @@
-﻿using SyriacResources.Backend.Application.TodoLists.Commands.CreateTodoList;
-using SyriacResources.Backend.Application.TodoLists.Commands.DeleteTodoList;
-using SyriacResources.Backend.Application.TodoLists.Commands.UpdateTodoList;
-using SyriacResources.Backend.Application.TodoLists.Queries.GetTodos;
+﻿using SyriacSources.Backend.Application.TodoLists.Commands.CreateTodoList;
+using SyriacSources.Backend.Application.TodoLists.Commands.DeleteTodoList;
+using SyriacSources.Backend.Application.TodoLists.Commands.UpdateTodoList;
+using SyriacSources.Backend.Application.TodoLists.Queries.GetTodos;
 
-namespace SyriacResources.Backend.Web.Endpoints;
+namespace SyriacSources.Backend.Web.Endpoints;
 
 public class TodoLists : EndpointGroupBase
 {

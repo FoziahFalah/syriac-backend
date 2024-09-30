@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Application.Common.Security;
+﻿namespace SyriacSources.Backend.Application.Common.Security;
 
 /// <summary>
 /// Specifies the class this attribute is applied to requires authorization.

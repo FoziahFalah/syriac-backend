@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using SyriacResources.Backend.Application.Common.Exceptions;
-using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Application.Common.Security;
+using SyriacSources.Backend.Application.Common.Exceptions;
+using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Security;
 
-namespace SyriacResources.Backend.Application.Common.Behaviours;
+namespace SyriacSources.Backend.Application.Common.Behaviours;
 
 public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {

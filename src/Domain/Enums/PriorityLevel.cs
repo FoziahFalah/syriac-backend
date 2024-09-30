@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Domain.Enums;
+﻿namespace SyriacSources.Backend.Domain.Enums;
 
 public enum PriorityLevel
 {

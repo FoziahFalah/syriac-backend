@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using SyriacResources.Backend.Application.Common.Behaviours;
+using SyriacSources.Backend.Application.Common.Behaviours;
 
 namespace Microsoft.Extensions.DependencyInjection;
 

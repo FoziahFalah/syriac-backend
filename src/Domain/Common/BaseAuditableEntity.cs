@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Domain.Common;
+﻿namespace SyriacSources.Backend.Domain.Common;
 
 public abstract class BaseAuditableEntity : BaseEntity
 {

@@ -1,6 +1,6 @@
-﻿using ValidationException = SyriacResources.Backend.Application.Common.Exceptions.ValidationException;
+﻿using ValidationException = SyriacSources.Backend.Application.Common.Exceptions.ValidationException;
 
-namespace SyriacResources.Backend.Application.Common.Behaviours;
+namespace SyriacSources.Backend.Application.Common.Behaviours;
 
 public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
      where TRequest : notnull

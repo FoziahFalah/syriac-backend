@@ -1,7 +1,7 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Domain.Entities;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacResources.Backend.Application.TodoLists.Commands.CreateTodoList;
+namespace SyriacSources.Backend.Application.TodoLists.Commands.CreateTodoList;
 
 public record CreateTodoListCommand : IRequest<int>
 {

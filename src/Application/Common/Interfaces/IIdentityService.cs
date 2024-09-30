@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Application.Common.Models;
+﻿using SyriacSources.Backend.Application.Common.Models;
 
-namespace SyriacResources.Backend.Application.Common.Interfaces;
+namespace SyriacSources.Backend.Application.Common.Interfaces;
 
 public interface IIdentityService
 {

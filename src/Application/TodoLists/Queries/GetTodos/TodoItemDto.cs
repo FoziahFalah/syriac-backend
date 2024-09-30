@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Domain.Entities;
+﻿using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacResources.Backend.Application.TodoLists.Queries.GetTodos;
+namespace SyriacSources.Backend.Application.TodoLists.Queries.GetTodos;
 
 public class TodoItemDto
 {

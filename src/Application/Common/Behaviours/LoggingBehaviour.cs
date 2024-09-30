@@ -1,8 +1,8 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 
-namespace SyriacResources.Backend.Application.Common.Behaviours;
+namespace SyriacSources.Backend.Application.Common.Behaviours;
 
 public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where TRequest : notnull
 {
@@ -28,7 +28,7 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
             userName = await _identityService.GetUserNameAsync(userId);
         }
 
-        _logger.LogInformation("SyriacResources.Backend Request: {Name} {@UserId} {@UserName} {@Request}",
+        _logger.LogInformation("SyriacSources.Backend Request: {Name} {@UserId} {@UserName} {@Request}",
             requestName, userId, userName, request);
     }
 }

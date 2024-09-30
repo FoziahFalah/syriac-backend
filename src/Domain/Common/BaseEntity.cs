@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SyriacResources.Backend.Domain.Common;
+namespace SyriacSources.Backend.Domain.Common;
 
 public abstract class BaseEntity
 {

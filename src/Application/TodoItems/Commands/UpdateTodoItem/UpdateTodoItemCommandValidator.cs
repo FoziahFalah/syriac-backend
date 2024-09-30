@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Application.TodoItems.Commands.UpdateTodoItem;
+﻿namespace SyriacSources.Backend.Application.TodoItems.Commands.UpdateTodoItem;
 
 public class UpdateTodoItemCommandValidator : AbstractValidator<UpdateTodoItemCommand>
 {

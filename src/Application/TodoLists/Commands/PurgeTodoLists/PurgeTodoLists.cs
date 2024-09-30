@@ -1,8 +1,8 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Application.Common.Security;
-using SyriacResources.Backend.Domain.Constants;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Security;
+using SyriacSources.Backend.Domain.Constants;
 
-namespace SyriacResources.Backend.Application.TodoLists.Commands.PurgeTodoLists;
+namespace SyriacSources.Backend.Application.TodoLists.Commands.PurgeTodoLists;
 
 [Authorize(Roles = Roles.Administrator)]
 [Authorize(Policy = Policies.CanPurge)]

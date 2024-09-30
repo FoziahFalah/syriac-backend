@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Application.Common.Models;
+﻿namespace SyriacSources.Backend.Application.Common.Models;
 
 public class PaginatedList<T>
 {

@@ -1,9 +1,9 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Application.Common.Models;
-using SyriacResources.Backend.Application.Common.Security;
-using SyriacResources.Backend.Domain.Enums;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Application.Common.Security;
+using SyriacSources.Backend.Domain.Enums;
 
-namespace SyriacResources.Backend.Application.TodoLists.Queries.GetTodos;
+namespace SyriacSources.Backend.Application.TodoLists.Queries.GetTodos;
 
 [Authorize]
 public record GetTodosQuery : IRequest<TodosVm>;

@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Domain.Events;
+﻿namespace SyriacSources.Backend.Domain.Events;
 
 public class TodoItemDeletedEvent : BaseEvent
 {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation.Results;
 
-namespace SyriacResources.Backend.Application.Common.Exceptions;
+namespace SyriacSources.Backend.Application.Common.Exceptions;
 
 public class ValidationException : Exception
 {

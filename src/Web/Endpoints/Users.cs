@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Infrastructure.Identity;
+﻿using SyriacSources.Backend.Infrastructure.Identity;
 
-namespace SyriacResources.Backend.Web.Endpoints;
+namespace SyriacSources.Backend.Web.Endpoints;
 
 public class Users : EndpointGroupBase
 {

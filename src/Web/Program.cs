@@ -1,4 +1,4 @@
-using SyriacResources.Backend.Infrastructure.Data;
+using SyriacSources.Backend.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

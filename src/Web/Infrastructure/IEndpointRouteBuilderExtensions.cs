@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace SyriacResources.Backend.Web.Infrastructure;
+namespace SyriacSources.Backend.Web.Infrastructure;
 
 public static class IEndpointRouteBuilderExtensions
 {

@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Application.Common.Interfaces;
+﻿namespace SyriacSources.Backend.Application.Common.Interfaces;
 
 public interface IUser
 {

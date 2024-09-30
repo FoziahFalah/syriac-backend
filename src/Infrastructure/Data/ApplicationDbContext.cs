@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
-using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Domain.Entities;
-using SyriacResources.Backend.Infrastructure.Identity;
+using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Domain.Entities;
+using SyriacSources.Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace SyriacResources.Backend.Infrastructure.Data;
+namespace SyriacSources.Backend.Infrastructure.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {

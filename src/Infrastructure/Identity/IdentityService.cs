@@ -1,10 +1,10 @@
-using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace SyriacResources.Backend.Infrastructure.Identity;
+namespace SyriacSources.Backend.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {

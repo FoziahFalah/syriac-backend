@@ -1,9 +1,9 @@
-﻿using SyriacResources.Backend.Domain.Exceptions;
-using SyriacResources.Backend.Domain.ValueObjects;
+﻿using SyriacSources.Backend.Domain.Exceptions;
+using SyriacSources.Backend.Domain.ValueObjects;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace SyriacResources.Backend.Domain.UnitTests.ValueObjects;
+namespace SyriacSources.Backend.Domain.UnitTests.ValueObjects;
 
 public class ColourTests
 {

@@ -1,10 +1,10 @@
-﻿using SyriacResources.Backend.Application.Common.Exceptions;
-using SyriacResources.Backend.Application.Common.Security;
-using SyriacResources.Backend.Application.TodoLists.Commands.CreateTodoList;
-using SyriacResources.Backend.Application.TodoLists.Commands.PurgeTodoLists;
-using SyriacResources.Backend.Domain.Entities;
+﻿using SyriacSources.Backend.Application.Common.Exceptions;
+using SyriacSources.Backend.Application.Common.Security;
+using SyriacSources.Backend.Application.TodoLists.Commands.CreateTodoList;
+using SyriacSources.Backend.Application.TodoLists.Commands.PurgeTodoLists;
+using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacResources.Backend.Application.FunctionalTests.TodoLists.Commands;
+namespace SyriacSources.Backend.Application.FunctionalTests.TodoLists.Commands;
 
 using static Testing;
 

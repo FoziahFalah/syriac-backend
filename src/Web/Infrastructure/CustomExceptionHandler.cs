@@ -1,8 +1,8 @@
-﻿using SyriacResources.Backend.Application.Common.Exceptions;
+﻿using SyriacSources.Backend.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SyriacResources.Backend.Web.Infrastructure;
+namespace SyriacSources.Backend.Web.Infrastructure;
 
 public class CustomExceptionHandler : IExceptionHandler
 {

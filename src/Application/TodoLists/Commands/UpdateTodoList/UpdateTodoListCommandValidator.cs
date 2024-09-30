@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
 
-namespace SyriacResources.Backend.Application.TodoLists.Commands.UpdateTodoList;
+namespace SyriacSources.Backend.Application.TodoLists.Commands.UpdateTodoList;
 
 public class UpdateTodoListCommandValidator : AbstractValidator<UpdateTodoListCommand>
 {

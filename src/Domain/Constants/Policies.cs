@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Domain.Constants;
+﻿namespace SyriacSources.Backend.Domain.Constants;
 
 public abstract class Policies
 {

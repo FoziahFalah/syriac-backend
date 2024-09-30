@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Domain.Entities;
+﻿namespace SyriacSources.Backend.Domain.Entities;
 
 public class TodoItem : BaseAuditableEntity
 {

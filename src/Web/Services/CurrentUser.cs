@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 
-using SyriacResources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Interfaces;
 
-namespace SyriacResources.Backend.Web.Services;
+namespace SyriacSources.Backend.Web.Services;
 
 public class CurrentUser : IUser
 {

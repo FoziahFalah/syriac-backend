@@ -1,8 +1,8 @@
-﻿using SyriacResources.Backend.Application.TodoLists.Queries.GetTodos;
-using SyriacResources.Backend.Domain.Entities;
-using SyriacResources.Backend.Domain.ValueObjects;
+﻿using SyriacSources.Backend.Application.TodoLists.Queries.GetTodos;
+using SyriacSources.Backend.Domain.Entities;
+using SyriacSources.Backend.Domain.ValueObjects;
 
-namespace SyriacResources.Backend.Application.FunctionalTests.TodoLists.Queries;
+namespace SyriacSources.Backend.Application.FunctionalTests.TodoLists.Queries;
 
 using static Testing;
 

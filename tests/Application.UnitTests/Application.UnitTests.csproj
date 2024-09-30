@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <RootNamespace>SyriacResources.Backend.Application.UnitTests</RootNamespace>
-        <AssemblyName>SyriacResources.Backend.Application.UnitTests</AssemblyName>
+        <RootNamespace>SyriacSources.Backend.Application.UnitTests</RootNamespace>
+        <AssemblyName>SyriacSources.Backend.Application.UnitTests</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

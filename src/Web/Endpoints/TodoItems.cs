@@ -1,11 +1,11 @@
-﻿using SyriacResources.Backend.Application.Common.Models;
-using SyriacResources.Backend.Application.TodoItems.Commands.CreateTodoItem;
-using SyriacResources.Backend.Application.TodoItems.Commands.DeleteTodoItem;
-using SyriacResources.Backend.Application.TodoItems.Commands.UpdateTodoItem;
-using SyriacResources.Backend.Application.TodoItems.Commands.UpdateTodoItemDetail;
-using SyriacResources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
+﻿using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Application.TodoItems.Commands.CreateTodoItem;
+using SyriacSources.Backend.Application.TodoItems.Commands.DeleteTodoItem;
+using SyriacSources.Backend.Application.TodoItems.Commands.UpdateTodoItem;
+using SyriacSources.Backend.Application.TodoItems.Commands.UpdateTodoItemDetail;
+using SyriacSources.Backend.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 
-namespace SyriacResources.Backend.Web.Endpoints;
+namespace SyriacSources.Backend.Web.Endpoints;
 
 public class TodoItems : EndpointGroupBase
 {

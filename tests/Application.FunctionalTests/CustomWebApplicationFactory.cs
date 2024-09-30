@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
-using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Infrastructure.Data;
+using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace SyriacResources.Backend.Application.FunctionalTests;
+namespace SyriacSources.Backend.Application.FunctionalTests;
 
 using static Testing;
 

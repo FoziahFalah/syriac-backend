@@ -1,8 +1,8 @@
-﻿using SyriacResources.Backend.Domain.Entities;
+﻿using SyriacSources.Backend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace SyriacResources.Backend.Infrastructure.Data.Configurations;
+namespace SyriacSources.Backend.Infrastructure.Data.Configurations;
 
 public class TodoListConfiguration : IEntityTypeConfiguration<TodoList>
 {

@@ -1,10 +1,10 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Domain.Common;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace SyriacResources.Backend.Infrastructure.Data.Interceptors;
+namespace SyriacSources.Backend.Infrastructure.Data.Interceptors;
 
 public class AuditableEntityInterceptor : SaveChangesInterceptor
 {

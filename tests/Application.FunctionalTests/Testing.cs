@@ -1,12 +1,12 @@
-﻿using SyriacResources.Backend.Domain.Constants;
-using SyriacResources.Backend.Infrastructure.Data;
-using SyriacResources.Backend.Infrastructure.Identity;
+﻿using SyriacSources.Backend.Domain.Constants;
+using SyriacSources.Backend.Infrastructure.Data;
+using SyriacSources.Backend.Infrastructure.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SyriacResources.Backend.Application.FunctionalTests;
+namespace SyriacSources.Backend.Application.FunctionalTests;
 
 [SetUpFixture]
 public partial class Testing

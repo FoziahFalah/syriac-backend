@@ -1,7 +1,7 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Domain.Events;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Domain.Events;
 
-namespace SyriacResources.Backend.Application.TodoItems.Commands.DeleteTodoItem;
+namespace SyriacSources.Backend.Application.TodoItems.Commands.DeleteTodoItem;
 
 public record DeleteTodoItemCommand(int Id) : IRequest;
 

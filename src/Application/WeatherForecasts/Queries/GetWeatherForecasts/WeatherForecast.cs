@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Application.WeatherForecasts.Queries.GetWeatherForecasts;
+﻿namespace SyriacSources.Backend.Application.WeatherForecasts.Queries.GetWeatherForecasts;
 
 public class WeatherForecast
 {

@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Web.Infrastructure;
+﻿namespace SyriacSources.Backend.Web.Infrastructure;
 
 public abstract class EndpointGroupBase
 {

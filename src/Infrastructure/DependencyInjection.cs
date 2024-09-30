@@ -1,8 +1,8 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Domain.Constants;
-using SyriacResources.Backend.Infrastructure.Data;
-using SyriacResources.Backend.Infrastructure.Data.Interceptors;
-using SyriacResources.Backend.Infrastructure.Identity;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Domain.Constants;
+using SyriacSources.Backend.Infrastructure.Data;
+using SyriacSources.Backend.Infrastructure.Data.Interceptors;
+using SyriacSources.Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;

@@ -1,4 +1,4 @@
-﻿namespace SyriacResources.Backend.Application.FunctionalTests;
+﻿namespace SyriacSources.Backend.Application.FunctionalTests;
 
 public static class TestDatabaseFactory
 {

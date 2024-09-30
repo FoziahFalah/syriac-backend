@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace SyriacResources.Backend.Infrastructure.Identity;
+namespace SyriacSources.Backend.Infrastructure.Identity;
 
 public class ApplicationUser : IdentityUser
 {

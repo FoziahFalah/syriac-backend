@@ -1,7 +1,7 @@
-﻿using SyriacResources.Backend.Application.Common.Models;
+﻿using SyriacSources.Backend.Application.Common.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace SyriacResources.Backend.Infrastructure.Identity;
+namespace SyriacSources.Backend.Infrastructure.Identity;
 
 public static class IdentityResultExtensions
 {

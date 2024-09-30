@@ -1,7 +1,7 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Domain.Enums;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Domain.Enums;
 
-namespace SyriacResources.Backend.Application.TodoItems.Commands.UpdateTodoItemDetail;
+namespace SyriacSources.Backend.Application.TodoItems.Commands.UpdateTodoItemDetail;
 
 public record UpdateTodoItemDetailCommand : IRequest
 {

@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <RootNamespace>SyriacResources.Backend.Infrastructure.IntegrationTests</RootNamespace>
-        <AssemblyName>SyriacResources.Backend.Infrastructure.IntegrationTests</AssemblyName>
+        <RootNamespace>SyriacSources.Backend.Infrastructure.IntegrationTests</RootNamespace>
+        <AssemblyName>SyriacSources.Backend.Infrastructure.IntegrationTests</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

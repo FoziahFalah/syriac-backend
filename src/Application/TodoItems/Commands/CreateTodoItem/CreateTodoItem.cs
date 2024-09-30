@@ -1,8 +1,8 @@
-﻿using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Domain.Entities;
-using SyriacResources.Backend.Domain.Events;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Domain.Entities;
+using SyriacSources.Backend.Domain.Events;
 
-namespace SyriacResources.Backend.Application.TodoItems.Commands.CreateTodoItem;
+namespace SyriacSources.Backend.Application.TodoItems.Commands.CreateTodoItem;
 
 public record CreateTodoItemCommand : IRequest<int>
 {

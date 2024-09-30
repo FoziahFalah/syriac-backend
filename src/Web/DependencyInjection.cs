@@ -1,7 +1,7 @@
 ﻿using Azure.Identity;
-using SyriacResources.Backend.Application.Common.Interfaces;
-using SyriacResources.Backend.Infrastructure.Data;
-using SyriacResources.Backend.Web.Services;
+using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Infrastructure.Data;
+using SyriacSources.Backend.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
 using NSwag;
@@ -34,7 +34,7 @@ public static class DependencyInjection
 
         services.AddOpenApiDocument((configure, sp) =>
         {
-            configure.Title = "SyriacResources.Backend API";
+            configure.Title = "SyriacSources.Backend API";
 
             // Add JWT
             configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme

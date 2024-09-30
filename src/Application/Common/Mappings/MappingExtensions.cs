@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Application.Common.Models;
+﻿using SyriacSources.Backend.Application.Common.Models;
 
-namespace SyriacResources.Backend.Application.Common.Mappings;
+namespace SyriacSources.Backend.Application.Common.Mappings;
 
 public static class MappingExtensions
 {

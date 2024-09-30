@@ -1,9 +1,9 @@
-﻿using SyriacResources.Backend.Application.Common.Exceptions;
+﻿using SyriacSources.Backend.Application.Common.Exceptions;
 using FluentAssertions;
 using FluentValidation.Results;
 using NUnit.Framework;
 
-namespace SyriacResources.Backend.Application.UnitTests.Common.Exceptions;
+namespace SyriacSources.Backend.Application.UnitTests.Common.Exceptions;
 
 public class ValidationExceptionTests
 {

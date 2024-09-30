@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using SyriacResources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace SyriacResources.Backend.Application.Common.Behaviours;
+namespace SyriacSources.Backend.Application.Common.Behaviours;
 
 public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
@@ -44,7 +44,7 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
                 userName = await _identityService.GetUserNameAsync(userId);
             }
 
-            _logger.LogWarning("SyriacResources.Backend Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
+            _logger.LogWarning("SyriacSources.Backend Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@UserName} {@Request}",
                 requestName, elapsedMilliseconds, userId, userName, request);
         }
 

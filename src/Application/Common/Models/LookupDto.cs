@@ -1,6 +1,6 @@
-﻿using SyriacResources.Backend.Domain.Entities;
+﻿using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacResources.Backend.Application.Common.Models;
+namespace SyriacSources.Backend.Application.Common.Models;
 
 public class LookupDto
 {

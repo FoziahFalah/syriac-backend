@@ -1,11 +1,11 @@
 ﻿using System.Data.Common;
-using SyriacResources.Backend.Infrastructure.Data;
+using SyriacSources.Backend.Infrastructure.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Respawn;
 
-namespace SyriacResources.Backend.Application.FunctionalTests;
+namespace SyriacSources.Backend.Application.FunctionalTests;
 
 public class SqlServerTestDatabase : ITestDatabase
 {
