@@ -14,6 +14,21 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<TodoList> TodoLists => Set<TodoList>();
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
+    public DbSet<Attachment> Attachments => Set<Attachment>();
+    public DbSet<Author> Authors => Set<Author>();
+    public DbSet<Century> Centuries => Set<Century>();
+    public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<Contributor> Contributors => Set<Contributor>();
+    public DbSet<CoverPhoto> CoverPhotos => Set<CoverPhoto>();
+    public DbSet<DateFromat> DateFromats => Set<DateFromat>();
+    public DbSet<Excerpt> Excerpts => Set<Excerpt>();
+    public DbSet<ExcerptDate> ExcerptDates => Set<ExcerptDate>();
+    public DbSet<ExcerptText> ExcerptTexts => Set<ExcerptText>();
+    public DbSet<Footnote> Footnotes => Set<Footnote>();
+    public DbSet<Language> Languages => Set<Language>();
+    public DbSet<SourcePublication> Publications => Set<SourcePublication>();
+    public DbSet<SourceInroductionEditor> SourceInroductionEditors => Set<SourceInroductionEditor>();
+    public DbSet<Source> Sources => Set<Source>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

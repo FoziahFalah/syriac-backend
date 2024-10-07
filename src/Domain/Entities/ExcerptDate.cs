@@ -1,6 +1,6 @@
 ﻿
 namespace SyriacSources.Backend.Domain.Entities;
-public class ExcerptDates : BaseAuditableEntity
+public class ExcerptDate : BaseAuditableEntity
 {
     public int ExcerptId { get; set; }
     public int DateFormatId { get; set; }

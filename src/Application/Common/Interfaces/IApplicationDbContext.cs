@@ -7,6 +7,21 @@ public interface IApplicationDbContext
     DbSet<TodoList> TodoLists { get; }
 
     DbSet<TodoItem> TodoItems { get; }
+    DbSet<Attachment> Attachments { get; }
+    DbSet<Author> Authors { get; }
+    DbSet<Century> Centuries { get; }
+    DbSet<Comment> Comments { get; }
+    DbSet<Contributor> Contributors { get; }
+    DbSet<CoverPhoto> CoverPhotos { get; }
+    DbSet<DateFromat> DateFromats { get; }
+    DbSet<Excerpt> Excerpts { get; }
+    DbSet<ExcerptDate> ExcerptDates { get; }
+    DbSet<ExcerptText> ExcerptTexts { get; }
+    DbSet<Footnote> Footnotes { get; }
+    DbSet<Language> Languages { get; }
+    DbSet<SourcePublication> Publications { get; }
+    DbSet<SourceInroductionEditor> SourceInroductionEditors { get; }
+    DbSet<Source> Sources { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
