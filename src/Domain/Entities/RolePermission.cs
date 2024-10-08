@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SyriacSources.Backend.Domain.Entities;
-public class Permissions : BaseAuditableEntity
+public class RolePermission : BaseAuditableEntity
 {
-    public int RoleId {  get; set; }
-    public int Policy { get; set; }
+    public Guid RoleId { get; set; }
+    public string? PermissionId { get; set; }
 }

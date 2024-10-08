@@ -3,11 +3,11 @@ using Microsoft.Extensions.Logging;
 
 namespace SyriacSources.Backend.Application.TodoItems.EventHandlers;
 
-public class TodoItemCreatedEventHandler : INotificationHandler<TodoItemCreatedEvent>
+public class RoleCreatedEventHandler : INotificationHandler<TodoItemCreatedEvent>
 {
-    private readonly ILogger<TodoItemCreatedEventHandler> _logger;
+    private readonly ILogger<RoleCreatedEventHandler> _logger;
 
-    public TodoItemCreatedEventHandler(ILogger<TodoItemCreatedEventHandler> logger)
+    public RoleCreatedEventHandler(ILogger<RoleCreatedEventHandler> logger)
     {
         _logger = logger;
     }

@@ -6,75 +6,59 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
-public class IdentityService : IIdentityService
+public class IdentityRoleService : IIdentityRoleService
 {
+    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
+    private readonly CurrentUser _user;
 
-    public IdentityService(
+    public IdentityRoleService(
+        RoleManager<ApplicationRole> roleManager,
         UserManager<ApplicationUser> userManager,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
+        CurrentUser user,
         IAuthorizationService authorizationService)
     {
-        _userManager = userManager;
-        _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         _authorizationService = authorizationService;
+        _roleManager = roleManager;
+        _userManager = userManager;
+        _user = user;
     }
 
-    public async Task<string?> GetUserNameAsync(string userId)
+    public async Task<string?> GetRoleAsync(string roleId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var role = await _roleManager.FindByIdAsync(roleId);
 
-        return user?.UserName;
+        return role?.Name;
     }
 
-    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+    public async Task<(Result Result, string roleId)> CreateRoleAsync(string name, string description)
     {
-        var user = new ApplicationUser
+        var role = new ApplicationRole
         {
-            UserName = userName,
-            Email = userName,
+            Name = name,
+            Description = description,
+            CreatedOn= DateTime.UtcNow,
+            CreatedBy = _user.Id, // Double check if it works
         };
 
-        var result = await _userManager.CreateAsync(user, password);
+        var result = await _roleManager.CreateAsync(role);
 
-        return (result.ToApplicationResult(), user.Id);
+        return (result.ToApplicationResult(), role.Id);
     }
 
-    public async Task<bool> IsInRoleAsync(string userId, string role)
+    public async Task<Result> DeleteRoleAsync(string roleId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        var role = await _roleManager.FindByIdAsync(roleId);
 
-        return user != null && await _userManager.IsInRoleAsync(user, role);
+        return role != null ? await DeleteRoleAsync(role) : Result.Success();
     }
 
-    public async Task<bool> AuthorizeAsync(string userId, string policyName)
+    public async Task<Result> DeleteRoleAsync(ApplicationRole role)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        role.IsActive = false;
 
-        if (user == null)
-        {
-            return false;
-        }
-
-        var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
-
-        var result = await _authorizationService.AuthorizeAsync(principal, policyName);
-
-        return result.Succeeded;
-    }
-
-    public async Task<Result> DeleteUserAsync(string userId)
-    {
-        var user = await _userManager.FindByIdAsync(userId);
-
-        return user != null ? await DeleteUserAsync(user) : Result.Success();
-    }
-
-    public async Task<Result> DeleteUserAsync(ApplicationUser user)
-    {
-        var result = await _userManager.DeleteAsync(user);
+        var result = await _roleManager.UpdateAsync(role);
 
         return result.ToApplicationResult();
     }

@@ -12,10 +12,10 @@ public class ExcerptText : BaseAuditableEntity
     public int LanguageId{ get; set; }
     public Language Language { get; set; } = new Language();
     public int EditorId{ get; set; }
-    public ApplicationUser Editor { get; set; } 
+    public Contributor Editor { get; set; } = new Contributor();
     public int ReviewerId{ get; set; }
-    public ApplicationUser Reviewer { get; set; }
+    public Contributor Reviewer { get; set; } = new Contributor();
     public int TranslatorId { get; set; }
-    public ApplicationUser Translator { get; set; }
+    public Contributor Translator { get; set; } = new Contributor();
 
 }

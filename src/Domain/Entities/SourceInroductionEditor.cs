@@ -6,6 +6,6 @@ public class SourceInroductionEditor : BaseAuditableEntity
 { 
     public int SourceId {  get; set; }
     public int EditorId {  get; set; }
-    public ApplicationUser Editor {  get; set; }
+    public Contributor Editor {  get; set; } = new Contributor();
 }
 

@@ -10,17 +10,6 @@ public class AccessPermissionsDto
 
     private class Mapping : Profile
     {
-        //public Mapping()
-        //{
-        //    CreateMap<TodoItem, AccessPermissionsDto>();
-        //}
+
     }
-}
-
-
-public class EndpointActions
-{
-    public int Id { get; init; }
-    public int EndpointId { get; init; }
-    public string? DisplayName { get; init; }
 }
