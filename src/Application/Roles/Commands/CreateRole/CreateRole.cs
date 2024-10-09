@@ -1,18 +1,14 @@
 ﻿using SyriacSources.Backend.Application.Common.Interfaces;
-using SyriacSources.Backend.Application.Roles;
-using SyriacSources.Backend.Domain.Constants;
-using SyriacSources.Backend.Domain.Entities;
-using SyriacSources.Backend.Domain.Events;
 
-namespace SyriacSources.Backend.Application.TodoItems.Commands.CreateRole;
+namespace SyriacSources.Backend.Application.Roles.Commands.CreateRole;
 
-public record CreateRoleCommand : IRequest<int>
+public record CreateRoleCommand : IRequest<string>
 {
     public required string Name { get; init; }
     public required string Description { get; init; }
 }
 
-public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, int>
+public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, string>
 {
     private readonly IApplicationDbContext _context;
     private readonly IIdentityRoleService _identityRoleService;
@@ -23,10 +19,10 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, int>
         _identityRoleService = identityRoleService;
     }
 
-    public async Task<int> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
-
         var role = await _identityRoleService.CreateRoleAsync(request.Name , request.Description);
-        return role.Id;
+
+        return role.roleId;
     }
 }

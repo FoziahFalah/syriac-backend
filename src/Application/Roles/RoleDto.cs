@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace SyriacSources.Backend.Application.Roles;
 public class RoleDto
 {
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public required string Name { get; set; }
+    public required string Description { get; set; }
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SyriacSources.Backend.Infrastructure.Data;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -17,10 +17,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Attachment> Attachments => Set<Attachment>();
     public DbSet<Author> Authors => Set<Author>();
     public DbSet<Century> Centuries => Set<Century>();
+    public DbSet<Permission> Permissions => Set<Permission>();
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<Contributor> Contributors => Set<Contributor>();
     public DbSet<CoverPhoto> CoverPhotos => Set<CoverPhoto>();
-    public DbSet<DateFromat> DateFromats => Set<DateFromat>();
+    public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
+    public DbSet<DateFormat> DateFromats => Set<DateFormat>();
     public DbSet<Excerpt> Excerpts => Set<Excerpt>();
     public DbSet<ExcerptDate> ExcerptDates => Set<ExcerptDate>();
     public DbSet<ExcerptText> ExcerptTexts => Set<ExcerptText>();

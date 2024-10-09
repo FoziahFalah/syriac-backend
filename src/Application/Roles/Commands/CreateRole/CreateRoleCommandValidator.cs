@@ -1,4 +1,4 @@
-﻿namespace SyriacSources.Backend.Application.TodoItems.Commands.CreateRole;
+﻿namespace SyriacSources.Backend.Application.Roles.Commands.CreateRole;
 
 public class CreateRoleCommandValidator : AbstractValidator<CreateRoleCommand>
 {

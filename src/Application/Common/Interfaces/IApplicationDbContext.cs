@@ -13,8 +13,10 @@ public interface IApplicationDbContext
     DbSet<Comment> Comments { get; }
     DbSet<Contributor> Contributors { get; }
     DbSet<CoverPhoto> CoverPhotos { get; }
-    DbSet<DateFromat> DateFromats { get; }
+    DbSet<DateFormat> DateFromats { get; }
     DbSet<Excerpt> Excerpts { get; }
+    DbSet<Permission> Permissions { get; }
+    DbSet<RolePermission> RolePermissions { get; }
     DbSet<ExcerptDate> ExcerptDates { get; }
     DbSet<ExcerptText> ExcerptTexts { get; }
     DbSet<Footnote> Footnotes { get; }

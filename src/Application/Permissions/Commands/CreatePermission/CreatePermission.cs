@@ -1,0 +1,37 @@
+﻿
+using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Domain.Entities;
+
+namespace SyriacSources.Backend.Application.Permissions.Commands.CreatePermission;
+
+public record CreatePermissionCommand :IRequest<int>
+{
+    public required string Name { get; init; }
+    public required string Description { get; init; }
+}
+public class CreatePermissionHandler : IRequestHandler<CreatePermissionCommand, int>
+{
+    private readonly IApplicationDbContext _context;
+    private readonly IIdentityRoleService _identityRoleService;
+
+    public CreatePermissionHandler(IApplicationDbContext context, IIdentityRoleService identityRoleService)
+    {
+        _context = context;
+        _identityRoleService = identityRoleService;
+    }
+
+    public async Task<int> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
+    {
+        var entity = new Permission
+        {
+            PermissionName = request.Name,
+            Description = request.Description
+        };
+
+        _context.Permissions.Add(entity);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return entity.Id;
+    }
+}

@@ -4,7 +4,7 @@ using SyriacSources.Backend.Domain.Constants;
 
 namespace SyriacSources.Backend.Application.TodoLists.Commands.PurgeTodoLists;
 
-[Authorize(Roles = Roles.Administrator)]
+//[Authorize(Roles = Roles.Administrator)]
 [Authorize(Policy = Policies.CanPurge)]
 public record PurgeTodoListsCommand : IRequest;
 
