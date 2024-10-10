@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace SyriacSources.Backend.Domain.Entities;
 public class Permission : BaseAuditableEntity
 {
+    public int? ParentId { get; set; } = 0;
     public string? PermissionName { get; set; }
     public string? Description { get; set; }
 }

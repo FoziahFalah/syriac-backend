@@ -1,7 +1,7 @@
 ﻿
 namespace SyriacSources.Backend.Application.RolePermissions.Queries.GetRolePermissions;
 
-public class RolePermissionDto
+public class RoleDto
 {
     public int Id { get; init; }
     public string? DisplayName { get; init; }

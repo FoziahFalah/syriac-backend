@@ -6,7 +6,7 @@ namespace SyriacSources.Backend.Application.RolePermissions.Commands.UpdateRoleP
 
 public record UpdateRolePermissionCommand :IRequest<int>
 {
-    public Guid RoleId { get; set; }
+    public int RoleId { get; set; }
     public required List<int> PermissionId { get; init; }
 }
 

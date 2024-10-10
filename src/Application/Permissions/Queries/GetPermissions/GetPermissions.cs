@@ -20,9 +20,9 @@ public class GetPermissionsQueryHandler : IRequestHandler<GetPermissionsQuery, L
 
     public async Task<List<PermissionDto>> Handle(GetPermissionsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.TodoItems
-            .Where(x => x.ListId == request.RoleId)
-            .OrderBy(x => x.Title)
+        return await _context.Permissions
+            .Where(x => x.Id == request.RoleId)
+            .OrderBy(x => x.PermissionName)
             .ProjectTo<PermissionDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
     }
