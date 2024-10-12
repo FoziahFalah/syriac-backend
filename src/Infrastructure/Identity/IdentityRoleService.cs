@@ -3,6 +3,9 @@ using SyriacSources.Backend.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SyriacSources.Backend.Application.User;
+using System.ComponentModel.DataAnnotations;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
@@ -28,7 +31,9 @@ public class IdentityService : IIdentityService
 
         return user?.UserName;
     }
-
+    public async Task<bool> EmailExists(string email){
+        return await _userManager.FindByEmailAsync(email) != null;
+    }
     public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
     {
         var user = new ApplicationUser
@@ -65,6 +70,28 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
+    public async Task<(Result Result, UserDto? User)> AuthenticateAsync(string email, string password)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if(user == null)
+            return (Result.Failure(new List<string> {"User not Found"}),null);
+
+        if (!await _userManager.CheckPasswordAsync(user, password))
+        {
+            var error = new List<string> { "Email or Password is incorrect" };
+            return (Result.Failure(error), null);
+        }
+
+        var userDto = new UserDto
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Username = user.UserName,
+        };
+
+        return (Result.Success(),userDto);
+    }
     public async Task<Result> DeleteUserAsync(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);

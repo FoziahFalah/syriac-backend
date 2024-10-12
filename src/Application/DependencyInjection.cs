@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Configuration;
+using System.Reflection;
 using SyriacSources.Backend.Application.Common.Behaviours;
+using SyriacSources.Backend.Application.Common.Models;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +12,6 @@ public static class DependencyInjection
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-
         services.AddMediatR(cfg => {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));

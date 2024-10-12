@@ -8,6 +8,4 @@ using Microsoft.AspNetCore.Identity;
 namespace SyriacSources.Backend.Infrastructure.Identity;
 public class ApplicationRole : IdentityRole<int>
 {
-    public int RoleId { get; set; } 
-    public Role Role { get; set; }
 }

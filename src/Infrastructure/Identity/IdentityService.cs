@@ -40,21 +40,14 @@ public class IdentityRoleService : IIdentityRoleService
         return roles;
     }
 
-    //public async Task<List<string?>> GetRoleNamesAsync()
-    //{
-    //    var roles = await _roleManager.Roles.Select(r=>r.Name).ToListAsync();
-
-    //    return roles;
-    //}
-
     public async Task<(Result Result, string roleId)> CreateRoleAsync(string name, string description)
     {
         var role = new ApplicationRole
         {
             Name = name,
-            Description = description,
-            CreatedOn= DateTime.UtcNow,
-            CreatedBy = _user.Id, // Double check if it works
+            //Description = description,
+            //CreatedOn= DateTime.UtcNow,
+            //CreatedBy = _user.Id, // Double check if it works
         };
 
         var result = await _roleManager.CreateAsync(role);
@@ -79,9 +72,9 @@ public class IdentityRoleService : IIdentityRoleService
 
         role.Name = name;
         role.NormalizedName = name;
-        role.Description = description;
-        role.ModifiedOn = DateTime.UtcNow;
-        role.ModifiedBy = _user.Id;
+        //role.Description = description;
+        //role.ModifiedOn = DateTime.UtcNow;
+        //role.ModifiedBy = _user.Id;
 
         result = await _roleManager.UpdateAsync(role);
 

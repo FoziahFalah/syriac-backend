@@ -1,8 +1,8 @@
 ﻿namespace SyriacSources.Backend.Application.Roles.Commands.CreateRole;
 
-public class CreateRoleCommandValidator : AbstractValidator<CreateRoleCommand>
+public class CreateUserCommandValidator : AbstractValidator<CreateRoleCommand>
 {
-    public CreateRoleCommandValidator()
+    public CreateUserCommandValidator()
     {
         RuleFor(v => v.Name)
             .MaximumLength(100)
