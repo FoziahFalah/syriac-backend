@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Builder.Extensions;
@@ -24,7 +25,7 @@ public class TokenService : ITokenService
     {
         var authClaims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, id),
+            new Claim(ClaimTypes.NameIdentifier, id!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtToken.Secret));

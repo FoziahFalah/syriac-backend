@@ -44,7 +44,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDt
         return new LoginResponseDto
         {
             User = result.User,
-            Token = _tokenService.CreateJwtSecurityToken(result.User?.Id.ToString())
+            Token = _tokenService.CreateJwtSecurityToken(result.User!.Id.ToString())
         };
     }
 }

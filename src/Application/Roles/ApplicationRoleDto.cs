@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Domain.Entities;
-using SyriacSources.Backend.Infrastructure.Identity;
 
 namespace SyriacSources.Backend.Application.Roles;
-public class RoleDto
+public class ApplicationRoleDto
 {
-    public required string Name { get; set; }
-    public required string Description { get; set; }
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public string? Name_ar { get; set; }
+    public string? Description { get; set; }
 
     private class Mapping : Profile { 
     
-        public Mapping(){
-            CreateMap<Role, RoleDto>();
-        }
-    }  
+        public Mapping(){} // CreateMap<ApplicationRole, ApplicationRoleDto>();
+
+    }
 }

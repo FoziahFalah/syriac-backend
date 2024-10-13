@@ -54,18 +54,18 @@ public partial class Testing
         return await RunAsUserAsync("test@local", "Testing1234!", Array.Empty<string>());
     }
 
-    public static async Task<string> RunAsAdministratorAsync()
-    {
-        return await RunAsUserAsync("administrator@local", "Administrator1234!", new[] { Roles.Administrator });
-    }
+    //public static async Task<string> RunAsAdministratorAsync()
+    //{
+    //    return await RunAsUserAsync("administrator@local", "Administrator1234!", new[] { Roles.Administrator });
+    //}
 
     public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles)
     {
         using var scope = _scopeFactory.CreateScope();
 
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-        var user = new User { UserName = userName, Email = userName };
+        var user = new ApplicationUser { UserName = userName, Email = userName };
 
         var result = await userManager.CreateAsync(user, password);
 
@@ -83,7 +83,7 @@ public partial class Testing
 
         if (result.Succeeded)
         {
-            _userId = user.Id;
+            _userId = user.Id.ToString();
 
             return _userId;
         }

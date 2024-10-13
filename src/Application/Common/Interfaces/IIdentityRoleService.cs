@@ -1,4 +1,5 @@
 ﻿using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Application.Roles;
 
 namespace SyriacSources.Backend.Application.Common.Interfaces;
 
@@ -8,9 +9,9 @@ public interface IIdentityRoleService
 
     Task<List<string?>> GetRolesAsync();
 
-    Task<(Result Result, string roleId)> CreateRoleAsync(string name, string description);
+    Task<(Result Result, string roleId)> CreateRoleAsync(ApplicationRoleDto role, CancellationToken cancellationToken);
 
-    Task<Result> UpdateRoleAsync(string roleId, string name, string description);
+    Task<Result> UpdateRoleAsync(ApplicationRoleDto role);
 
     Task<Result> DeleteRoleAsync(string roleId);
 }

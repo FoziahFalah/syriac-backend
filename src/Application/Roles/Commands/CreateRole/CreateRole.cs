@@ -5,7 +5,7 @@ namespace SyriacSources.Backend.Application.Roles.Commands.CreateRole;
 public record CreateRoleCommand : IRequest<string>
 {
     public required string Name { get; init; }
-    public required string Description { get; init; }
+    public required string Name_ar { get; init; }
 }
 
 public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, string>
@@ -21,7 +21,12 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, strin
 
     public async Task<string> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
-        var role = await _identityRoleService.CreateRoleAsync(request.Name , request.Description);
+        var entity = new ApplicationRoleDto
+        {
+            Name = request.Name,
+            Name_ar = request.Name_ar,
+        };
+        var role = await _identityRoleService.CreateRoleAsync(entity, cancellationToken);
 
         return role.roleId;
     }

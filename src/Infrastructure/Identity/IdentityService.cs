@@ -3,20 +3,20 @@ using SyriacSources.Backend.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using SyriacSources.Backend.Application.Roles;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
 public class IdentityRoleService : IIdentityRoleService
 {
     private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly UserManager<User> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IAuthorizationService _authorizationService;
     private readonly CurrentUser _user;
 
     public IdentityRoleService(
         RoleManager<ApplicationRole> roleManager,
-        UserManager<User> userManager,
+        UserManager<ApplicationUser> userManager,
         CurrentUser user,
         IAuthorizationService authorizationService)
     {
@@ -40,43 +40,43 @@ public class IdentityRoleService : IIdentityRoleService
         return roles;
     }
 
-    public async Task<(Result Result, string roleId)> CreateRoleAsync(string name, string description)
+    public async Task<(Result Result, string roleId)> CreateRoleAsync(ApplicationRoleDto role,CancellationToken cancellationToken)
     {
-        var role = new ApplicationRole
+        var entity = new ApplicationRole
         {
-            Name = name,
-            //Description = description,
-            //CreatedOn= DateTime.UtcNow,
-            //CreatedBy = _user.Id, // Double check if it works
+            Name = role.Name,
+            Name_ar = role.Name_ar,
+            CreatedOn = DateTime.UtcNow,
+            CreatedBy = _user.Id, // Double check if it works
         };
 
-        var result = await _roleManager.CreateAsync(role);
+        var result = await _roleManager.CreateAsync(entity);
 
         return (result.ToApplicationResult(), role.Id.ToString());
     }
-    public async Task<Result> UpdateRoleAsync(string roleId, string name, string description)
+    public async Task<Result> UpdateRoleAsync(ApplicationRoleDto role)
     {
-        var role = await _roleManager.FindByIdAsync(roleId);
+        var entity = await _roleManager.FindByIdAsync(role.Id.ToString());
 
         IdentityResult result = new IdentityResult();
 
         if (role == null)
         {
-           result = IdentityResult.Failed(
-              new IdentityError {
-                Code = "0001",
-                Description = "Not Found"
-              });
+            result = IdentityResult.Failed(
+               new IdentityError {
+                   Code = "0001",
+                   Description = "Not Found"
+               });
             return result.ToApplicationResult();
         }
 
-        role.Name = name;
-        role.NormalizedName = name;
-        //role.Description = description;
-        //role.ModifiedOn = DateTime.UtcNow;
-        //role.ModifiedBy = _user.Id;
+        entity!.Name = role.Name;
+        entity!.Name_ar = role?.Name_ar;
+        entity!.ModifiedOn = DateTime.UtcNow;
+        entity!.ModifiedBy = _user.Id;
 
-        result = await _roleManager.UpdateAsync(role);
+        
+        result = await _roleManager.UpdateAsync(entity);
 
         return (result.ToApplicationResult());
     }

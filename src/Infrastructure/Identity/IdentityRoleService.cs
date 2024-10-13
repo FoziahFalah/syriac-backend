@@ -70,7 +70,7 @@ public class IdentityService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<(Result Result, UserDto? User)> AuthenticateAsync(string email, string password)
+    public async Task<(Result Result, ApplicationUserDto? User)> AuthenticateAsync(string email, string password)
     {
         var user = await _userManager.FindByEmailAsync(email);
 
@@ -83,7 +83,7 @@ public class IdentityService : IIdentityService
             return (Result.Failure(error), null);
         }
 
-        var userDto = new UserDto
+        var userDto = new ApplicationUserDto
         {
             Id = user.Id,
             Email = user.Email,

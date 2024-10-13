@@ -22,8 +22,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, strin
 
     public async Task<string> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _identityService.CreateUserAsync(request.Name , request.Description);
+        var user = await _identityService.CreateUserAsync(request.Name , request.Password);
 
-        return user.userId;
+        return user.UserId;
     }
 }

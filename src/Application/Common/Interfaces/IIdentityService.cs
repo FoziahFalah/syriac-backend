@@ -1,6 +1,5 @@
 ﻿using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Application.User;
-using SyriacSources.Backend.Infrastructure.Identity;
 
 namespace SyriacSources.Backend.Application.Common.Interfaces;
 
@@ -13,7 +12,7 @@ public interface IIdentityService
 
     Task<bool> AuthorizeAsync(string userId, string policyName);
 
-    Task<(Result Result, UserDto? User)> AuthenticateAsync(string email, string password);
+    Task<(Result Result, ApplicationUserDto? User)> AuthenticateAsync(string email, string password);
 
     Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password);
 

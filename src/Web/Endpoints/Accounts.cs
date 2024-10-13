@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SyriacSources.Backend.Application.Account.Commands.Login;
 using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Application.TodoItems.Commands.CreateTodoItem;
 using SyriacSources.Backend.Application.TodoItems.Commands.DeleteTodoItem;
@@ -13,14 +14,14 @@ public class Accounts : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .MapPost(CreateTodoItem);
+            .MapPost(Login);
     }
 
     public Task<int> CreateTodoItem(ISender sender, CreateTodoItemCommand command)
     {
         return sender.Send(command);
     }
-    public Task<IResult> Login(ISender sender, CreateTodoItemCommand command)
+    public Task<LoginResponseDto> Login(ISender sender, LoginCommand command)
     {
         return sender.Send(command);
     }

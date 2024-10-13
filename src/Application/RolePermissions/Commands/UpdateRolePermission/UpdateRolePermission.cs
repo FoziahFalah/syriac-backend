@@ -36,7 +36,7 @@ public class UpdateRolePermissionHandler : IRequestHandler<UpdateRolePermissionC
             _context.RolePermissions.Add(new RolePermission
             {
                 RoleId = request.RoleId,
-                PermissionId = permissionId.ToString()
+                PermissionId = permissionId
             });
         }
 
@@ -44,7 +44,7 @@ public class UpdateRolePermissionHandler : IRequestHandler<UpdateRolePermissionC
         var permissionsToRemove = currentPermissionIds.Except(request.PermissionId).ToList();
         foreach (var permissionId in permissionsToRemove)
         {
-            var permissionToRemove = entity.First(rp => rp.PermissionId == permissionId.ToString());
+            var permissionToRemove = entity.First(rp => rp.PermissionId == permissionId);
             _context.RolePermissions.Remove(permissionToRemove);
         }
 
