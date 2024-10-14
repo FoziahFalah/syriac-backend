@@ -26,6 +26,8 @@ app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseOpenApi();
+
 app.UseSwaggerUi(settings =>
 {
     settings.Path = "/api";
@@ -35,9 +37,6 @@ app.UseSwaggerUi(settings =>
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
-
-
-
 
 app.MapRazorPages();
 

@@ -45,7 +45,7 @@ public class IdentityRoleService : IIdentityRoleService
         var entity = new ApplicationRole
         {
             Name = role.Name,
-            Name_ar = role.Name_ar,
+            NameAR = role.Name_ar,
             CreatedOn = DateTime.UtcNow,
             CreatedBy = _user.Id, // Double check if it works
         };
@@ -71,7 +71,7 @@ public class IdentityRoleService : IIdentityRoleService
         }
 
         entity!.Name = role.Name;
-        entity!.Name_ar = role?.Name_ar;
+        entity!.NameAR = role?.Name_ar;
         entity!.ModifiedOn = DateTime.UtcNow;
         entity!.ModifiedBy = _user.Id;
 

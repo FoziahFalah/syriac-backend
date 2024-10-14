@@ -1,13 +1,1 @@
-﻿@* @using SyriacSources.Backend.Infrastructure.Identity
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<> SignInManager
-@inject UserManager<> UserManager
-
-@{
-    string? returnUrl = null;
-    var query = ViewContext.HttpContext.Request.Query;
-    if (query.ContainsKey("returnUrl"))
-    {
-        returnUrl = query["returnUrl"];
-    }
-}*@
+﻿

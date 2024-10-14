@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 namespace SyriacSources.Backend.Infrastructure.Identity;
 public class ApplicationRole : IdentityRole<int>
 {
-    public string? Name_ar { get; set; }
+    public string? NameAR { get; set; }
     public bool IsActive { get; set; }
     public string? CreatedBy { get; set; }
     public DateTime CreatedOn { get; set; }

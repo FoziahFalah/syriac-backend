@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Infrastructure.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -40,14 +41,21 @@ public static class DependencyInjection
 
         services
             .AddIdentityCore<ApplicationUser>()
-            .AddUserManager<ApplicationUser>()
+            .AddUserManager<UserManager<ApplicationUser>>()
             .AddRoles<ApplicationRole>()
             .AddRoleManager<RoleManager<ApplicationRole>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddApiEndpoints();
 
         services.AddSingleton(TimeProvider.System);
+
+        services.AddScoped<CurrentUser>();
+
+        //Registering Services
         services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<IIdentityRoleService, IdentityRoleService>();
+        services.AddTransient<ITokenService, TokenService>();
+
         services.Configure<JWTToken>(configuration.GetSection("JWT"));
 
         services.AddAuthorization(options =>
