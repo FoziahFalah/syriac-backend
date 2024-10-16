@@ -3,96 +3,105 @@ using SyriacSources.Backend.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SyriacSources.Backend.Application.Roles;
+using SyriacSources.Backend.Application.User;
+using System.ComponentModel.DataAnnotations;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
-public class IdentityRoleService : IIdentityRoleService
+public class IdentityService : IIdentityService
 {
-    private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
-    private readonly CurrentUser _user;
 
-    public IdentityRoleService(
-        RoleManager<ApplicationRole> roleManager,
+    public IdentityService(
         UserManager<ApplicationUser> userManager,
-        CurrentUser user,
+        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService)
     {
-        _authorizationService = authorizationService;
-        _roleManager = roleManager;
         _userManager = userManager;
-        _user = user;
+        _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
+        _authorizationService = authorizationService;
     }
 
-    public async Task<string?> GetRoleAsync(string roleId)
+    public async Task<string?> GetUserNameAsync(string userId)
     {
-        var role = await _roleManager.FindByIdAsync(roleId);
+        var user = await _userManager.FindByIdAsync(userId);
 
-        return role?.Name;
+        return user?.UserName;
     }
-
-    public async Task<List<string?>> GetRolesAsync()
-    {
-        var roles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
-
-        return roles;
+    public async Task<bool> EmailExists(string email){
+        return await _userManager.FindByEmailAsync(email) != null;
     }
-
-    public async Task<(Result Result, string roleId)> CreateRoleAsync(ApplicationRoleDto role,CancellationToken cancellationToken)
+    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
     {
-        var entity = new ApplicationRole
+        var user = new ApplicationUser
         {
-            Name = role.Name,
-            NameAR = role.Name_ar,
-            CreatedOn = DateTime.UtcNow,
-            CreatedBy = _user.Id, // Double check if it works
+            UserName = userName,
+            Email = userName,
         };
 
-        var result = await _roleManager.CreateAsync(entity);
+        var result = await _userManager.CreateAsync(user, password);
 
-        return (result.ToApplicationResult(), role.Id.ToString());
+        return (result.ToApplicationResult(), user.Id.ToString());
     }
-    public async Task<Result> UpdateRoleAsync(ApplicationRoleDto role)
+
+    public async Task<bool> IsInRoleAsync(string userId, string role)
     {
-        var entity = await _roleManager.FindByIdAsync(role.Id.ToString());
+        var user = await _userManager.FindByIdAsync(userId);
 
-        IdentityResult result = new IdentityResult();
+        return user != null && await _userManager.IsInRoleAsync(user, role);
+    }
 
-        if (role == null)
+    public async Task<bool> AuthorizeAsync(string userId, string policyName)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
         {
-            result = IdentityResult.Failed(
-               new IdentityError {
-                   Code = "0001",
-                   Description = "Not Found"
-               });
-            return result.ToApplicationResult();
+            return false;
         }
 
-        entity!.Name = role.Name;
-        entity!.NameAR = role?.Name_ar;
-        entity!.ModifiedOn = DateTime.UtcNow;
-        entity!.ModifiedBy = _user.Id;
+        var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
 
-        
-        result = await _roleManager.UpdateAsync(entity);
+        var result = await _authorizationService.AuthorizeAsync(principal, policyName);
 
-        return (result.ToApplicationResult());
+        return result.Succeeded;
     }
 
-    public async Task<Result> DeleteRoleAsync(string roleId)
+    public async Task<(Result Result, ApplicationUserDto? User)> AuthenticateAsync(string email, string password)
     {
-        var role = await _roleManager.FindByIdAsync(roleId);
+        var user = await _userManager.FindByEmailAsync(email);
 
-        return role != null ? await DeleteRoleAsync(role) : Result.Success();
+        if(user == null)
+            return (Result.Failure(new List<string> {"User not Found"}),null);
+
+        if (!await _userManager.CheckPasswordAsync(user, password))
+        {
+            var error = new List<string> { "Email or Password is incorrect" };
+            return (Result.Failure(error), null);
+        }
+
+        var userDto = new ApplicationUserDto
+        {
+            Id = user.Id,
+            Email = user.Email,
+            Username = user.UserName,
+        };
+
+        return (Result.Success(),userDto);
+    }
+    public async Task<Result> DeleteUserAsync(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        return user != null ? await DeleteUserAsync(user) : Result.Success();
     }
 
-    public async Task<Result> DeleteRoleAsync(ApplicationRole role)
+    public async Task<Result> DeleteUserAsync(ApplicationUser user)
     {
-        role.IsActive = false;
-
-        var result = await _roleManager.UpdateAsync(role);
+        var result = await _userManager.DeleteAsync(user);
 
         return result.ToApplicationResult();
     }

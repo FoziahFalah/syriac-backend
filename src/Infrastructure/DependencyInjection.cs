@@ -53,7 +53,7 @@ public static class DependencyInjection
 
         //Registering Services
         services.AddTransient<IIdentityService, IdentityService>();
-        services.AddTransient<IIdentityRoleService, IdentityRoleService>();
+        services.AddTransient<IApplicationRoleService, IdentityRoleService>();
         services.AddTransient<ITokenService, TokenService>();
 
         services.Configure<JWTToken>(configuration.GetSection("JWT"));

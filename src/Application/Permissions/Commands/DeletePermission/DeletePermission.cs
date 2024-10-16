@@ -11,9 +11,9 @@ public record DeletePermissionCommand :IRequest
 public class DeletePermissionHandler : IRequestHandler<DeletePermissionCommand>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IIdentityRoleService _identityRoleService;
+    private readonly IApplicationRoleService _identityRoleService;
 
-    public DeletePermissionHandler(IApplicationDbContext context, IIdentityRoleService identityRoleService)
+    public DeletePermissionHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
     {
         _context = context;
         _identityRoleService = identityRoleService;

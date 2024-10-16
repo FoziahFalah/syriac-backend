@@ -13,9 +13,9 @@ public record UpdateRolePermissionCommand :IRequest<int>
 public class UpdateRolePermissionHandler : IRequestHandler<UpdateRolePermissionCommand, int>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IIdentityRoleService _identityRoleService;
+    private readonly IApplicationRoleService _identityRoleService;
 
-    public UpdateRolePermissionHandler(IApplicationDbContext context, IIdentityRoleService identityRoleService)
+    public UpdateRolePermissionHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
     {
         _context = context;
         _identityRoleService = identityRoleService;

@@ -11,9 +11,9 @@ public record DeleteRoleCommand :IRequest
 public class DeleteRoleHandler : IRequestHandler<DeleteRoleCommand>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IIdentityRoleService _identityRoleService;
+    private readonly IApplicationRoleService _identityRoleService;
 
-    public DeleteRoleHandler(IApplicationDbContext context, IIdentityRoleService identityRoleService)
+    public DeleteRoleHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
     {
         _context = context;
         _identityRoleService = identityRoleService;

@@ -12,9 +12,9 @@ public record CreatePermissionCommand :IRequest<int>
 public class CreatePermissionHandler : IRequestHandler<CreatePermissionCommand, int>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IIdentityRoleService _identityRoleService;
+    private readonly IApplicationRoleService _identityRoleService;
 
-    public CreatePermissionHandler(IApplicationDbContext context, IIdentityRoleService identityRoleService)
+    public CreatePermissionHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
     {
         _context = context;
         _identityRoleService = identityRoleService;
@@ -22,9 +22,9 @@ public class CreatePermissionHandler : IRequestHandler<CreatePermissionCommand, 
 
     public async Task<int> Handle(CreatePermissionCommand request, CancellationToken cancellationToken)
     {
-        var entity = new Permission
+        var entity = new ApplicationPermission
         {
-            PermissionName = request.Name,
+            NormalizedPermissionName = request.Name,
             Description = request.Description
         };
 

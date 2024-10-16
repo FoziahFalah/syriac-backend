@@ -18,7 +18,7 @@ public class PermissionDto
     {
         public Mapping()
         {
-            CreateMap<Permission, PermissionDto>();
+            CreateMap<ApplicationPermission, PermissionDto>();
         }
     }
 }

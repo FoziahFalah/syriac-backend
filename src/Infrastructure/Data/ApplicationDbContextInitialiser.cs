@@ -68,9 +68,9 @@ public class ApplicationDbContextInitialiser
     public async Task TrySeedAsync()
     {
         // Default roles
-        var administratorRole = new ApplicationRole { Name = Roles.Administrator };
+        var administratorRole = new ApplicationRole { NormalizedRoleName = "Administrator" , NameAR = "مدير النظام" , NameEN = "Administrator"};
 
-        if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
+        if (_roleManager.Roles.All(r => r.NameAR != administratorRole.NameEN))
         {
             await _roleManager.CreateAsync(administratorRole);
         }
@@ -81,9 +81,9 @@ public class ApplicationDbContextInitialiser
         if (_userManager.Users.All(u => u.UserName != administrator.UserName))
         {
             await _userManager.CreateAsync(administrator, "Administrator1!");
-            if (!string.IsNullOrWhiteSpace(administratorRole.Name))
+            if (!string.IsNullOrWhiteSpace(administratorRole.NormalizedRoleName))
             {
-                await _userManager.AddToRolesAsync(administrator, new [] { administratorRole.Name });
+                await _userManager.AddToRolesAsync(administrator, new [] { administratorRole.NormalizedRoeName }); //
             }
         }
 

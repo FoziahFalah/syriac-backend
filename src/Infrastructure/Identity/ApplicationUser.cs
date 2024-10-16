@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using SyriacSources.Backend.Domain.Common;
+using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
-public class ApplicationUser : IdentityUser<int>
+public class ApplicationUser : IdentityUser
 {
-    public string? NameAR { get; set; }
-    public string? NameEn { get; set; }
-    public bool IsActive { get; set; }
-    public string? CreatedBy { get; set; }
-    public DateTime CreatedOn { get; set; }
-    public string? DeactivatedBy { get; set; }
-    public DateTime Deactivatedon { get; set; }
+    public Guid ContributorId { get; set; }
+    public Contributor Contributor { get; set; } = new Contributor();
 
 }

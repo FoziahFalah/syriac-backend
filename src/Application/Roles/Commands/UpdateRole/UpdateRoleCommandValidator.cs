@@ -6,9 +6,9 @@ namespace SyriacSources.Backend.Application.Permissions.Commands.UpdatePermissio
 public class UpdateRoleCommandValidator : AbstractValidator<UpdatePermissionCommand>
 {
        private readonly IApplicationDbContext _context;
-       private readonly IIdentityRoleService _roleManager;
+       private readonly IApplicationRoleService _roleManager;
 
-    public UpdateRoleCommandValidator(IApplicationDbContext context, IIdentityRoleService roleManager)
+    public UpdateRoleCommandValidator(IApplicationDbContext context, IApplicationRoleService roleManager)
     {
         _context = context;
         _roleManager = roleManager;

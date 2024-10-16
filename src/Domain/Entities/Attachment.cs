@@ -10,5 +10,6 @@ public class Attachment : BaseAuditableEntity
     public int SourceId { get; set; }
     public string? FileName { get; set; }
     public string? FilePath { get; set; }
+    public string? FileExtension { get; set; }
 
 }

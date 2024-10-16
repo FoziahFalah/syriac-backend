@@ -8,7 +8,7 @@ public class CreateUserCommandValidator : AbstractValidator<CreateRoleCommand>
             .MaximumLength(100)
             .NotEmpty();
 
-        RuleFor(v => v.Name_ar)
+        RuleFor(v => v.NameAR)
             .MaximumLength(200)
             .NotEmpty();
     }

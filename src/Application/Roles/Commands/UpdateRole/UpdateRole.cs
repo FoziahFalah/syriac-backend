@@ -14,9 +14,9 @@ public record UpdateRoleCommand :IRequest<Result>
 public class UpdateRoleHandler : IRequestHandler<UpdateRoleCommand, Result>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IIdentityRoleService _identityRoleService;
+    private readonly IApplicationRoleService _identityRoleService;
 
-    public UpdateRoleHandler(IApplicationDbContext context, IIdentityRoleService identityRoleService)
+    public UpdateRoleHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
     {
         _context = context;
         _identityRoleService = identityRoleService;
@@ -30,7 +30,7 @@ public class UpdateRoleHandler : IRequestHandler<UpdateRoleCommand, Result>
         ApplicationRoleDto role = new ApplicationRoleDto
         {
             Name = request.Name,
-            Name_ar = request.Name_ar,
+            NameAR = request.Name_ar,
             Id  = request.Id
         };
 

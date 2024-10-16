@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SyriacSources.Backend.Domain.Entities;
-public class Contributor :BaseAuditableEntity
+public class Contributor : BaseAuditableEntity
 {
-    public string? Name { get; set; }
-    public int UserId { get; set; }
+    public string? FullNameEN{ get; set; }
+    public string? FullNameAR { get; set; }
+    public string? EmailAddress { get; set; }
 }

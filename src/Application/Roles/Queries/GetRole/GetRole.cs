@@ -15,9 +15,9 @@ public record GetRoleCommand : IRequest<string>
 public class GetRoleHandler : IRequestHandler<GetRoleCommand, string>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IIdentityRoleService _identityRoleService;
+    private readonly IApplicationRoleService _identityRoleService;
 
-    public GetRoleHandler(IApplicationDbContext context, IIdentityRoleService identityRoleService)
+    public GetRoleHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
     {
         _context = context;
         _identityRoleService = identityRoleService;

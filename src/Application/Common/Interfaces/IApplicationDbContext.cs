@@ -10,12 +10,12 @@ public interface IApplicationDbContext
     DbSet<Attachment> Attachments { get; }
     DbSet<Author> Authors { get; }
     DbSet<Century> Centuries { get; }
-    DbSet<Comment> Comments { get; }
+    DbSet<ExcerptComment> Comments { get; }
     DbSet<Contributor> Contributors { get; }
     DbSet<CoverPhoto> CoverPhotos { get; }
     DbSet<DateFormat> DateFromats { get; }
     DbSet<Excerpt> Excerpts { get; }
-    DbSet<Permission> Permissions { get; }
+    DbSet<ApplicationPermission> Permissions { get; }
     DbSet<RolePermission> RolePermissions { get; }
     DbSet<ExcerptDate> ExcerptDates { get; }
     DbSet<ExcerptText> ExcerptTexts { get; }

@@ -22,7 +22,7 @@ public class GetPermissionsQueryHandler : IRequestHandler<GetPermissionsQuery, L
     {
         return await _context.Permissions
             .Where(x => x.Id == request.RoleId)
-            .OrderBy(x => x.PermissionName)
+            .OrderBy(x => x.NormalizedPermissionName)
             .ProjectTo<PermissionDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
     }

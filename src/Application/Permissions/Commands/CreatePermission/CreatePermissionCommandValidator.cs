@@ -27,7 +27,7 @@ public class DeletePermissionCommandValidator : AbstractValidator<CreatePermissi
     public async Task<bool> BeUnique(string name, CancellationToken cancellationToken)
     {
         return await _context.Permissions
-            .AllAsync(l => l.PermissionName != name, cancellationToken);
+            .AllAsync(l => l.NormalizedPermissionName != name, cancellationToken);
     }
 
 }

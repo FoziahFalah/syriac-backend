@@ -13,9 +13,9 @@ public record UpdatePermissionCommand :IRequest<int>
 public class UpdatePermissionHandler : IRequestHandler<UpdatePermissionCommand, int>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IIdentityRoleService _identityRoleService;
+    private readonly IApplicationRoleService _identityRoleService;
 
-    public UpdatePermissionHandler(IApplicationDbContext context, IIdentityRoleService identityRoleService)
+    public UpdatePermissionHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
     {
         _context = context;
         _identityRoleService = identityRoleService;
@@ -28,7 +28,7 @@ public class UpdatePermissionHandler : IRequestHandler<UpdatePermissionCommand, 
 
         Guard.Against.NotFound(request.Id, entity);
 
-        entity.PermissionName = request.Name;
+        entity.NormalizedPermissionName = request.Name;
         entity.Description = request.Description;
 
         await _context.SaveChangesAsync(cancellationToken);
