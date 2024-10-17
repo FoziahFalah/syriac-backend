@@ -41,9 +41,13 @@ public class ApplicationRoleService : IApplicationRoleService
     {
         return await _context.ApplicationRoles.FirstOrDefaultAsync(r => r.NormalizedRoleName == roleName, cancellationToken);
     }
-    public async Task<List<string>> GetRolesAsync(CancellationToken cancellationToken)
+    public async Task<List<ApplicationRole>> GetRolesAsync(CancellationToken cancellationToken)
     {
-        return await _context.ApplicationRoles.Select(x => x.NormalizedRoleName).ToListAsync();
+        return await _context.ApplicationRoles.ToListAsync();
+    }
+    public async Task<ApplicationRole?> GetRoleAsync(int roleId, CancellationToken cancellationToken)
+    {
+        return await _context.ApplicationRoles.FindAsync(roleId);
     }
 
     public async Task<Result> UpdateAsync(ApplicationRole role, CancellationToken cancellationToken)

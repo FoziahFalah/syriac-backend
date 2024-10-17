@@ -726,7 +726,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.ToTable("Sources");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceInroductionEditor", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroductionEditor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -764,7 +764,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.ToTable("SourceInroductionEditors");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourcePublication", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Publication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1202,7 +1202,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Navigation("IntroductionEditor");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceInroductionEditor", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroductionEditor", b =>
                 {
                     b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Editor")
                         .WithMany()
@@ -1219,7 +1219,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Navigation("Editor");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourcePublication", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Publication", b =>
                 {
                     b.HasOne("SyriacSources.Backend.Domain.Entities.Source", null)
                         .WithMany("Publications")

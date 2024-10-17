@@ -52,7 +52,7 @@ public static class DependencyInjection
         services.AddScoped<CurrentUser>();
 
         //Registering Services
-        services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<IIdentityService, IdentityUserService>();
         services.AddTransient<IApplicationRoleService, IdentityRoleService>();
         services.AddTransient<ITokenService, TokenService>();
 

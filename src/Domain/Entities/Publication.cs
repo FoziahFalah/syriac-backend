@@ -1,6 +1,6 @@
 ﻿
 namespace SyriacSources.Backend.Domain.Entities;
-public class SourcePublication : BaseAuditableEntity
+public class Publication : BaseAuditableEntity
 {
     public int SourceId {  get; set; }
     public string? Description {  get; set; }

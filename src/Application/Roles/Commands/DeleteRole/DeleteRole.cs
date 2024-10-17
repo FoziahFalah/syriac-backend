@@ -11,22 +11,22 @@ public record DeleteRoleCommand :IRequest
 public class DeleteRoleHandler : IRequestHandler<DeleteRoleCommand>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IApplicationRoleService _identityRoleService;
+    private readonly IApplicationRoleService _appRoleService;
 
-    public DeleteRoleHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
+    public DeleteRoleHandler(IApplicationDbContext context, IApplicationRoleService appRoleService)
     {
         _context = context;
-        _identityRoleService = identityRoleService;
+        _appRoleService = appRoleService;
     }
 
     public async Task Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
     {
 
-        var entity = await _identityRoleService.GetRoleAsync(request.Id.ToString());
+        var entity = await _appRoleService.GetRoleAsync(request.Id, cancellationToken);
 
         Guard.Against.NotFound(request.Id, entity);
 
-        await _identityRoleService.DeleteRoleAsync(entity);
+        await _appRoleService.DeleteAsync(entity, cancellationToken);
 
     }
 }

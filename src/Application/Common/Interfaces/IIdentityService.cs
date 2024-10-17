@@ -6,9 +6,8 @@ namespace SyriacSources.Backend.Application.Common.Interfaces;
 public interface IIdentityService
 {
     Task<string?> GetUserNameAsync(string userId);
-    Task<bool> EmailExists(string email);
 
-    Task<bool> IsInRoleAsync(string userId, string role);
+    Task<bool> EmailExists(string email);
 
     Task<bool> AuthorizeAsync(string userId, string policyName);
 
@@ -17,4 +16,8 @@ public interface IIdentityService
     Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password);
 
     Task<Result> DeleteUserAsync(string userId);
+
+    ////Roles
+    //Task<bool> IsInRoleAsync(string userId,  int roleId);
+    //Task<bool> AddToRole(string userId, int roleId);
 }

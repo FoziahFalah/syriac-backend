@@ -15,14 +15,16 @@ public interface IApplicationDbContext
     DbSet<CoverPhoto> CoverPhotos { get; }
     DbSet<DateFormat> DateFromats { get; }
     DbSet<Excerpt> Excerpts { get; }
+    DbSet<ApplicationRolePermission> ApplicationRolePermissions { get; }
+    DbSet<ApplicationUserRole> ApplicationUserRoles { get; }
+    DbSet<ApplicationRole> ApplicationRoles { get; }
     DbSet<ApplicationPermission> Permissions { get; }
-    DbSet<RolePermission> RolePermissions { get; }
     DbSet<ExcerptDate> ExcerptDates { get; }
     DbSet<ExcerptText> ExcerptTexts { get; }
     DbSet<Footnote> Footnotes { get; }
     DbSet<Language> Languages { get; }
-    DbSet<SourcePublication> Publications { get; }
-    DbSet<SourceInroductionEditor> SourceInroductionEditors { get; }
+    DbSet<Publication> Publications { get; }
+    DbSet<SourceIntroEditor> SourceIntroEditors { get; }
     DbSet<Source> Sources { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

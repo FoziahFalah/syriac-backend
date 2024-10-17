@@ -12,9 +12,9 @@ public class Source : BaseAuditableEntity
     public string? SourceTitleInArabic { get; set; }
     public string? SourceTitleInSyriac { get; set; }
     public string? SourceTitleInForeignLanguage { get; set; }
-    public List<SourceInroductionEditor> SourceIntroductionEditors { get; set; } = new List<SourceInroductionEditor>();
+    public List<SourceIntroEditor> SourceIntroductionEditors { get; set; } = new List<SourceIntroEditor>();
     public Contributor IntroductionEditor { get; set; } = new Contributor();
-    public List<SourcePublication> Publications { get; set; } = new List<SourcePublication> { };
+    public List<Publication> Publications { get; set; } = new List<Publication> { };
     public int CoverPhotoId { get; set; }
     public Attachment CoverPhoto { get; set; } = new Attachment();
     public List<Attachment> OtherAttachments{ get; set; } = new List<Attachment> { };

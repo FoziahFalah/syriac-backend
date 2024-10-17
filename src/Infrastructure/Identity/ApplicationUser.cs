@@ -4,9 +4,9 @@ using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
-public class ApplicationUser : IdentityUser
+public class ApplicationUser : IdentityUser<int>
 {
-    public Guid ContributorId { get; set; }
+    public int ContributorId { get; set; }
     public Contributor Contributor { get; set; } = new Contributor();
 
 }

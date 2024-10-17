@@ -9,17 +9,20 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
-public class IdentityService : IIdentityService
+public class IdentityUserService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IApplicationRoleService _roleService;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
 
-    public IdentityService(
+    public IdentityUserService(
         UserManager<ApplicationUser> userManager,
+        IApplicationRoleService roleService,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService)
     {
+        _roleService = roleService;
         _userManager = userManager;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         _authorizationService = authorizationService;
@@ -45,13 +48,6 @@ public class IdentityService : IIdentityService
         var result = await _userManager.CreateAsync(user, password);
 
         return (result.ToApplicationResult(), user.Id.ToString());
-    }
-
-    public async Task<bool> IsInRoleAsync(string userId, string role)
-    {
-        var user = await _userManager.FindByIdAsync(userId);
-
-        return user != null && await _userManager.IsInRoleAsync(user, role);
     }
 
     public async Task<bool> AuthorizeAsync(string userId, string policyName)
@@ -85,7 +81,7 @@ public class IdentityService : IIdentityService
 
         var userDto = new ApplicationUserDto
         {
-            Id = user.Id,
+            Id = Convert.ToInt32(user.Id),
             Email = user.Email,
             Username = user.UserName,
         };
@@ -105,4 +101,5 @@ public class IdentityService : IIdentityService
 
         return result.ToApplicationResult();
     }
+
 }

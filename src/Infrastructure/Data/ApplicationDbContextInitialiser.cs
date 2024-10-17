@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SyriacSources.Backend.Infrastructure.Services;
+using SyriacSources.Backend.Application.Common.Interfaces;
+using System;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SyriacSources.Backend.Infrastructure.Data;
 
@@ -28,15 +32,19 @@ public class ApplicationDbContextInitialiser
 {
     private readonly ILogger<ApplicationDbContextInitialiser> _logger;
     private readonly ApplicationDbContext _context;
+    private readonly IApplicationRoleService _appRoleService;
+    private readonly IApplicationUserRoleService _appUserRoleService;
+    private readonly IApplicationUserService _appUserService;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<ApplicationRole> _roleManager;
 
-    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, IApplicationUserService appUserService, IApplicationUserRoleService userRoleService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, ApplicationRoleService roleService)
     {
         _logger = logger;
         _context = context;
+        _appUserRoleService = userRoleService;
         _userManager = userManager;
-        _roleManager = roleManager;
+        _appRoleService = roleService;
+        _appUserService = appUserService;
     }
 
     public async Task InitialiseAsync()
@@ -68,42 +76,60 @@ public class ApplicationDbContextInitialiser
     public async Task TrySeedAsync()
     {
         // Default roles
-        var administratorRole = new ApplicationRole { NormalizedRoleName = "Administrator" , NameAR = "مدير النظام" , NameEN = "Administrator"};
+        var token = new CancellationToken();
 
-        if (_roleManager.Roles.All(r => r.NameAR != administratorRole.NameEN))
+        var administratorRole = new ApplicationRole { NormalizedRoleName = "Administrator" , NameAR = "مدير النظام" , NameEN = "Administrator", CreatedBy = "S"};
+
+        var roles =await _appRoleService.GetRolesAsync(token);
+
+        if (roles.All(r => r.NormalizedRoleName != administratorRole.NormalizedRoleName))
         {
-            await _roleManager.CreateAsync(administratorRole);
+            await _appRoleService.CreateAsync(administratorRole, token);
         }
 
-        // Default users
-        var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
+        var user = new Contributor
+        {
+            FullNameAR = "مدير نظام",
+            FullNameEN = "Administrator",
+            EmailAddress = "admin@local"
+        };
 
+        //Create Contributor
+        var result = await _appUserService.CreateUser(user, new CancellationToken());
+
+        if (!result.Item1.Succeeded)
+        {
+            var errors = result.Item1.Errors.Aggregate((i, j) => i + "\n " + j);
+            _logger.LogError(errors);
+            return;
+        }
+
+        //Create identity user
+        var administrator = new ApplicationUser { UserName = user.EmailAddress, Email = user.EmailAddress, ContributorId = result.Item2};
+        IdentityResult identityUser;
         if (_userManager.Users.All(u => u.UserName != administrator.UserName))
         {
-            await _userManager.CreateAsync(administrator, "Administrator1!");
-            if (!string.IsNullOrWhiteSpace(administratorRole.NormalizedRoleName))
+            //Creating 
+            identityUser =  await _userManager.CreateAsync(administrator, "Aa@123456");
+            if (!identityUser.Succeeded)
             {
-                await _userManager.AddToRolesAsync(administrator, new [] { administratorRole.NormalizedRoeName }); //
+                var errors = identityUser.Errors.Select(x=>x.Description).Aggregate((i, j) => i + "\n " + j);
+                _logger.LogError(errors);
+                return;
             }
         }
 
-        //// Default data
-        //// Seed, if necessary
-        //if (!_context.TodoLists.Any())
-        //{
-        //    _context.TodoLists.Add(new TodoList
-        //    {
-        //        Title = "Todo List",
-        //        Items =
-        //        {
-        //            new TodoItem { Title = "Make a todo list 📃" },
-        //            new TodoItem { Title = "Check off the first item ✅" },
-        //            new TodoItem { Title = "Realise you've already done two things on the list! 🤯"},
-        //            new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
-        //        }
-        //    });
-
-        //    await _context.SaveChangesAsync();
-        //}
+        //Map Contributor to role
+        if (!string.IsNullOrWhiteSpace(administratorRole.NormalizedRoleName))
+        {
+            ///Add To Role
+            var userRole = await _appUserRoleService.AddToRolesAsync(result.Item2, new List<int> { administratorRole.Id }, token);
+            if (!userRole.Item1.Succeeded)
+            {
+                var errors = userRole.Item1.Errors.Aggregate((i, j) => i + "\n " + j);
+                _logger.LogError(errors);
+                return;
+            }
+        }
     }
 }

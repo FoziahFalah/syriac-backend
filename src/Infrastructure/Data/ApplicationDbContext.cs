@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SyriacSources.Backend.Infrastructure.Data;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -31,8 +31,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<ExcerptText> ExcerptTexts => Set<ExcerptText>();
     public DbSet<Footnote> Footnotes => Set<Footnote>();
     public DbSet<Language> Languages => Set<Language>();
-    public DbSet<SourcePublication> Publications => Set<SourcePublication>();
-    public DbSet<SourceInroductionEditor> SourceInroductionEditors => Set<SourceInroductionEditor>();
+    public DbSet<Publication> Publications => Set<Publication>();
+    public DbSet<SourceIntroEditor> SourceInroductionEditors => Set<SourceIntroEditor>();
     public DbSet<Source> Sources => Set<Source>();
 
     protected override void OnModelCreating(ModelBuilder builder)

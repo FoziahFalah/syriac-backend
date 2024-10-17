@@ -29,7 +29,7 @@ public class GetRoleHandler : IRequestHandler<GetRoleCommand, string>
 
         Guard.Against.NotFound(request.Id, entity);
 
-        //string result = await _identityRoleService.GetRoleAsync(request.Id.ToString());
+        //string result = await _appRoleService.GetRoleAsync(request.Id.ToString());
 
         return entity;
     }
