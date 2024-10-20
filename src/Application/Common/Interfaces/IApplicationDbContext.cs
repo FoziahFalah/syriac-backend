@@ -4,28 +4,30 @@ namespace SyriacSources.Backend.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    DbSet<TodoList> TodoLists { get; }
 
-    DbSet<TodoItem> TodoItems { get; }
-    DbSet<Attachment> Attachments { get; }
-    DbSet<Author> Authors { get; }
-    DbSet<Century> Centuries { get; }
-    DbSet<ExcerptComment> Comments { get; }
-    DbSet<Contributor> Contributors { get; }
-    DbSet<CoverPhoto> CoverPhotos { get; }
-    DbSet<DateFormat> DateFromats { get; }
-    DbSet<Excerpt> Excerpts { get; }
-    DbSet<ApplicationRolePermission> ApplicationRolePermissions { get; }
-    DbSet<ApplicationUserRole> ApplicationUserRoles { get; }
-    DbSet<ApplicationRole> ApplicationRoles { get; }
-    DbSet<ApplicationPermission> Permissions { get; }
-    DbSet<ExcerptDate> ExcerptDates { get; }
-    DbSet<ExcerptText> ExcerptTexts { get; }
-    DbSet<Footnote> Footnotes { get; }
-    DbSet<Language> Languages { get; }
-    DbSet<Publication> Publications { get; }
-    DbSet<SourceIntroEditor> SourceIntroEditors { get; }
-    DbSet<Source> Sources { get; }
+    public DbSet<TodoList> TodoLists{ get; }
+
+    public DbSet<TodoItem> TodoItems { get; }
+    public DbSet<Attachment> Attachments { get; }
+    public DbSet<Author> Authors { get; }
+    public DbSet<Century> Centuries { get; }
+    public DbSet<ApplicationPermission> Permissions { get; }
+    public DbSet<ExcerptComment> Comments { get; }
+    public DbSet<Contributor> Contributors { get; }
+    public DbSet<CoverPhoto> CoverPhotos { get; }
+    public DbSet<ApplicationRolePermission> ApplicationRolePermissions { get; }
+    public DbSet<ApplicationPermission> ApplicationPermissions { get; }
+    public DbSet<ApplicationRole> ApplicationRoles { get; }
+    public DbSet<ApplicationUserRole> ApplicationUserRoles { get; }
+    public DbSet<DateFormat> DateFromats { get; }
+    public DbSet<Excerpt> Excerpts { get; }
+    public DbSet<ExcerptDate> ExcerptDates { get; }
+    public DbSet<ExcerptText> ExcerptTexts { get; }
+    public DbSet<Footnote> Footnotes { get; }
+    public DbSet<Language> Languages{ get; }
+    public DbSet<Publication> Publications { get; }
+    public DbSet<SourceIntroEditor> SourceInroductionEditors { get; }
+    public DbSet<Source> Sources { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

@@ -1,4 +1,5 @@
 ﻿
+using SyriacSources.Backend.Application.Common.Extensions;
 using SyriacSources.Backend.Application.Common.Interfaces;
 
 namespace SyriacSources.Backend.Application.Permissions.Commands.UpdatePermission;
@@ -28,7 +29,7 @@ public class UpdateRoleCommandValidator : AbstractValidator<UpdatePermissionComm
 
     public async Task<bool> BeUnique(string name, CancellationToken cancellationToken)
     {
-        return (await _roleManager.GetRolesAsync()).All(l => l!= name);
+        return (await _roleManager.GetRolesAsync(cancellationToken)).All(l => l.NormalizedRoleName!= name.NormalizeString());
     }
 
 }

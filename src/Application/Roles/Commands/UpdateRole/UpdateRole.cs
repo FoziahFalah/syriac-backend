@@ -1,4 +1,5 @@
 ﻿
+using SyriacSources.Backend.Application.Common.Extensions;
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Domain.Entities;
@@ -8,8 +9,8 @@ namespace SyriacSources.Backend.Application.Roles.Commands.UpdateRole;
 public record UpdateRoleCommand :IRequest<Result>
 {
     public int Id { get; set; }
-    public required string Name { get; init; }
-    public required string Name_ar { get; init; }
+    public required string NameEN { get; init; }
+    public required string NameAR { get; init; }
 }
 public class UpdateRoleHandler : IRequestHandler<UpdateRoleCommand, Result>
 {
@@ -24,17 +25,18 @@ public class UpdateRoleHandler : IRequestHandler<UpdateRoleCommand, Result>
 
     public async Task<Result> Handle(UpdateRoleCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _identityRoleService.GetRoleAsync(request.Id.ToString());
+        var entity = await _identityRoleService.GetRoleAsync(request.Id, cancellationToken);
 
         Guard.Against.NotFound(request.Id, entity);
-        ApplicationRoleDto role = new ApplicationRoleDto
+        ApplicationRole role = new ApplicationRole
         {
-            Name = request.Name,
-            NameAR = request.Name_ar,
+            NameEN = request.NameEN,
+            NameAR = request.NameAR,
+            NormalizedRoleName = request.NameEN.NormalizeString(),
             Id  = request.Id
         };
 
-        Result result = await _identityRoleService.UpdateRoleAsync(role);
+        Result result = await _identityRoleService.UpdateAsync(role,cancellationToken);
 
         return result;
     }

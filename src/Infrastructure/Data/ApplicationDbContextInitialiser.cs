@@ -124,9 +124,9 @@ public class ApplicationDbContextInitialiser
         {
             ///Add To Role
             var userRole = await _appUserRoleService.AddToRolesAsync(result.Item2, new List<int> { administratorRole.Id }, token);
-            if (!userRole.Item1.Succeeded)
+            if (!userRole.Succeeded)
             {
-                var errors = userRole.Item1.Errors.Aggregate((i, j) => i + "\n " + j);
+                var errors = userRole.Errors.Aggregate((i, j) => i + "\n " + j);
                 _logger.LogError(errors);
                 return;
             }

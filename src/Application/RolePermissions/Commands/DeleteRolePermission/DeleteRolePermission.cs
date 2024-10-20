@@ -21,13 +21,13 @@ public class DeleteRolePermissionHandler : IRequestHandler<DeleteRolePermissionC
 
     public async Task Handle(DeleteRolePermissionCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.RolePermissions
+        var entity = await _context.ApplicationRolePermissions
             .Where(l => l.Id == request.Id)
             .SingleOrDefaultAsync(cancellationToken);
 
         Guard.Against.NotFound(request.Id, entity);
 
-        _context.RolePermissions.Remove(entity);
+        _context.ApplicationRolePermissions.Remove(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
 

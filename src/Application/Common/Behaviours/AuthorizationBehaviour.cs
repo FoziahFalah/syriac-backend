@@ -9,13 +9,16 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
 {
     private readonly IUser _user;
     private readonly IIdentityService _identityService;
+    private readonly IApplicationUserRoleService _appUserRoleService;
 
     public AuthorizationBehaviour(
         IUser user,
+        IApplicationUserRoleService appUserRoleService,
         IIdentityService identityService)
     {
         _user = user;
         _identityService = identityService;
+        _appUserRoleService = appUserRoleService;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -41,7 +44,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
                 {
                     foreach (var role in roles)
                     {
-                        var isInRole = await _identityService.IsInRoleAsync(_user.Id, role.Trim());
+                        bool isInRole = await _appUserRoleService.IsInRoleAsync(Convert.ToInt32(_user.Id), Convert.ToInt32(role),cancellationToken);
                         if (isInRole)
                         {
                             authorized = true;

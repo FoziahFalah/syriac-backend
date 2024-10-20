@@ -984,7 +984,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<string>("NameAR")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NameEn")
+                    b.Property<string>("NameEN")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")

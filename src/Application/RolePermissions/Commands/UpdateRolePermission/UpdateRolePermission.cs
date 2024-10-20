@@ -2,56 +2,32 @@
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacSources.Backend.Application.RolePermissions.Commands.UpdateRolePermission;
+namespace SyriacSources.Backend.Application.ApplicationRolePermissions.Commands.UpdateRolePermission;
 
 public record UpdateRolePermissionCommand :IRequest<int>
 {
     public int RoleId { get; set; }
-    public required List<int> PermissionId { get; init; }
+    public required List<int> PermissionIds { get; init; }
 }
 
 public class UpdateRolePermissionHandler : IRequestHandler<UpdateRolePermissionCommand, int>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IApplicationRoleService _identityRoleService;
+    private readonly IApplicationRoleService _appRoleService;
 
-    public UpdateRolePermissionHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
+    public UpdateRolePermissionHandler(IApplicationDbContext context, IApplicationRoleService appRoleService)
     {
         _context = context;
-        _identityRoleService = identityRoleService;
+        _appRoleService = appRoleService;
     }
 
     public async Task<int> Handle(UpdateRolePermissionCommand request, CancellationToken cancellationToken)
     {
-        // Fetch existing role permissions for the specified role
-        var entity = await _context.RolePermissions
-           .Where(r => r.RoleId == request.RoleId).ToListAsync();
 
-        var currentPermissionIds = entity.Select(r => r.Id);
+        var result = await _appRoleService.UpdateRolePermissions(request.RoleId, request.PermissionIds, cancellationToken);
 
-        // Find permissions to add
-        var permissionsToAdd = request.PermissionId.Except(currentPermissionIds).ToList();
-        foreach (var permissionId in permissionsToAdd)
-        {
-            _context.RolePermissions.Add(new RolePermission
-            {
-                RoleId = request.RoleId,
-                PermissionId = permissionId
-            });
-        }
-
-        // Find permissions to remove
-        var permissionsToRemove = currentPermissionIds.Except(request.PermissionId).ToList();
-        foreach (var permissionId in permissionsToRemove)
-        {
-            var permissionToRemove = entity.First(rp => rp.PermissionId == permissionId);
-            _context.RolePermissions.Remove(permissionToRemove);
-        }
-
-
-        await _context.SaveChangesAsync(cancellationToken);
 
         // Return the number of changes made
-        return permissionsToAdd.Count + permissionsToRemove.Count;
+        return result.countChanges;
     }
 }

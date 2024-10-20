@@ -42,8 +42,6 @@ public static class DependencyInjection
         services
             .AddIdentityCore<ApplicationUser>()
             .AddUserManager<UserManager<ApplicationUser>>()
-            .AddRoles<ApplicationRole>()
-            .AddRoleManager<RoleManager<ApplicationRole>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddApiEndpoints();
 
@@ -53,7 +51,7 @@ public static class DependencyInjection
 
         //Registering Services
         services.AddTransient<IIdentityService, IdentityUserService>();
-        services.AddTransient<IApplicationRoleService, IdentityRoleService>();
+        services.AddTransient<IApplicationRoleService, ApplicationRoleService>();
         services.AddTransient<ITokenService, TokenService>();
 
         services.Configure<JWTToken>(configuration.GetSection("JWT"));

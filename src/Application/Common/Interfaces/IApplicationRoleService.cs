@@ -10,7 +10,8 @@ public interface IApplicationRoleService
     Task<ApplicationRole?> FindByNameAsync(string roleName, CancellationToken cancellationToken);
     Task<List<ApplicationRole>> GetRolesAsync(CancellationToken cancellationToken);
     Task<ApplicationRole?> GetRoleAsync(int roleId, CancellationToken cancellationToken);
-    Task<(Result Result, int roleId)> CreateAsync(ApplicationRole role, CancellationToken cancellationToken);
+    Task<(Result Result, int RoleId)> CreateAsync(ApplicationRole role, CancellationToken cancellationToken);
+    Task<(Result result, int countChanges)> UpdateRolePermissions(int roleId, List<int> permissionIds, CancellationToken cancellationToken);
     Task<Result> UpdateAsync(ApplicationRole role, CancellationToken cancellationToken);
     Task<Result> DeleteAsync(ApplicationRole role, CancellationToken cancellationToken);
 }

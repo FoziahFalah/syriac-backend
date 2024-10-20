@@ -8,4 +8,3 @@ public class SourceIntroEditor : BaseAuditableEntity
     public int EditorId {  get; set; }
     public Contributor Editor {  get; set; } = new Contributor();
 }
-

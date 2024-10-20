@@ -7,6 +7,7 @@ using SyriacSources.Backend.Application.Common;
 using SyriacSources.Backend.Domain.Entities;
 using SyriacSources.Backend.Infrastructure.Data;
 using SyriacSources.Backend.Application.Common.Extensions;
+using Azure.Core;
 
 namespace SyriacSources.Backend.Infrastructure.Services;
 public class ApplicationRoleService : IApplicationRoleService
@@ -64,4 +65,34 @@ public class ApplicationRoleService : IApplicationRoleService
         return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x=> Result.Success());
     }
 
+    public async Task<(Result result, int countChanges)> UpdateRolePermissions(int roleId, List<int> permissionIds, CancellationToken cancellationToken)
+    {
+        // Fetch existing role permissions for the specified role
+        List<ApplicationRolePermission> entity = await _context.ApplicationRolePermissions
+           .Where(r => r.Id == roleId).ToListAsync();
+
+        var currentPermissionIds = entity.Select(r => r.Id);
+
+        // Find permissions to add
+        var permissionsToAdd = permissionIds.Except(currentPermissionIds).ToList();
+        foreach (var permissionId in permissionsToAdd)
+        {
+            _context.ApplicationRolePermissions.Add(new ApplicationRolePermission
+            {
+                ApplicationRoleId = roleId,
+                ApplicationPermissionId = permissionId
+            });
+        }
+
+        // Find permissions to remove
+        var permissionsToRemove = currentPermissionIds.Except(permissionIds).ToList();
+        foreach (var permissionId in permissionsToRemove)
+        {
+            var permissionToRemove = entity.First(rp => rp.ApplicationPermissionId == permissionId);
+            _context.ApplicationRolePermissions.Remove(permissionToRemove);
+        }
+        var result = await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success());
+        var changes = permissionsToAdd.Count + permissionsToRemove.Count();
+        return new (result, changes) ;
+    }
 }

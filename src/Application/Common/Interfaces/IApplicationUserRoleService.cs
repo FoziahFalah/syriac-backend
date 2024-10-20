@@ -6,6 +6,6 @@ namespace SyriacSources.Backend.Application.Common.Interfaces;
 
 public interface IApplicationUserRoleService
 {
-    Task<(Result,int)> AddToRolesAsync(int userId, List<int> roles, CancellationToken cancellationToken);
+    Task<Result> AddToRolesAsync(int userId, List<int> roles, CancellationToken cancellationToken);
     Task<bool> IsInRoleAsync(int userId, int roleId, CancellationToken cancellationToken);
 }
