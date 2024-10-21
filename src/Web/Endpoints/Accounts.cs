@@ -17,13 +17,10 @@ public class Accounts : EndpointGroupBase
             .MapPost(Login);
     }
 
-    public Task<int> CreateTodoItem(ISender sender, CreateTodoItemCommand command)
+
+    public async Task<LoginResponseDto> Login(ISender sender, LoginCommand command)
     {
-        return sender.Send(command);
-    }
-    public Task<LoginResponseDto> Login(ISender sender, LoginCommand command)
-    {
-        return sender.Send(command);
+        return await sender.Send(command);
     }
 
 }

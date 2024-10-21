@@ -12,17 +12,54 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "ApplicationPermission",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NormalizedPermissionName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    NameEN = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    NameAR = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    ParentId = table.Column<int>(type: "int", nullable: false),
+                    IsModule = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationPermission", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationRoles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NormalizedRoleName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    NameEN = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    NameAR = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NameAR = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -33,45 +70,12 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NameAR = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeactivatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Deactivatedon = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Authors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -89,7 +93,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -107,8 +111,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: false),
+                    FullNameEN = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    FullNameAR = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    EmailAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -127,8 +132,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SourceId = table.Column<int>(type: "int", nullable: false),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FileName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    FilePath = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    FileExtension = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -146,8 +152,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Format = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Period = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Format = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Period = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -186,8 +192,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -197,26 +203,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Languages", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Permissions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentId = table.Column<int>(type: "int", nullable: true),
-                    PermissionName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Permissions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -239,6 +225,37 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ApplicationRolePermissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApplicationRoleId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationPermissionId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationRolePermissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationRolePermissions_ApplicationPermission_ApplicationPermissionId",
+                        column: x => x.ApplicationPermissionId,
+                        principalTable: "ApplicationPermission",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationRolePermissions_ApplicationRoles_ApplicationRoleId",
+                        column: x => x.ApplicationRoleId,
+                        principalTable: "ApplicationRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -255,6 +272,190 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserRoles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserRoles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContributorId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUserRoles_Contributors_ContributorId",
+                        column: x => x.ContributorId,
+                        principalTable: "Contributors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ContributorId = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Contributors_ContributorId",
+                        column: x => x.ContributorId,
+                        principalTable: "Contributors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ContributorId = table.Column<int>(type: "int", nullable: false),
+                    Details = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_Contributors_ContributorId",
+                        column: x => x.ContributorId,
+                        principalTable: "Contributors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Footnotes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CommenterId = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Footnotes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Footnotes_Contributors_CommenterId",
+                        column: x => x.CommenterId,
+                        principalTable: "Contributors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExcerptTexts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExcerptId = table.Column<int>(type: "int", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    EditorId = table.Column<int>(type: "int", nullable: false),
+                    ReviewerId = table.Column<int>(type: "int", nullable: false),
+                    TranslatorId = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExcerptTexts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExcerptTexts_Contributors_EditorId",
+                        column: x => x.EditorId,
+                        principalTable: "Contributors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_ExcerptTexts_Contributors_ReviewerId",
+                        column: x => x.ReviewerId,
+                        principalTable: "Contributors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_ExcerptTexts_Contributors_TranslatorId",
+                        column: x => x.TranslatorId,
+                        principalTable: "Contributors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_ExcerptTexts_Languages_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Languages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TodoItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ListId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    Reminder = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Done = table.Column<bool>(type: "bit", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TodoItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TodoItems_TodoLists_ListId",
+                        column: x => x.ListId,
+                        principalTable: "TodoLists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -345,166 +546,15 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CommenterId = table.Column<int>(type: "int", nullable: false),
-                    Details = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Comments_Contributors_CommenterId",
-                        column: x => x.CommenterId,
-                        principalTable: "Contributors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Footnotes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CommenterId = table.Column<int>(type: "int", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Footnotes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Footnotes_Contributors_CommenterId",
-                        column: x => x.CommenterId,
-                        principalTable: "Contributors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ExcerptTexts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ExcerptId = table.Column<int>(type: "int", nullable: false),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LanguageId = table.Column<int>(type: "int", nullable: false),
-                    EditorId = table.Column<int>(type: "int", nullable: false),
-                    ReviewerId = table.Column<int>(type: "int", nullable: false),
-                    TranslatorId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExcerptTexts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ExcerptTexts_Contributors_EditorId",
-                        column: x => x.EditorId,
-                        principalTable: "Contributors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ExcerptTexts_Contributors_ReviewerId",
-                        column: x => x.ReviewerId,
-                        principalTable: "Contributors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ExcerptTexts_Contributors_TranslatorId",
-                        column: x => x.TranslatorId,
-                        principalTable: "Contributors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ExcerptTexts_Languages_LanguageId",
-                        column: x => x.LanguageId,
-                        principalTable: "Languages",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RolePermissions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    PermissionId = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RolePermissions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RolePermissions_Permissions_PermissionId",
-                        column: x => x.PermissionId,
-                        principalTable: "Permissions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TodoItems",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ListId = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Priority = table.Column<int>(type: "int", nullable: false),
-                    Reminder = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Done = table.Column<bool>(type: "bit", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TodoItems", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TodoItems_TodoLists_ListId",
-                        column: x => x.ListId,
-                        principalTable: "TodoLists",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Attachments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SourceId = table.Column<int>(type: "int", nullable: false),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FilePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExcerptId = table.Column<int>(type: "int", nullable: true),
+                    FileName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    FilePath = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    FileExtension = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -517,32 +567,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Excerpts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SourceId = table.Column<int>(type: "int", nullable: false),
-                    CoverPhotoId = table.Column<int>(type: "int", nullable: false),
-                    AdditionalInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Excerpts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Excerpts_Attachments_CoverPhotoId",
-                        column: x => x.CoverPhotoId,
-                        principalTable: "Attachments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Sources",
                 columns: table => new
                 {
@@ -552,14 +576,14 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     DocumentedOnHijri = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DocumentedOnGregorian = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CenturyId = table.Column<int>(type: "int", nullable: false),
-                    Introduction = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SourceTitleInArabic = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SourceTitleInSyriac = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SourceTitleInForeignLanguage = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Introduction = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    SourceTitleInArabic = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    SourceTitleInSyriac = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    SourceTitleInForeignLanguage = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     IntroductionEditorId = table.Column<int>(type: "int", nullable: false),
                     CoverPhotoId = table.Column<int>(type: "int", nullable: false),
                     CoverPhotoId1 = table.Column<int>(type: "int", nullable: false),
-                    AdditionalInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdditionalInfo = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -574,23 +598,48 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         column: x => x.CoverPhotoId1,
                         principalTable: "Attachments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Sources_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Sources_Centuries_CenturyId",
                         column: x => x.CenturyId,
                         principalTable: "Centuries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Sources_Contributors_IntroductionEditorId",
                         column: x => x.IntroductionEditorId,
                         principalTable: "Contributors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Excerpts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SourceId = table.Column<int>(type: "int", nullable: false),
+                    AdditionalInfo = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Excerpts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Excerpts_Sources_SourceId",
+                        column: x => x.SourceId,
+                        principalTable: "Sources",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -602,8 +651,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SourceId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Url = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -622,7 +671,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SourceInroductionEditors",
+                name: "SourceIntroductionEditors",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -653,6 +702,33 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "NormalizedPermissionName",
+                table: "ApplicationPermission",
+                column: "NormalizedPermissionName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationRolePermissions_ApplicationPermissionId",
+                table: "ApplicationRolePermissions",
+                column: "ApplicationPermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationRolePermissions_ApplicationRoleId",
+                table: "ApplicationRolePermissions",
+                column: "ApplicationRoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "NormalizedRoleName",
+                table: "ApplicationRoles",
+                column: "NormalizedRoleName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUserRoles_ContributorId",
+                table: "ApplicationUserRoles",
+                column: "ContributorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -660,9 +736,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
-                column: "NormalizedPermissionName",
+                column: "NormalizedName",
                 unique: true,
-                filter: "[NormalizedPermissionName] IS NOT NULL");
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -685,6 +761,11 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ContributorId",
+                table: "AspNetUsers",
+                column: "ContributorId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -692,24 +773,70 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attachments_ExcerptId",
-                table: "Attachments",
-                column: "ExcerptId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Attachments_SourceId",
                 table: "Attachments",
                 column: "SourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_CommenterId",
-                table: "Comments",
-                column: "CommenterId");
+                name: "AuthorName",
+                table: "Authors",
+                column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Excerpts_CoverPhotoId",
+                name: "CenturyName",
+                table: "Centuries",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ContributorId",
+                table: "Comments",
+                column: "ContributorId");
+
+            migrationBuilder.CreateIndex(
+                name: "ContributorEmailAddress",
+                table: "Contributors",
+                column: "EmailAddress",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ContributorFullNameAR",
+                table: "Contributors",
+                column: "FullNameAR");
+
+            migrationBuilder.CreateIndex(
+                name: "ContributorFullNameEN",
+                table: "Contributors",
+                column: "FullNameEN");
+
+            migrationBuilder.CreateIndex(
+                name: "CoverPhotoFileExtension",
+                table: "CoverPhotos",
+                column: "FileExtension");
+
+            migrationBuilder.CreateIndex(
+                name: "CoverPhotoFileName",
+                table: "CoverPhotos",
+                column: "FileName");
+
+            migrationBuilder.CreateIndex(
+                name: "CoverPhotoFilePath",
+                table: "CoverPhotos",
+                column: "FilePath");
+
+            migrationBuilder.CreateIndex(
+                name: "DateFormatName",
+                table: "DateFromats",
+                column: "Format");
+
+            migrationBuilder.CreateIndex(
+                name: "DateFormatPeriod",
+                table: "DateFromats",
+                column: "Period");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Excerpts_SourceId",
                 table: "Excerpts",
-                column: "CoverPhotoId");
+                column: "SourceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExcerptTexts_EditorId",
@@ -737,23 +864,18 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 column: "CommenterId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Publications_SourceId",
+                name: "PublicationSourceId",
                 table: "Publications",
                 column: "SourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RolePermissions_PermissionId",
-                table: "RolePermissions",
-                column: "PermissionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SourceInroductionEditors_EditorId",
-                table: "SourceInroductionEditors",
+                table: "SourceIntroductionEditors",
                 column: "EditorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SourceInroductionEditors_SourceId",
-                table: "SourceInroductionEditors",
+                table: "SourceIntroductionEditors",
                 column: "SourceId");
 
             migrationBuilder.CreateIndex(
@@ -777,16 +899,14 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 column: "IntroductionEditorId");
 
             migrationBuilder.CreateIndex(
+                name: "SourceTitleInArabic",
+                table: "Sources",
+                column: "SourceTitleInArabic");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TodoItems_ListId",
                 table: "TodoItems",
                 column: "ListId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Attachments_Excerpts_ExcerptId",
-                table: "Attachments",
-                column: "ExcerptId",
-                principalTable: "Excerpts",
-                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Attachments_Sources_SourceId",
@@ -801,12 +921,18 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Attachments_Excerpts_ExcerptId",
-                table: "Attachments");
+                name: "FK_Sources_Contributors_IntroductionEditorId",
+                table: "Sources");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Attachments_Sources_SourceId",
                 table: "Attachments");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationRolePermissions");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationUserRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -836,6 +962,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 name: "ExcerptDates");
 
             migrationBuilder.DropTable(
+                name: "Excerpts");
+
+            migrationBuilder.DropTable(
                 name: "ExcerptTexts");
 
             migrationBuilder.DropTable(
@@ -845,13 +974,16 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 name: "Publications");
 
             migrationBuilder.DropTable(
-                name: "RolePermissions");
-
-            migrationBuilder.DropTable(
-                name: "SourceInroductionEditors");
+                name: "SourceIntroductionEditors");
 
             migrationBuilder.DropTable(
                 name: "TodoItems");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationPermission");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -863,13 +995,10 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 name: "Languages");
 
             migrationBuilder.DropTable(
-                name: "Permissions");
-
-            migrationBuilder.DropTable(
                 name: "TodoLists");
 
             migrationBuilder.DropTable(
-                name: "Excerpts");
+                name: "Contributors");
 
             migrationBuilder.DropTable(
                 name: "Sources");
@@ -882,9 +1011,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Centuries");
-
-            migrationBuilder.DropTable(
-                name: "Contributors");
         }
     }
 }

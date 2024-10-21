@@ -33,7 +33,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Footnote> Footnotes => Set<Footnote>();
     public DbSet<Language> Languages => Set<Language>();
     public DbSet<Publication> Publications => Set<Publication>();
-    public DbSet<SourceIntroEditor> SourceInroductionEditors => Set<SourceIntroEditor>();
+    public DbSet<SourceIntroEditor> SourceIntroductionEditors => Set<SourceIntroEditor>();
     public DbSet<Source> Sources => Set<Source>();
 
     protected override void OnModelCreating(ModelBuilder builder)

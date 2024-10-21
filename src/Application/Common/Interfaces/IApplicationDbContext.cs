@@ -26,7 +26,7 @@ public interface IApplicationDbContext
     public DbSet<Footnote> Footnotes { get; }
     public DbSet<Language> Languages{ get; }
     public DbSet<Publication> Publications { get; }
-    public DbSet<SourceIntroEditor> SourceInroductionEditors { get; }
+    public DbSet<SourceIntroEditor> SourceIntroductionEditors { get; }
     public DbSet<Source> Sources { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

@@ -6,6 +6,7 @@ namespace SyriacSources.Backend.Application.Common.Interfaces;
 
 public interface IApplicationUserService
 {
+    Task<Contributor?> GetUserByEmail(string emailAddress, CancellationToken cancellationToken);
     Task<(Result,int)> CreateUser(Contributor contributor, CancellationToken cancellationToken);
     Task<(Result,int)> DeleteUser(Contributor contributor, CancellationToken cancellationToken);
     Task<(Result,int)> UpdateUser(Contributor contributor, CancellationToken cancellationToken);

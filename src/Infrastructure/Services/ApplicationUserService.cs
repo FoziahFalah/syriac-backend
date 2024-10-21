@@ -25,6 +25,17 @@ public class ApplicationUserService : IApplicationUserService
         _logger = logger;
     }
 
+    //public Task<(Result, Contributor)> GetUserById(int id, CancellationToken cancellationToken)
+    //{
+    //    return _context.Contributors.Where(x => x.)
+    //}
+
+    public async Task<Contributor?> GetUserByEmail(string emailAddress, CancellationToken cancellationToken)
+    {
+        Contributor? entity = await _context.Contributors.SingleOrDefaultAsync(x => x.EmailAddress == emailAddress);
+        return entity;
+    }
+
 
     public async Task<(Result, int)> CreateUser(Contributor contributor, CancellationToken cancellationToken)
     {

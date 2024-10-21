@@ -12,7 +12,7 @@ using SyriacSources.Backend.Infrastructure.Data;
 namespace SyriacSources.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241015070710_initialMigration")]
+    [Migration("20241021101726_initialMigration")]
     partial class initialMigration
     {
         /// <inheritdoc />
@@ -128,6 +128,184 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationPermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsModule")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameAR")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NameEN")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NormalizedPermissionName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedPermissionName")
+                        .IsUnique()
+                        .HasDatabaseName("NormalizedPermissionName");
+
+                    b.ToTable("ApplicationPermission");
+                });
+
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameAR")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NameEN")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NormalizedRoleName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedRoleName")
+                        .IsUnique()
+                        .HasDatabaseName("NormalizedRoleName");
+
+                    b.ToTable("ApplicationRoles");
+                });
+
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationRolePermission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplicationPermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ApplicationRoleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationPermissionId");
+
+                    b.HasIndex("ApplicationRoleId");
+
+                    b.ToTable("ApplicationRolePermissions");
+                });
+
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationUserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ContributorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserRoles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContributorId");
+
+                    b.ToTable("ApplicationUserRoles");
+                });
+
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Attachment", b =>
                 {
                     b.Property<int>("Id")
@@ -142,14 +320,20 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ExcerptId")
-                        .HasColumnType("int");
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("FilePath")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -164,8 +348,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ExcerptId");
 
                     b.HasIndex("SourceId");
 
@@ -197,9 +379,13 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .HasDatabaseName("AuthorName");
 
                     b.ToTable("Authors");
                 });
@@ -229,48 +415,15 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .HasDatabaseName("CenturyName");
 
                     b.ToTable("Centuries");
-                });
-
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptComment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CommenterId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Details")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommenterId");
-
-                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Contributor", b =>
@@ -287,6 +440,21 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FullNameAR")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FullNameEN")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -296,13 +464,17 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("EmailAddress")
+                        .IsUnique()
+                        .HasDatabaseName("ContributorEmailAddress");
+
+                    b.HasIndex("FullNameAR")
+                        .HasDatabaseName("ContributorFullNameAR");
+
+                    b.HasIndex("FullNameEN")
+                        .HasDatabaseName("ContributorFullNameEN");
 
                     b.ToTable("Contributors");
                 });
@@ -321,11 +493,20 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("FilePath")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -340,6 +521,15 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FileExtension")
+                        .HasDatabaseName("CoverPhotoFileExtension");
+
+                    b.HasIndex("FileName")
+                        .HasDatabaseName("CoverPhotoFileName");
+
+                    b.HasIndex("FilePath")
+                        .HasDatabaseName("CoverPhotoFilePath");
 
                     b.ToTable("CoverPhotos");
                 });
@@ -360,7 +550,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.Property<string>("Format")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -373,9 +564,16 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.Property<string>("Period")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Format")
+                        .HasDatabaseName("DateFormatName");
+
+                    b.HasIndex("Period")
+                        .HasDatabaseName("DateFormatPeriod");
 
                     b.ToTable("DateFromats");
                 });
@@ -389,10 +587,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdditionalInfo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CoverPhotoId")
-                        .HasColumnType("int");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -414,9 +610,47 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CoverPhotoId");
+                    b.HasIndex("SourceId");
 
                     b.ToTable("Excerpts");
+                });
+
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ContributorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContributorId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptDate", b =>
@@ -495,6 +729,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TranslatorId")
@@ -521,9 +756,10 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ExcerptComment")
+                    b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<int>("CommenterId")
                         .HasColumnType("int");
@@ -559,7 +795,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -577,14 +815,16 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Languages");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Permission", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Publication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -599,7 +839,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -610,51 +852,20 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParentId")
+                    b.Property<int>("SourceId")
                         .HasColumnType("int");
 
-                    b.Property<string>("NormalizedPermissionName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions");
-                });
+                    b.HasIndex("SourceId")
+                        .HasDatabaseName("PublicationSourceId");
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.RolePermission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PermissionId");
-
-                    b.ToTable("RolePermissions");
+                    b.ToTable("Publications");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Source", b =>
@@ -666,7 +877,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AdditionalInfo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<int>("AuthorId")
                         .HasColumnType("int");
@@ -693,7 +905,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Introduction")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<int>("IntroductionEditorId")
                         .HasColumnType("int");
@@ -708,13 +922,19 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SourceTitleInArabic")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("SourceTitleInForeignLanguage")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("SourceTitleInSyriac")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.HasKey("Id");
 
@@ -726,10 +946,13 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasIndex("IntroductionEditorId");
 
+                    b.HasIndex("SourceTitleInArabic")
+                        .HasDatabaseName("SourceTitleInArabic");
+
                     b.ToTable("Sources");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroductionEditor", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroEditor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -764,47 +987,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasIndex("SourceId");
 
-                    b.ToTable("SourceInroductionEditors");
-                });
-
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Publication", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SourceId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SourceId");
-
-                    b.ToTable("Publications");
+                    b.ToTable("SourceIntroductionEditors");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.TodoItem", b =>
@@ -890,7 +1073,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.ToTable("TodoLists");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Infrastructure.Identity.ApplicationRole", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Infrastructure.Identity.ApplicationIdentityRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -902,38 +1085,20 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("NameAR")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedPermissionName")
+                    b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedPermissionName")
+                    b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedPermissionName] IS NOT NULL");
+                        .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
                 });
@@ -953,17 +1118,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeactivatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Deactivatedon")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("ContributorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -972,20 +1128,11 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NameAR")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NameEN")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -1016,6 +1163,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ContributorId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -1029,7 +1178,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationIdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1056,7 +1205,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationIdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1078,12 +1227,38 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationRolePermission", b =>
+                {
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationPermission", "ApplicationPermission")
+                        .WithMany()
+                        .HasForeignKey("ApplicationPermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationRole", "ApplicationRole")
+                        .WithMany()
+                        .HasForeignKey("ApplicationRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationPermission");
+
+                    b.Navigation("ApplicationRole");
+                });
+
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationUserRole", b =>
+                {
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Contributor")
+                        .WithMany()
+                        .HasForeignKey("ContributorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contributor");
+                });
+
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Attachment", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Excerpt", null)
-                        .WithMany("OtherAttachments")
-                        .HasForeignKey("ExcerptId");
-
                     b.HasOne("SyriacSources.Backend.Domain.Entities.Source", null)
                         .WithMany("OtherAttachments")
                         .HasForeignKey("SourceId")
@@ -1091,26 +1266,26 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptComment", b =>
-                {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Commenter")
-                        .WithMany()
-                        .HasForeignKey("CommenterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Commenter");
-                });
-
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Excerpt", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Attachment", "CoverPhoto")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.Source", "Source")
                         .WithMany()
-                        .HasForeignKey("CoverPhotoId")
+                        .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CoverPhoto");
+                    b.Navigation("Source");
+                });
+
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptComment", b =>
+                {
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Contributor")
+                        .WithMany()
+                        .HasForeignKey("ContributorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contributor");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptText", b =>
@@ -1159,15 +1334,13 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Navigation("Commenter");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.RolePermission", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Publication", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Permission", "Permission")
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.Source", null)
+                        .WithMany("Publications")
+                        .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Permission");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Source", b =>
@@ -1205,7 +1378,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Navigation("IntroductionEditor");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroductionEditor", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroEditor", b =>
                 {
                     b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Editor")
                         .WithMany()
@@ -1220,15 +1393,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Editor");
-                });
-
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Publication", b =>
-                {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Source", null)
-                        .WithMany("Publications")
-                        .HasForeignKey("SourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.TodoItem", b =>
@@ -1265,9 +1429,15 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Excerpt", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Infrastructure.Identity.ApplicationUser", b =>
                 {
-                    b.Navigation("OtherAttachments");
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Contributor")
+                        .WithMany()
+                        .HasForeignKey("ContributorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contributor");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Source", b =>

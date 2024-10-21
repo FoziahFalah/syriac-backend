@@ -25,7 +25,7 @@ public class ApplicationRoleService : IApplicationRoleService
         role.NormalizedRoleName = role.NormalizedRoleName.NormalizeString();
         _context.ApplicationRoles.Add(role);
         var result = await _context.SaveChangesAsync(cancellationToken);
-        if(result>0)
+        if(result > 0)
         {
             return (Result.Success(), role.Id);
         }

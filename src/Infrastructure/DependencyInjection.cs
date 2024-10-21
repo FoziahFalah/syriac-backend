@@ -21,6 +21,7 @@ public static class DependencyInjection
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 
         services.AddDbContext<ApplicationDbContext>((sp, options) =>
@@ -31,7 +32,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
+        
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         services.AddAuthentication()
@@ -51,7 +52,13 @@ public static class DependencyInjection
 
         //Registering Services
         services.AddTransient<IIdentityService, IdentityUserService>();
-        services.AddTransient<IApplicationRoleService, ApplicationRoleService>();
+
+        services.AddScoped<IApplicationUserService, ApplicationUserService>();
+
+        services.AddScoped<IApplicationUserRoleService, ApplicationUserRoleService>();
+
+        services.AddScoped<IApplicationRoleService, ApplicationRoleService>();
+
         services.AddTransient<ITokenService, TokenService>();
 
         services.Configure<JWTToken>(configuration.GetSection("JWT"));
