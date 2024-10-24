@@ -14,7 +14,7 @@ public class Accounts : EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .MapPost(Login);
+            .MapPost(Login, "Login");
     }
 
 

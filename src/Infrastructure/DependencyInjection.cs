@@ -64,7 +64,8 @@ public static class DependencyInjection
         services.Configure<JWTToken>(configuration.GetSection("JWT"));
 
         services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator))
+            );
 
         return services;
     }
