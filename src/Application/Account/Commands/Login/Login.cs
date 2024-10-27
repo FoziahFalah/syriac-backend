@@ -29,7 +29,6 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDt
         _context = context;
     }
 
-    //https://github.com/iayti/CleanArchitecture/blob/master/src/Common/CleanArchitecture.Infrastructure/Identity/IdentityService.cs#L36
     public async Task<LoginResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var result = await _identityService.AuthenticateAsync(request.Email, request.Password);

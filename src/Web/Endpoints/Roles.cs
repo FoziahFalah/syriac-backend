@@ -1,8 +1,10 @@
-﻿using SyriacSources.Backend.Application.Roles.Commands.CreateRole;
+﻿using SyriacSources.Backend.Application.Roles;
+using SyriacSources.Backend.Application.Roles.Commands.CreateRole;
 using SyriacSources.Backend.Application.Roles.Commands.DeleteRole;
 using SyriacSources.Backend.Application.Roles.Commands.UpdateRole;
 using SyriacSources.Backend.Application.Roles.Queries.GetRole;
 using SyriacSources.Backend.Domain.Entities;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SyriacSources.Backend.Web.Endpoints;
 
@@ -12,31 +14,23 @@ public class Roles : EndpointGroupBase
     {
         app.MapGroup(this)
             .RequireAuthorization()
-            .MapGet(GetRole)
             .MapPost(CreateRole)
+            .MapGet(GetRole)
             .MapPut(UpdateRole, "{id}")
             .MapDelete(DeleteRole, "{id}");
     }
-    public async Task<ApplicationRole> GetRole(ISender sender, GetRoleCommand command)
+
+    public Task<ApplicationRoleDto> GetRole(ISender sender, int id)
     {
-        return await sender.Send(command);
+        return sender.Send(new GetRoleQuery(id));
     }
 
-
-    public async Task<int> CreateRole(ISender sender, CreateRoleCommand command)
+    public Task<int> CreateRole(ISender sender, [AsParameters] CreateRoleCommand command)
     {
-        return await sender.Send(command);
+        return sender.Send(command);
     }
 
-    public async Task<IResult> UpdateRole(ISender sender, int id, UpdateRoleCommand command)
-    {
-        if (id != command.Id) return Results.BadRequest();
-        await sender.Send(command);
-        return Results.NoContent();
-    }
-
-
-    public async Task<IResult> DeleteRole(ISender sender, int id, DeleteRoleCommand command)
+    public async Task<IResult> UpdateRole(ISender sender, int id, [AsParameters] UpdateRoleCommand command)
     {
         if (id != command.Id) return Results.BadRequest();
         await sender.Send(command);
@@ -44,5 +38,9 @@ public class Roles : EndpointGroupBase
     }
 
 
-
+    public async Task<IResult> DeleteRole(ISender sender, int id)
+    {
+        await sender.Send(new DeleteRoleCommand(id));
+        return Results.NoContent();
+    }
 }

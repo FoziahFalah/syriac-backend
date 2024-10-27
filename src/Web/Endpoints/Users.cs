@@ -6,7 +6,7 @@ public class Users : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
-            .MapIdentityApi<ApplicationUserDto>();
+        //app.MapGroup(this)
+        //    .MapIdentityApi<A>();
     }
 }
