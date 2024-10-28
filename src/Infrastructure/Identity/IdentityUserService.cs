@@ -66,27 +66,20 @@ public class IdentityUserService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<(Result Result, ApplicationUserDto? User)> AuthenticateAsync(string email, string password)
+    public async Task<(Result Result,int Id)> AuthenticateAsync(string email, string password) 
     {
         var user = await _userManager.FindByEmailAsync(email);
 
         if(user == null)
-            return (Result.Failure(new List<string> {"User not Found"}),null);
+            return (Result.Failure(new List<string> {"User not Found"}), 0 );
 
         if (!await _userManager.CheckPasswordAsync(user, password))
         {
             var error = new List<string> { "Email or Password is incorrect" };
-            return (Result.Failure(error), null);
+            return (Result.Failure(error),0);
         }
 
-        var userDto = new ApplicationUserDto
-        {
-            Id = Convert.ToInt32(user.Id),
-            Email = user.Email,
-            Username = user.UserName,
-        };
-
-        return (Result.Success(),userDto);
+        return (Result.Success(), user.Id);
     }
     public async Task<Result> DeleteUserAsync(string userId)
     {

@@ -38,7 +38,7 @@
         }
       }
     },
-    "/api/Roles": {
+    "/api/Roles/Create": {
       "post": {
         "tags": [
           "Roles"
@@ -81,10 +81,14 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator"
+            ]
           }
         ]
-      },
+      }
+    },
+    "/api/Roles/Get": {
       "get": {
         "tags": [
           "Roles"
@@ -116,12 +120,14 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator"
+            ]
           }
         ]
       }
     },
-    "/api/Roles/{id}": {
+    "/api/Roles/Update/{id}": {
       "put": {
         "tags": [
           "Roles"
@@ -176,10 +182,14 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator"
+            ]
           }
         ]
-      },
+      }
+    },
+    "/api/Roles/Delete/{id}": {
       "delete": {
         "tags": [
           "Roles"
@@ -195,6 +205,16 @@
               "format": "int32"
             },
             "x-position": 1
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
           }
         ],
         "responses": {
@@ -204,7 +224,9 @@
         },
         "security": [
           {
-            "JWT": []
+            "JWT": [
+              "Administrator"
+            ]
           }
         ]
       }
@@ -584,44 +606,17 @@
             "type": "integer",
             "format": "int32"
           },
-          "name": {
+          "nameEN": {
             "type": "string",
             "nullable": true
           },
-          "name_ar": {
-            "type": "string",
-            "nullable": true
-          },
-          "username": {
-            "type": "string",
-            "nullable": true
-          },
-          "fullname": {
+          "nameAR": {
             "type": "string",
             "nullable": true
           },
           "email": {
             "type": "string",
             "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "createdBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdOn": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "deactivatedBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "deactivatedon": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },

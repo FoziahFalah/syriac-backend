@@ -1,8 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Configuration;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Builder.Extensions;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -21,14 +23,17 @@ public class TokenService : ITokenService
         _jwtToken = jwtToken.Value;      
     }
 
-    public string CreateJwtSecurityToken(string id)
+    public string CreateJwtSecurityToken(string id, string rolename)
     {
         var authClaims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, id!),
+            new Claim(ClaimTypes.Role, rolename!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtToken.Secret));
+        var key = EncodeKey(_jwtToken.Secret);
+
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
         var token = new JwtSecurityToken(
             issuer: _jwtToken.ValidIssuer,
@@ -38,5 +43,12 @@ public class TokenService : ITokenService
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
         );
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public string EncodeKey(string key)
+    {
+        var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(key);
+        return System.Convert.ToBase64String(plainTextBytes);
+
     }
 }

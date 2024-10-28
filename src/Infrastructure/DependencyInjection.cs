@@ -20,7 +20,8 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        string secretKey = configuration.GetSection("JWT:Secret").Get<string>()?? throw new InvalidOperationException("JWT secret must not be null.");
+        string secretKey = configuration.GetSection("JWT:Secret").Get<string>() ?? throw new InvalidOperationException("JWT secret must not be null.");
+
 
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
@@ -39,7 +40,12 @@ public static class DependencyInjection
         
         services.AddScoped<ApplicationDbContextInitialiser>();
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
          .AddJwtBearer(options =>
          {
              options.TokenValidationParameters = new TokenValidationParameters
