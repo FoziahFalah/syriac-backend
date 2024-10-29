@@ -17,7 +17,12 @@ public class DeletePermissionCommandValidator : AbstractValidator<CreatePermissi
             .MustAsync(BeUnique)
                 .WithMessage("'{PropertyName}' must be unique.")
                 .WithErrorCode("Unique");
-
+        RuleFor(v => v.NameEN)
+           .MaximumLength(100)
+           .NotEmpty();
+        RuleFor(v => v.NameAR)
+           .MaximumLength(100)
+           .NotEmpty();
         RuleFor(v => v.Description)
             .MaximumLength(200)
             .NotEmpty();
@@ -27,7 +32,7 @@ public class DeletePermissionCommandValidator : AbstractValidator<CreatePermissi
     public async Task<bool> BeUnique(string name, CancellationToken cancellationToken)
     {
         return await _context.Permissions
-            .AllAsync(l => l.NormalizedPermissionName != name, cancellationToken);
+            .AllAsync(l => l.PolicyName != name, cancellationToken);
     }
 
 }

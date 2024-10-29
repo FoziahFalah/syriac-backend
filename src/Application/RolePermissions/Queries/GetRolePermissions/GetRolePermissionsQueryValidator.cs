@@ -1,7 +1,7 @@
 ﻿
 namespace SyriacSources.Backend.Application.RolePermissions.Queries.GetRolePermissions;
 
-public class GetRolePermissionsQueryValidator : AbstractValidator<GetPermissionsQuery>
+public class GetRolePermissionsQueryValidator : AbstractValidator<GetRolePermissionsQuery>
 {
     public GetRolePermissionsQueryValidator()
     {

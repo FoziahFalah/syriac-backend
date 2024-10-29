@@ -1,4 +1,5 @@
 ﻿
+using SyriacSources.Backend.Application.Common.Extensions;
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Domain.Entities;
 
@@ -7,7 +8,11 @@ namespace SyriacSources.Backend.Application.Permissions.Commands.CreatePermissio
 public record CreatePermissionCommand :IRequest<int>
 {
     public required string Name { get; init; }
+    public required string NameAR { get; init; }
+    public required string NameEN { get; init; }
     public required string Description { get; init; }
+    public int ParentId { get; set; }
+    public bool IsModule { get; set; }
 }
 public class CreatePermissionHandler : IRequestHandler<CreatePermissionCommand, int>
 {
@@ -24,7 +29,11 @@ public class CreatePermissionHandler : IRequestHandler<CreatePermissionCommand, 
     {
         var entity = new ApplicationPermission
         {
-            NormalizedPermissionName = request.Name,
+            PolicyName = request.Name.NormalizeString(),
+            NameAR = request.NameAR,
+            NameEN = request.NameEN,
+            ParentId = request.ParentId,
+            IsModule = request.IsModule,
             Description = request.Description
         };
 

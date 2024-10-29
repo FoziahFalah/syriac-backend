@@ -2,7 +2,7 @@
 using SyriacSources.Backend.Application.TodoLists.Queries.GetTodos;
 using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacSources.Backend.Application.Permissions.Queries.GetPermissions;
+namespace SyriacSources.Backend.Application.Permissions.Queries;
 
 public class PermissionDto
 {
@@ -14,7 +14,7 @@ public class PermissionDto
     public string? DisplayName { get; init; }
     public IEnumerable<PermissionDto>? Actions { get; init; }
 
-    private class Mapping : Profile 
+    private class Mapping : Profile
     {
         public Mapping()
         {

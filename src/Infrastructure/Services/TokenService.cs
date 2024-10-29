@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -31,14 +32,14 @@ public class TokenService : ITokenService
             new Claim(ClaimTypes.Role, rolename!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
-        var key = EncodeKey(_jwtToken.Secret);
+        // var key = EncodeKey(_jwtToken.Secret);
 
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(_jwtToken.Secret))));
 
         var token = new JwtSecurityToken(
             issuer: _jwtToken.ValidIssuer,
             audience: _jwtToken.ValidAudience,
-            expires: DateTime.Now.AddHours(2),
+            expires: DateTime.Now.AddHours(_jwtToken.ExpiryByHours),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
         );

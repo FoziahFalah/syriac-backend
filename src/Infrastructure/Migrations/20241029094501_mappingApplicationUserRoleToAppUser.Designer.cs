@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SyriacSources.Backend.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SyriacSources.Backend.Infrastructure.Data;
 namespace SyriacSources.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241029094501_mappingApplicationUserRoleToAppUser")]
+    partial class mappingApplicationUserRoleToAppUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,8 +239,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationPermissionIds")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ApplicationPermissionId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ApplicationRoleId")
                         .HasColumnType("int");
@@ -258,6 +261,8 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationPermissionId");
 
                     b.HasIndex("ApplicationRoleId");
 
@@ -1222,11 +1227,19 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationRolePermission", b =>
                 {
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationPermission", "ApplicationPermission")
+                        .WithMany()
+                        .HasForeignKey("ApplicationPermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationRole", "ApplicationRole")
                         .WithMany()
                         .HasForeignKey("ApplicationRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ApplicationPermission");
 
                     b.Navigation("ApplicationRole");
                 });

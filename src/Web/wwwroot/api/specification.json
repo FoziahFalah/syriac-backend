@@ -38,15 +38,43 @@
         }
       }
     },
-    "/api/Roles/Create": {
+    "/api/Permissions/Get": {
+      "get": {
+        "tags": [
+          "Permissions"
+        ],
+        "operationId": "GetPermissions",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Permissions/Create": {
       "post": {
         "tags": [
-          "Roles"
+          "Permissions"
         ],
-        "operationId": "CreateRole",
+        "operationId": "CreatePermission",
         "parameters": [
           {
-            "name": "NameEN",
+            "name": "Name",
             "in": "query",
             "required": true,
             "schema": {
@@ -64,6 +92,45 @@
               "nullable": true
             },
             "x-position": 2
+          },
+          {
+            "name": "NameEN",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "Description",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          },
+          {
+            "name": "ParentId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 5
+          },
+          {
+            "name": "IsModule",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "boolean"
+            },
+            "x-position": 6
           }
         ],
         "responses": {
@@ -81,9 +148,145 @@
         },
         "security": [
           {
-            "JWT": [
-              "Administrator"
-            ]
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Permissions/Update/{id}": {
+      "put": {
+        "tags": [
+          "Permissions"
+        ],
+        "operationId": "UpdatePermission",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          },
+          {
+            "name": "Name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 3
+          },
+          {
+            "name": "Description",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 4
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Permissions/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Permissions"
+        ],
+        "operationId": "DeletePermission",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 2
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/api/Roles/Create": {
+      "post": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "CreateRole",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoleCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
           }
         ]
       }
@@ -120,9 +323,7 @@
         },
         "security": [
           {
-            "JWT": [
-              "Administrator"
-            ]
+            "JWT": []
           }
         ]
       }
@@ -143,38 +344,20 @@
               "format": "int32"
             },
             "x-position": 1
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          },
-          {
-            "name": "NameEN",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 3
-          },
-          {
-            "name": "NameAR",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 4
           }
         ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoleCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
         "responses": {
           "200": {
             "description": ""
@@ -182,9 +365,7 @@
         },
         "security": [
           {
-            "JWT": [
-              "Administrator"
-            ]
+            "JWT": []
           }
         ]
       }
@@ -205,16 +386,6 @@
               "format": "int32"
             },
             "x-position": 1
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
           }
         ],
         "responses": {
@@ -224,9 +395,7 @@
         },
         "security": [
           {
-            "JWT": [
-              "Administrator"
-            ]
+            "JWT": []
           }
         ]
       }
@@ -632,6 +801,53 @@
           }
         }
       },
+      "PermissionDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parentId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "endpointName": {
+            "type": "string",
+            "nullable": true
+          },
+          "endpointGroup": {
+            "type": "string"
+          },
+          "policy": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
+          "actions": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PermissionDto"
+            }
+          }
+        }
+      },
+      "CreateRoleCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "nameEN": {
+            "type": "string"
+          },
+          "nameAR": {
+            "type": "string"
+          }
+        }
+      },
       "ApplicationRoleDto": {
         "type": "object",
         "additionalProperties": false,
@@ -651,6 +867,22 @@
           "nameAR": {
             "type": "string",
             "nullable": true
+          }
+        }
+      },
+      "UpdateRoleCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "nameEN": {
+            "type": "string"
+          },
+          "nameAR": {
+            "type": "string"
           }
         }
       },

@@ -21,13 +21,13 @@ public class ApplicationPermissionConfiguration : IEntityTypeConfiguration<Appli
            .HasMaxLength(200)
            .IsRequired();
 
-        builder.Property(p => p.NormalizedPermissionName)
+        builder.Property(p => p.PolicyName)
            .HasMaxLength(200)
            .IsRequired();
 
         //Indexes
-        builder.HasIndex(p => p.NormalizedPermissionName)
+        builder.HasIndex(p => p.PolicyName)
             .IsUnique()
-            .HasDatabaseName("NormalizedPermissionName");
+            .HasDatabaseName("PolicyName");
     }
 }

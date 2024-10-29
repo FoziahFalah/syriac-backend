@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using SyriacSources.Backend.Application.Roles;
 using SyriacSources.Backend.Application.Roles.Commands.CreateRole;
 using SyriacSources.Backend.Application.Roles.Commands.DeleteRole;
@@ -22,31 +24,30 @@ public class Roles : EndpointGroupBase
             .MapDelete(DeleteRole, "Delete/{id}");
     }
 
-    [Authorize(Roles = "Administrator")]
+    [Authorize]//(Policy ="ROLES.GETROLE")
     public Task<ApplicationRoleDto> GetRole(ISender sender, int id)
     {
         return sender.Send(new GetRoleQuery(id));
     }
 
-    [Authorize(Roles = "Administrator")]
-    public Task<int> CreateRole(ISender sender, [AsParameters] CreateRoleCommand command)
+    [Authorize]//(Policy = "ROLES.CREATEROLE")
+    public Task<int> CreateRole(ISender sender,CreateRoleCommand command)
     {
         return sender.Send(command);
     }
 
-    [Authorize(Roles = "Administrator")]
-
-    public async Task<IResult> UpdateRole(ISender sender, int id, [AsParameters] UpdateRoleCommand command)
+    [Authorize]//(Policy = "ROLES.UPDATEROLE")
+    public async Task<IResult> UpdateRole(ISender sender, int id, UpdateRoleCommand command)
     {
         if (id != command.Id) return Results.BadRequest();
         await sender.Send(command);
         return Results.NoContent();
     }
 
-    [Authorize(Roles = "Administrator")]
-    public async Task<IResult> DeleteRole(ISender sender, int id, [AsParameters]  DeleteRoleCommand command)
+    [Authorize]//(Policy = "ROLES.DELETEROLE")
+    public async Task<IResult> DeleteRole(ISender sender, int id)
     {
-        await sender.Send(command);
+        await sender.Send(new DeleteRoleCommand(id));
         return Results.NoContent();
     }
 }

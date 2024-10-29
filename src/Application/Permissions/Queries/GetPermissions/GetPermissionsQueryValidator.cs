@@ -2,12 +2,10 @@
 
 namespace SyriacSources.Backend.Application.Permissions.Queries.GetPermissions;
 
-public class GetRolePermissionsQueryValidator : AbstractValidator<GetPermissionsQuery>
+public class GetPermissionsQueryValidator : AbstractValidator<GetPermissionsQuery>
 {
-    public GetRolePermissionsQueryValidator()
+    public GetPermissionsQueryValidator()
     {
-        RuleFor(x => x.RoleId)
-            .NotEmpty().WithMessage("RoleId is required.");
 
     }
 }

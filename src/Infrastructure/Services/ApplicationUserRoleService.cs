@@ -23,13 +23,13 @@ public class ApplicationUserRoleService : IApplicationUserRoleService
 
     public async Task<Result> AddToRolesAsync(int userId, List<int> roles, CancellationToken cancellationToken)
     {
-        ApplicationUserRole? result = await _context.ApplicationUserRoles.SingleOrDefaultAsync(x => x.ContributorId == userId);
+        ApplicationUserRole? result = await _context.ApplicationUserRoles.SingleOrDefaultAsync(x => x.ApplicationUserId == userId);
 
         if (result == null)
         {
             result = new ApplicationUserRole()
             {
-                ContributorId = userId,
+                ApplicationUserId = userId,
             };
         }
         result.UserRoles = string.Join("|", roles);
@@ -39,7 +39,7 @@ public class ApplicationUserRoleService : IApplicationUserRoleService
 
     public async Task<bool> IsInRoleAsync(int userId, int roleId, CancellationToken cancellationToken)
     {
-        ApplicationUserRole? userRoles = await _context.ApplicationUserRoles.Where(r => r.ContributorId == userId).SingleOrDefaultAsync();
+        ApplicationUserRole? userRoles = await _context.ApplicationUserRoles.Where(r => r.ApplicationUserId == userId).SingleOrDefaultAsync();
         if (userRoles == null )
         {
             return false;

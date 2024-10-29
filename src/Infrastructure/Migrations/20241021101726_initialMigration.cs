@@ -702,9 +702,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "NormalizedPermissionName",
+                name: "PolicyName",
                 table: "ApplicationPermission",
-                column: "NormalizedPermissionName",
+                column: "PolicyName",
                 unique: true);
 
             migrationBuilder.CreateIndex(

@@ -167,7 +167,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("NormalizedPermissionName")
+                    b.Property<string>("PolicyName")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
@@ -177,9 +177,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedPermissionName")
+                    b.HasIndex("PolicyName")
                         .IsUnique()
-                        .HasDatabaseName("NormalizedPermissionName");
+                        .HasDatabaseName("PolicyName");
 
                     b.ToTable("ApplicationPermission");
                 });

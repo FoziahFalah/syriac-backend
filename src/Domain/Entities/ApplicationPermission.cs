@@ -2,7 +2,7 @@
 namespace SyriacSources.Backend.Domain.Entities;
 public class ApplicationPermission : BaseAuditableEntity
 {
-    public string? NormalizedPermissionName { get; set; }
+    public string? PolicyName { get; set; }
     public string? NameEN {  get; set; }
     public string? NameAR {  get; set; }
     public int ParentId { get; set; } = 0;

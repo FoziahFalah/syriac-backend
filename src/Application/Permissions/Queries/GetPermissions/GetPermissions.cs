@@ -2,10 +2,7 @@
 
 namespace SyriacSources.Backend.Application.Permissions.Queries.GetPermissions;
 
-public record GetPermissionsQuery : IRequest<List<PermissionDto>>
-{
-    public int RoleId { get; init; }
-}
+public record GetPermissionsQuery : IRequest<List<PermissionDto>> { }
 
 public class GetPermissionsQueryHandler : IRequestHandler<GetPermissionsQuery, List<PermissionDto>>
 {
@@ -21,8 +18,8 @@ public class GetPermissionsQueryHandler : IRequestHandler<GetPermissionsQuery, L
     public async Task<List<PermissionDto>> Handle(GetPermissionsQuery request, CancellationToken cancellationToken)
     {
         return await _context.Permissions
-            .Where(x => x.Id == request.RoleId)
-            .OrderBy(x => x.NormalizedPermissionName)
+            .Where(x=>x.IsActive)
+            .OrderBy(x => x.PolicyName)
             .ProjectTo<PermissionDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
     }

@@ -27,7 +27,7 @@ public class UpdatePermissionCommandValidator : AbstractValidator<UpdatePermissi
     public async Task<bool> BeUnique(string name, CancellationToken cancellationToken)
     {
         return await _context.Permissions
-            .AllAsync(l => l.NormalizedPermissionName != name, cancellationToken);
+            .AllAsync(l => l.PolicyName != name, cancellationToken);
     }
 
 }

@@ -65,34 +65,20 @@ public class ApplicationRoleService : IApplicationRoleService
         return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x=> Result.Success());
     }
 
-    public async Task<(Result result, int countChanges)> UpdateRolePermissions(int roleId, List<int> permissionIds, CancellationToken cancellationToken)
+    public async Task<Result> UpdateRolePermissions(int roleId, List<int> permissionIds, CancellationToken cancellationToken)
     {
         // Fetch existing role permissions for the specified role
         List<ApplicationRolePermission> entity = await _context.ApplicationRolePermissions
            .Where(r => r.Id == roleId).ToListAsync();
 
-        var currentPermissionIds = entity.Select(r => r.Id);
-
-        // Find permissions to add
-        var permissionsToAdd = permissionIds.Except(currentPermissionIds).ToList();
-        foreach (var permissionId in permissionsToAdd)
+        _context.ApplicationRolePermissions.Add(new ApplicationRolePermission
         {
-            _context.ApplicationRolePermissions.Add(new ApplicationRolePermission
-            {
-                ApplicationRoleId = roleId,
-                ApplicationPermissionId = permissionId
-            });
-        }
+            ApplicationRoleId = roleId,
+            ApplicationPermissionIds = string.Join(",", permissionIds)
+        });
 
-        // Find permissions to remove
-        var permissionsToRemove = currentPermissionIds.Except(permissionIds).ToList();
-        foreach (var permissionId in permissionsToRemove)
-        {
-            var permissionToRemove = entity.First(rp => rp.ApplicationPermissionId == permissionId);
-            _context.ApplicationRolePermissions.Remove(permissionToRemove);
-        }
         var result = await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success());
-        var changes = permissionsToAdd.Count + permissionsToRemove.Count();
-        return new (result, changes) ;
+
+        return result;
     }
 }

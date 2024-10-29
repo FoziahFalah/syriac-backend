@@ -28,7 +28,7 @@ public class UpdatePermissionHandler : IRequestHandler<UpdatePermissionCommand, 
 
         Guard.Against.NotFound(request.Id, entity);
 
-        entity.NormalizedPermissionName = request.Name;
+        entity.PolicyName = request.Name;
         entity.Description = request.Description;
 
         await _context.SaveChangesAsync(cancellationToken);

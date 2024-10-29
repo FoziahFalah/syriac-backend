@@ -1,29 +1,29 @@
 ﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Permissions.Queries;
 
 namespace SyriacSources.Backend.Application.RolePermissions.Queries.GetRolePermissions;
 
-public record GetPermissionsQuery : IRequest<List<RoleDto>>
+public record GetRolePermissionsQuery : IRequest<List<RolePermissionDto>>
 {
     public int RoleId { get; init; }
 }
 
-public class GetPermissionsQueryHandler : IRequestHandler<GetPermissionsQuery, List<RoleDto>>
+public class GetRolePermissionsQueryHandler : IRequestHandler<GetRolePermissionsQuery, List<RolePermissionDto>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetPermissionsQueryHandler(IApplicationDbContext context, IMapper mapper)
+    public GetRolePermissionsQueryHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
     }
 
-    public async Task<List<RoleDto>> Handle(GetPermissionsQuery request, CancellationToken cancellationToken)
+    public async Task<List<RolePermissionDto>> Handle(GetRolePermissionsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.TodoItems
-            .Where(x => x.ListId == request.RoleId)
-            .OrderBy(x => x.Title)
-            .ProjectTo<RoleDto>(_mapper.ConfigurationProvider)
+        return await _context.ApplicationRolePermissions
+            .Where(x => x.ApplicationRoleId == request.RoleId)
+            .ProjectTo<RolePermissionDto>(_mapper.ConfigurationProvider)
             .ToListAsync(cancellationToken);
     }
 }

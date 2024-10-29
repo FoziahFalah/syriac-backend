@@ -50,13 +50,14 @@ public static class DependencyInjection
          {
              options.TokenValidationParameters = new TokenValidationParameters
              {
-                 ValidateIssuer = true,
-                 ValidateAudience = true,
+                 ValidateIssuer = false,
+                 ValidateAudience = false,
                  ValidateLifetime = true,
                  ValidateIssuerSigningKey = true,
+                 RequireExpirationTime = true,
                  ValidIssuer = configuration.GetSection("JWT:ValidIssuer").Get<string>(),
                  ValidAudience = configuration.GetSection("JWT:ValidAudience").Get<string>(),
-                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(secretKey))))
              };
          });
 

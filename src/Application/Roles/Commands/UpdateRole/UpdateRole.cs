@@ -28,15 +28,11 @@ public class UpdateRoleHandler : IRequestHandler<UpdateRoleCommand, Result>
         var entity = await _identityRoleService.GetRoleAsync(request.Id, cancellationToken);
 
         Guard.Against.NotFound(request.Id, entity);
-        ApplicationRole role = new ApplicationRole
-        {
-            NameEN = request.NameEN,
-            NameAR = request.NameAR,
-            NormalizedRoleName = request.NameEN.NormalizeString(),
-            Id  = request.Id
-        };
+        entity.NameEN = request.NameEN;
+        entity.NameAR = request.NameAR;
+        entity.NormalizedRoleName = request.NameEN.NormalizeString();
 
-        Result result = await _identityRoleService.UpdateAsync(role,cancellationToken);
+        Result result = await _identityRoleService.UpdateAsync(entity,cancellationToken);
 
         return result;
     }

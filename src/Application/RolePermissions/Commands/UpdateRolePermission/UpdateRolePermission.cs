@@ -1,16 +1,17 @@
 ﻿
 using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Application.ApplicationRolePermissions.Commands.UpdateRolePermission;
 
-public record UpdateRolePermissionCommand :IRequest<int>
+public record UpdateRolePermissionCommand :IRequest
 {
     public int RoleId { get; set; }
     public required List<int> PermissionIds { get; init; }
 }
 
-public class UpdateRolePermissionHandler : IRequestHandler<UpdateRolePermissionCommand, int>
+public class UpdateRolePermissionHandler : IRequestHandler<UpdateRolePermissionCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IApplicationRoleService _appRoleService;
@@ -21,13 +22,10 @@ public class UpdateRolePermissionHandler : IRequestHandler<UpdateRolePermissionC
         _appRoleService = appRoleService;
     }
 
-    public async Task<int> Handle(UpdateRolePermissionCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateRolePermissionCommand request, CancellationToken cancellationToken)
     {
 
         var result = await _appRoleService.UpdateRolePermissions(request.RoleId, request.PermissionIds, cancellationToken);
 
-
-        // Return the number of changes made
-        return result.countChanges;
     }
 }

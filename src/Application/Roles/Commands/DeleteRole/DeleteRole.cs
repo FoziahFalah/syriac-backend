@@ -5,9 +5,7 @@ using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Application.Roles.Commands.DeleteRole;
 
-public record DeleteRoleCommand() : IRequest {
-    public int Id { get; set; }
-}
+public record DeleteRoleCommand(int Id) : IRequest {}
 public class DeleteRoleHandler : IRequestHandler<DeleteRoleCommand>
 {
     private readonly IApplicationDbContext _context;

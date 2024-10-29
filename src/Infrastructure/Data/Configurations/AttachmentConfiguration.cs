@@ -22,8 +22,8 @@ public class AttachmentConfiguration : IEntityTypeConfiguration<Attachment>
            .IsRequired();
 
         ////Indexes
-        //builder.HasIndex(p => p.NormalizedPermissionName)
+        //builder.HasIndex(p => p.PolicyName)
         //    .IsUnique()
-        //    .HasDatabaseName("NormalizedPermissionName");
+        //    .HasDatabaseName("PolicyName");
     }
 }
