@@ -1,14 +1,11 @@
-﻿
-using SyriacSources.Backend.Application.Common.Interfaces;
-using SyriacSources.Backend.Application.Common.Models;
-using SyriacSources.Backend.Domain.Entities;
+﻿using SyriacSources.Backend.Application.Common.Interfaces;
 
 namespace SyriacSources.Backend.Application.ApplicationRolePermissions.Commands.UpdateRolePermission;
 
 public record UpdateRolePermissionCommand :IRequest
 {
     public int RoleId { get; set; }
-    public required List<int> PermissionIds { get; init; }
+    public string? PermissionIds { get; init; }
 }
 
 public class UpdateRolePermissionHandler : IRequestHandler<UpdateRolePermissionCommand>
@@ -24,8 +21,10 @@ public class UpdateRolePermissionHandler : IRequestHandler<UpdateRolePermissionC
 
     public async Task Handle(UpdateRolePermissionCommand request, CancellationToken cancellationToken)
     {
-
+        if(String.IsNullOrEmpty(request.PermissionIds))
+        {
+            return;
+        }
         var result = await _appRoleService.UpdateRolePermissions(request.RoleId, request.PermissionIds, cancellationToken);
-
     }
 }

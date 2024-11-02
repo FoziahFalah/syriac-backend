@@ -6,24 +6,29 @@ using Microsoft.EntityFrameworkCore;
 using SyriacSources.Backend.Application.User;
 using System.ComponentModel.DataAnnotations;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using AutoMapper;
+using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
 public class IdentityUserService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IMapper _mapper;
     private readonly IApplicationRoleService _roleService;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
 
     public IdentityUserService(
         UserManager<ApplicationUser> userManager,
+        IMapper mapper,
         IApplicationRoleService roleService,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService)
     {
         _roleService = roleService;
         _userManager = userManager;
+        _mapper = mapper;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         _authorizationService = authorizationService;
     }
@@ -34,6 +39,22 @@ public class IdentityUserService : IIdentityService
 
         return user?.UserName;
     }
+    public async Task<ApplicationUserDto?> GetUserAsync(string email)
+    {
+        var entity = await _userManager.FindByEmailAsync(email);
+        if(entity == null)
+        {
+            return null;
+        }
+        ApplicationUserDto user = new ApplicationUserDto
+        {
+            EmailAddress = email,
+            Id = entity.Id
+        };
+
+        return _mapper.Map<ApplicationUserDto>(user);
+    }
+    
     public async Task<bool> EmailExists(string email){
         return await _userManager.FindByEmailAsync(email) != null;
     }

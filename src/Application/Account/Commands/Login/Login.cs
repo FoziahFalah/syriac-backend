@@ -11,13 +11,12 @@ using SyriacSources.Backend.Application.User;
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Application.Account.Commands.Login;
-public class LoginCommand : IRequest<LoginResponseDto>
+public class LoginCommand : IRequest<LoginResponseVm>
 {
     public required string Email { get; set; }
-
     public required string Password { get; set; }
 }
-public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDto>
+public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseVm>
 {
     private readonly IIdentityService _identityService;
     private readonly ITokenService _tokenService;
@@ -31,34 +30,32 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseDt
         _context = context;
     }
 
-    public async Task<LoginResponseDto> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<LoginResponseVm> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var result = await _identityService.AuthenticateAsync(request.Email, request.Password);
+        //var result = await _identityService.AuthenticateAsync(request.Email, request.Password);
+        var user = await _identityService.GetUserAsync(request.Email);
 
-        Guard.Against.NotFound(request.Email, result);
-
-        if (!result.Result.Succeeded)
+        if (user == null)
         {
-            return new LoginResponseDto { Succeeded = false, Errors = result.Result.Errors };
+            return new LoginResponseVm { Succeeded = false, Errors = new String[]{ "Username or Password is incorrect"} };
         }
 
         var contributor = await _context.Contributors.SingleOrDefaultAsync(x => x.EmailAddress == request.Email);
 
         if (contributor == null) {
-            return new LoginResponseDto { Succeeded = false, Errors = new String[] { "Contributor doesn't exist" } };
+            return new LoginResponseVm { Succeeded = false, Errors = new String[] { "User is not authorized" } };
         }
 
-        ApplicationUserDto user = new()
-        {
-            NameEN = contributor.FullNameEN,
-            NameAR = contributor.FullNameAR,
-            Email = contributor.EmailAddress
+        UserBasicDetailsVm details = new UserBasicDetailsVm { 
+            Email = request.Email,
+            Id = user.Id,
+            Name = contributor.FullNameEN
         };
 
-        return new LoginResponseDto
+        return new LoginResponseVm
         {
-            User = user,
-            Token = _tokenService.CreateJwtSecurityToken(result.Id.ToString(), "Administrator")
+            UserBasicDetails = details,
+            Token = _tokenService.CreateJwtSecurityToken(user.Id.ToString(), "Administrator")
         };
     }
 }

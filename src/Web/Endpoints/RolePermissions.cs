@@ -1,6 +1,5 @@
 ﻿
-using SyriacSources.Backend.Application.RolePermissions.Commands.DeleteRolePermission;
-using SyriacSources.Backend.Application.RolePermissions.Commands.UpdateRolePermission;
+using SyriacSources.Backend.Application.ApplicationRolePermissions.Commands.UpdateRolePermission;
 using SyriacSources.Backend.Application.RolePermissions.Queries.GetRolePermissions;
 
 namespace SyriacSources.Backend.Web.Endpoints;
@@ -15,9 +14,9 @@ public class RolePermissions: EndpointGroupBase
             .MapPut(UpdateRolePermissions, "Update");
     }
 
-    public Task<List<RolePermissionDto>> GetRolePermissions(ISender sender) 
+    public Task<List<RolePermissionDto>> GetRolePermissions(ISender sender, [AsParameters]  GetRolePermissionsQuery query) 
     { 
-        return sender.Send(new GetRolePermissionsQuery());
+        return sender.Send(query);
     }
 
     public async Task<IResult> UpdateRolePermissions(ISender sender, [AsParameters] UpdateRolePermissionCommand command)

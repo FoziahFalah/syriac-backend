@@ -701,11 +701,11 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "PolicyName",
-                table: "ApplicationPermission",
-                column: "PolicyName",
-                unique: true);
+            //migrationBuilder.CreateIndex(
+            //    name: "PolicyName",
+            //    table: "ApplicationPermission",
+            //    column: "PolicyName",
+            //    unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ApplicationRolePermissions_ApplicationPermissionId",

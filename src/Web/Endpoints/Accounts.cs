@@ -12,7 +12,7 @@ public class Accounts : EndpointGroupBase
     }
 
 
-    public async Task<LoginResponseDto> Login(ISender sender, LoginCommand command)
+    public async Task<LoginResponseVm> Login(ISender sender, LoginCommand command)
     {
         return await sender.Send(command);
     }

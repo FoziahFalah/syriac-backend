@@ -65,7 +65,7 @@ public class ApplicationRoleService : IApplicationRoleService
         return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x=> Result.Success());
     }
 
-    public async Task<Result> UpdateRolePermissions(int roleId, List<int> permissionIds, CancellationToken cancellationToken)
+    public async Task<Result> UpdateRolePermissions(int roleId, string permissionIds, CancellationToken cancellationToken)
     {
         // Fetch existing role permissions for the specified role
         List<ApplicationRolePermission> entity = await _context.ApplicationRolePermissions
@@ -74,7 +74,7 @@ public class ApplicationRoleService : IApplicationRoleService
         _context.ApplicationRolePermissions.Add(new ApplicationRolePermission
         {
             ApplicationRoleId = roleId,
-            ApplicationPermissionIds = string.Join(",", permissionIds)
+            ApplicationPermissionIds = permissionIds
         });
 
         var result = await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success());
