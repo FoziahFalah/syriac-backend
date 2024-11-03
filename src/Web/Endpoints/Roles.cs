@@ -24,19 +24,19 @@ public class Roles : EndpointGroupBase
             .MapDelete(DeleteRole, "Delete/{id}");
     }
 
-    [Authorize]//(Policy ="ROLES.GETROLE")
+    [Authorize(Policy ="ROLES:GETROLE")]
     public Task<ApplicationRoleDto> GetRole(ISender sender, int id)
     {
         return sender.Send(new GetRoleQuery(id));
     }
 
-    [Authorize]//(Policy = "ROLES.CREATEROLE")
+    [Authorize(Policy = "ROLES:CREATEROLE")]
     public Task<int> CreateRole(ISender sender,CreateRoleCommand command)
     {
         return sender.Send(command);
     }
 
-    [Authorize]//(Policy = "ROLES.UPDATEROLE")
+    [Authorize(Policy = "ROLES:UPDATEROLE")]//
     public async Task<IResult> UpdateRole(ISender sender, int id, UpdateRoleCommand command)
     {
         if (id != command.Id) return Results.BadRequest();
@@ -44,7 +44,7 @@ public class Roles : EndpointGroupBase
         return Results.NoContent();
     }
 
-    [Authorize]//(Policy = "ROLES.DELETEROLE")
+    [Authorize(Policy = "ROLES:DELETEROLE")]//
     public async Task<IResult> DeleteRole(ISender sender, int id)
     {
         await sender.Send(new DeleteRoleCommand(id));

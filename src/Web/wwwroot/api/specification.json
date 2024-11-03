@@ -309,25 +309,17 @@
               "format": "int32"
             },
             "x-position": 1
+          },
+          {
+            "name": "PermissionIds",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "x-position": 2
           }
         ],
-        "requestBody": {
-          "x-name": "PermissionIds",
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
         "responses": {
           "200": {
             "description": ""

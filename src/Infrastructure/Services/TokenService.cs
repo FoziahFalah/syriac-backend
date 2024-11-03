@@ -16,7 +16,7 @@ namespace SyriacSources.Backend.Infrastructure.Services;
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
-    private readonly JWTToken _jwtToken;
+    private readonly JWTToken _jwtToken;`
 
     public TokenService(IConfiguration configuration, IOptions<JWTToken> jwtToken)
     {
@@ -26,12 +26,15 @@ public class TokenService : ITokenService
 
     public string CreateJwtSecurityToken(string id, string rolename)
     {
+        //var roleClaims = 
         var authClaims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, id!),
             new Claim(ClaimTypes.Role, rolename!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
+
+
         // var key = EncodeKey(_jwtToken.Secret);
 
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(_jwtToken.Secret))));
