@@ -11,7 +11,6 @@ public interface IApplicationDbContext
     public DbSet<Attachment> Attachments { get; }
     public DbSet<Author> Authors { get; }
     public DbSet<Century> Centuries { get; }
-    public DbSet<ApplicationPermission> Permissions { get; }
     public DbSet<ExcerptComment> Comments { get; }
     public DbSet<Contributor> Contributors { get; }
     public DbSet<CoverPhoto> CoverPhotos { get; }

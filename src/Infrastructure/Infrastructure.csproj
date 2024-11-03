@@ -9,7 +9,6 @@
   <ItemGroup>
     <Compile Remove="Identity\ApplicationRole.cs" />
     <Compile Remove="Identity\IdentityRoleService.cs" />
-    <Compile Remove="Services\ApplicationPermissionService.cs" />
   </ItemGroup>
 
   <ItemGroup>
