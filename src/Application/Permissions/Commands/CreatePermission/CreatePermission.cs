@@ -37,7 +37,7 @@ public class CreatePermissionHandler : IRequestHandler<CreatePermissionCommand, 
             Description = request.Description
         };
 
-        _context.Permissions.Add(entity);
+        _context.ApplicationPermissions.Add(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
 

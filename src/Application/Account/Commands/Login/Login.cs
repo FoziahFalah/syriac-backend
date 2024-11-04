@@ -52,10 +52,12 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseVm
             Name = contributor.FullNameEN
         };
 
+        var userRole = await _context.ApplicationUserRoles.SingleAsync(x => x.ApplicationUserId == user.Id);
+
         return new LoginResponseVm
         {
             UserBasicDetails = details,
-            Token = _tokenService.CreateJwtSecurityToken(user.Id.ToString(), "Administrator")
+            Token = await _tokenService.CreateJwtSecurityToken(user.Id.ToString(), userRole)
         };
     }
 }

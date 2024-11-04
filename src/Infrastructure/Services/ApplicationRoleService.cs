@@ -51,6 +51,12 @@ public class ApplicationRoleService : IApplicationRoleService
         return await _context.ApplicationRoles.FindAsync(roleId);
     }
 
+    public async Task<List<ApplicationRole>?> GetRolesAsync(List<int> roleIds, CancellationToken cancellationToken)
+    {
+        
+        return await _context.ApplicationRoles.Where(x=> roleIds.Any(r => r == x.Id)).ToListAsync();
+    }
+
     public async Task<Result> UpdateAsync(ApplicationRole role, CancellationToken cancellationToken)
     {
         role.NormalizedRoleName = role.NormalizedRoleName.NormalizeString();

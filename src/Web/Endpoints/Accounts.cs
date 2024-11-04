@@ -11,10 +11,11 @@ public class Accounts : EndpointGroupBase
             .MapPost(Login, "Login");
     }
 
-
+    /// <summary>
+    /// Users Login
+    /// </summary>
     public async Task<LoginResponseVm> Login(ISender sender, LoginCommand command)
     {
         return await sender.Send(command);
     }
-
 }

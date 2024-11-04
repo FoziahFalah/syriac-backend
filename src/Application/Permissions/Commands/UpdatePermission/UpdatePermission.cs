@@ -23,7 +23,7 @@ public class UpdatePermissionHandler : IRequestHandler<UpdatePermissionCommand, 
 
     public async Task<int> Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Permissions
+        var entity = await _context.ApplicationPermissions
            .FindAsync(new object[] { request.Id }, cancellationToken);
 
         Guard.Against.NotFound(request.Id, entity);

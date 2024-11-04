@@ -35,7 +35,7 @@ public static class DependencyInjection
         services.AddOpenApiDocument((configure, sp) =>
         {
             configure.Title = "SyriacSources.Backend API";
-
+            configure.Description = "An ASP.NET Core Web API for Syriac Sources Project";
             // Add JWT
             configure.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
             {

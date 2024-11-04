@@ -1,9 +1,13 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using SyriacSources.Backend.Application.ApplicationRolePermissions.Commands.UpdateRolePermission;
 using SyriacSources.Backend.Application.RolePermissions.Queries.GetRolePermissions;
+using SyriacSources.Backend.Domain.Constants;
 
 namespace SyriacSources.Backend.Web.Endpoints;
 
+
+[Authorize(Policies.CanManageSystem)]
 public class RolePermissions: EndpointGroupBase
 {
     public override void Map(WebApplication app)
@@ -14,7 +18,7 @@ public class RolePermissions: EndpointGroupBase
             .MapPut(UpdateRolePermissions, "Update");
     }
 
-    public Task<List<RolePermissionDto>> GetRolePermissions(ISender sender, [AsParameters]  GetRolePermissionsQuery query) 
+    public Task<RolePermissionVm> GetRolePermissions(ISender sender, [AsParameters]  GetRolePermissionsQuery query) 
     { 
         return sender.Send(query);
     }

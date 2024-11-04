@@ -12,6 +12,7 @@ using SyriacSources.Backend.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -87,8 +88,11 @@ public static class DependencyInjection
         services.Configure<JWTToken>(configuration.GetSection("JWT"));
 
         services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator))
-            );
+            {
+                options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator));
+                options.AddPolicy(Policies.CanManageSystem, policy => policy.RequireRole(Roles.Administrator));
+            }
+        );
 
         return services;
     }

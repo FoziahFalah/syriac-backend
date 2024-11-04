@@ -2,16 +2,11 @@
 using SyriacSources.Backend.Domain.Constants;
 using SyriacSources.Backend.Domain.Entities;
 using SyriacSources.Backend.Infrastructure.Identity;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SyriacSources.Backend.Application.Common.Extensions;
+using static System.Formats.Asn1.AsnWriter;
 using SyriacSources.Backend.Infrastructure.Services;
-using SyriacSources.Backend.Application.Common.Interfaces;
-using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using SyriacSources.Backend.Application.Common.Models;
 
 namespace SyriacSources.Backend.Infrastructure.Data;
 
@@ -26,6 +21,8 @@ public static class InitialiserExtensions
         await initialiser.InitialiseAsync();
 
         await initialiser.SeedAsync();
+
+        await initialiser.RegisterApplicationPolicies(app);
     }
 }
 
@@ -37,8 +34,9 @@ public class ApplicationDbContextInitialiser
     private readonly IApplicationRoleService _appRoleService;
     private readonly IApplicationUserRoleService _appUserRoleService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IApplicationPermissionService _appPermissionService;
 
-    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, IApplicationUserService appUserService, IApplicationUserRoleService userRoleService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, IApplicationRoleService appRoleService)
+    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, IApplicationPermissionService appPermissionService, IApplicationUserService appUserService, IApplicationUserRoleService userRoleService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, IApplicationRoleService appRoleService)
     {
         _logger = logger;
         _context = context;
@@ -46,6 +44,7 @@ public class ApplicationDbContextInitialiser
         _userManager = userManager;
         _appRoleService = appRoleService;
         _appUserService = appUserService;
+        _appPermissionService = appPermissionService;
     }
 
     public async Task InitialiseAsync()
@@ -79,7 +78,7 @@ public class ApplicationDbContextInitialiser
         // Default roles
         var token = new CancellationToken();
 
-        ApplicationRole administratorRole = new ApplicationRole { NormalizedRoleName = "ADMINISTRATOR" , NameAR = "مدير النظام" , NameEN = "Administrator", CreatedBy = "S"};
+        ApplicationRole administratorRole = new ApplicationRole { NormalizedRoleName = Roles.Administrator.NormalizeString(), NameAR = "مدير النظام" , NameEN = Roles.Administrator.NormalizeString(), CreatedBy = "S"};
 
 
         var roles = await _appRoleService.GetRolesAsync(token);
@@ -90,13 +89,13 @@ public class ApplicationDbContextInitialiser
         }
         else
         {
-            administratorRole = roles.Where(x => x.NormalizedRoleName == "ADMINISTRATOR").Single();
+            administratorRole = roles.Where(x => x.NormalizedRoleName == Roles.Administrator.NormalizeString()).Single();
         }
 
         var user = new Contributor
         {
             FullNameAR = "مدير نظام",
-            FullNameEN = "Administrator",
+            FullNameEN = Roles.Administrator,
             EmailAddress = "admin@local"
         };
 
@@ -135,5 +134,31 @@ public class ApplicationDbContextInitialiser
                 }
             }
         }
+    }
+    
+    public async Task RegisterApplicationPolicies(WebApplication app)
+    {
+        var policies = new HashSet<string>();
+
+        // Get all endpoints
+        var endpoints = app.Services.GetRequiredService<EndpointDataSource>().Endpoints;
+
+        foreach (var endpoint in endpoints)
+        {
+            // Check for metadata that includes the Authorize attribute
+            var authorizeMetadata = endpoint.Metadata.GetMetadata<IAuthorizeData>();
+            if (authorizeMetadata != null && !string.IsNullOrEmpty(authorizeMetadata.Policy))
+            {
+                policies.Add(authorizeMetadata.Policy);
+            }
+        }
+
+        // Insert policies into the database if they do not exist
+        foreach (var policy in policies)
+
+            if (!await _context.ApplicationPermissions.AnyAsync(p => p.PolicyName == policy))
+            {
+                await _appPermissionService.CreatePolicy(policy, new CancellationToken());
+            }
     }
 }

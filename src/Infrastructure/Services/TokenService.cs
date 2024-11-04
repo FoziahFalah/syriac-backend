@@ -5,38 +5,65 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Builder.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Infrastructure.Services;
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
-    private readonly JWTToken _jwtToken;`
+    private readonly IApplicationPermissionService _policyService;
+    private readonly IApplicationRoleService _roleService;
+    private readonly JWTToken _jwtToken;
 
-    public TokenService(IConfiguration configuration, IOptions<JWTToken> jwtToken)
+    public TokenService(IConfiguration configuration, IApplicationPermissionService policyService, IApplicationRoleService roleService, IOptions<JWTToken> jwtToken)
     {
         _configuration = configuration;
-        _jwtToken = jwtToken.Value;      
+        _jwtToken = jwtToken.Value;
+        _roleService = roleService;
+        _policyService = policyService;
     }
 
-    public string CreateJwtSecurityToken(string id, string rolename)
+    public async Task<string> CreateJwtSecurityToken(string id, ApplicationUserRole userRoles)
     {
-        //var roleClaims = 
+        
         var authClaims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, id!),
-            new Claim(ClaimTypes.Role, rolename!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
+        // Add roles to claims
+        var roleIds = userRoles.UserRoles.Split(',').Select(int.Parse).ToList<int>();
 
-        // var key = EncodeKey(_jwtToken.Secret);
+        var roles = await _roleService.GetRolesAsync(roleIds, new CancellationToken());
 
+        if(roles != null)
+        {
+            foreach (var role in roles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, role.NormalizedRoleName));
+            }
+        }
+
+        // Add policies as claims
+        var policies = await _policyService.FetchPermissionsByRoleIdAsync(userRoles.Id);
+
+        if (policies != null)
+        {
+            foreach (var policy in policies)
+            {
+                authClaims.Add(new Claim("policies", policy));
+            }
+
+        }
+        
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(_jwtToken.Secret))));
 
         var token = new JwtSecurityToken(

@@ -17,7 +17,7 @@ public class GetPermissionsQueryHandler : IRequestHandler<GetPermissionsQuery, L
 
     public async Task<List<PermissionDto>> Handle(GetPermissionsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.Permissions
+        return await _context.ApplicationPermissions
             .Where(x=>x.IsActive)
             .OrderBy(x => x.PolicyName)
             .ProjectTo<PermissionDto>(_mapper.ConfigurationProvider)
