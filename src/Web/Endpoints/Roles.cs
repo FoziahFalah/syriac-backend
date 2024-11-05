@@ -7,7 +7,6 @@ using SyriacSources.Backend.Application.Roles.Queries.GetRole;
 
 namespace SyriacSources.Backend.Web.Endpoints;
 
-[Authorize(Policy = "roles")]
 public class Roles : EndpointGroupBase
 {
     public override void Map(WebApplication app)

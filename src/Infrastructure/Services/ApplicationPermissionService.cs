@@ -162,9 +162,12 @@ public class ApplicationPermissionService : IApplicationPermissionService
                 {
                     NameAR = parentName,
                     NameEN = parentName,
-                    PolicyName = policy,
-                    IsModule = true
+                    PolicyName = parentName,
+                    IsModule = true,
+                    Created = DateTime.Now,
+                    CreatedBy = "auto generated"
                 };
+                _context.ApplicationPermissions.Add(parentPermissionEntity);
             }
 
             //adding parentId to new Policy
@@ -174,8 +177,10 @@ public class ApplicationPermissionService : IApplicationPermissionService
                 NameAR = policy,
                 PolicyName = policy,
                 ParentId = parentPermissionEntity == null ? 0 : parentPermissionEntity.Id,
-
-            };
+                Created = DateTime.Now,
+                CreatedBy = "auto generated"
+        };
+            _context.ApplicationPermissions.Add(permissionEntity);
 
             //Map Role to Permission
             var result = await _context.SaveChangesAsync(cancellationToken);

@@ -24,7 +24,7 @@ public static class InitialiserExtensions
 
         await initialiser.SeedAsync();
 
-        await initialiser.RegisterApplicationPolicies(scope);
+        await initialiser.RegisterApplicationPolicies(app);
     }
 }
 
@@ -164,44 +164,23 @@ public class ApplicationDbContextInitialiser
     //        }
     //}
 
-    public async Task RegisterApplicationPolicies(IServiceScope scope)
+    public async Task RegisterApplicationPolicies(WebApplication app)
     {
-        var authorizationPolicyCollectionProvider = scope.ServiceProvider
-            .GetRequiredService<IAuthorizationPolicyProvider>();
+        var endpoints = app.Services.GetServices<EndpointDataSource>().SelectMany(x => x.Endpoints).ToArray();
 
-        var actionDescriptorCollectionProvider = scope.ServiceProvider.GetRequiredService<IEndpointRouteBuilder>();
-
-
-
-
-
-
-
-
-        var actionDescriptors = actionDescriptorCollectionProvider.ActionDescriptors.Items;
-
-        foreach (var actionDescriptor in actionDescriptors)
+        foreach (var endpoint in endpoints)
         {
-            if (actionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
+            var authorisation = (endpoint?.Metadata
+                .Where(p => p.GetType() == typeof(AuthorizeAttribute)))?.Cast<AuthorizeAttribute>();
+            
+            if (authorisation == null)
+                continue;
+
+            foreach (var authoriseAttribute in authorisation)
             {
-                //string controllerName = controllerActionDescriptor.ControllerName;
-                //string actionName = controllerActionDescriptor.ActionName;
-                AuthorizeAttribute? authoriseAttribute = null;
-                var authorisation = (controllerActionDescriptor?.EndpointMetadata
-                    .Where(p => p.GetType() == typeof(AuthorizeAttribute)));
-
-                if (authorisation != null && authorisation.Any())
-                    authoriseAttribute = (AuthorizeAttribute)(authorisation).First();
-
-                if (authoriseAttribute != null)
-                {
-                    if (authoriseAttribute.Policy != null)
-                        await _appPermissionService.CreatePolicy(authoriseAttribute.Policy, new CancellationToken());
+                if (authoriseAttribute.Policy != null)
+                    await _appPermissionService.CreatePolicy(authoriseAttribute.Policy, new CancellationToken());
                     
-                        //endpoint.AuthorizationPolicy = authorizationPolicyCollectionProvider
-                        //    .GetPolicyAsync(authoriseAttribute.Policy).Result;
-                }
-
             }
         }
     }
