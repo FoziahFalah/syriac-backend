@@ -46,8 +46,7 @@ public static class DependencyInjection
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-         .AddJwtBearer(options =>
+        }).AddJwtBearer(options =>
          {
              options.TokenValidationParameters = new TokenValidationParameters
              {
@@ -82,6 +81,7 @@ public static class DependencyInjection
         services.AddScoped<IApplicationUserRoleService, ApplicationUserRoleService>();
 
         services.AddScoped<IApplicationRoleService, ApplicationRoleService>();
+        services.AddScoped<IApplicationPermissionService, ApplicationPermissionService>();
 
         services.AddTransient<ITokenService, TokenService>();
 

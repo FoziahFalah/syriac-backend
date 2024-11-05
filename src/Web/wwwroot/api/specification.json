@@ -3,6 +3,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "SyriacSources.Backend API",
+    "description": "An ASP.NET Core Web API for Syriac Sources Project",
     "version": "1.0.0"
   },
   "paths": {
@@ -277,10 +278,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/RolePermissionDto"
-                  }
+                  "$ref": "#/components/schemas/RolePermissionVm"
                 }
               }
             }
@@ -888,34 +886,31 @@
             "type": "integer",
             "format": "int32"
           },
+          "policyName": {
+            "type": "string"
+          },
+          "nameEN": {
+            "type": "string",
+            "nullable": true
+          },
+          "nameAR": {
+            "type": "string",
+            "nullable": true
+          },
           "parentId": {
             "type": "integer",
             "format": "int32"
           },
-          "endpointName": {
+          "isModule": {
+            "type": "boolean"
+          },
+          "description": {
             "type": "string",
             "nullable": true
-          },
-          "endpointGroup": {
-            "type": "string"
-          },
-          "policy": {
-            "type": "string"
-          },
-          "displayName": {
-            "type": "string",
-            "nullable": true
-          },
-          "actions": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/PermissionDto"
-            }
           }
         }
       },
-      "RolePermissionDto": {
+      "RolePermissionVm": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -924,8 +919,12 @@
             "format": "int32"
           },
           "applicationPermissionIds": {
-            "type": "string",
-            "nullable": true
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         }
       },

@@ -18,7 +18,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Attachment> Attachments => Set<Attachment>();
     public DbSet<Author> Authors => Set<Author>();
     public DbSet<Century> Centuries => Set<Century>();
-    public DbSet<ApplicationPermission> Permissions => Set<ApplicationPermission>();
     public DbSet<ExcerptComment> Comments => Set<ExcerptComment>();
     public DbSet<Contributor> Contributors => Set<Contributor>();
     public DbSet<CoverPhoto> CoverPhotos => Set<CoverPhoto>();

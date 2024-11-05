@@ -21,13 +21,13 @@ public class DeletePermissionHandler : IRequestHandler<DeletePermissionCommand>
 
     public async Task Handle(DeletePermissionCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Permissions
+        var entity = await _context.ApplicationPermissions
             .Where(l => l.Id == request.Id)
             .SingleOrDefaultAsync(cancellationToken);
 
         Guard.Against.NotFound(request.Id, entity);
 
-        _context.Permissions.Remove(entity);
+        _context.ApplicationPermissions.Remove(entity);
 
         await _context.SaveChangesAsync(cancellationToken);
 

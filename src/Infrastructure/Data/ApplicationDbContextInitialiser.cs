@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using SyriacSources.Backend.Application.Common.Extensions;
 using static System.Formats.Asn1.AsnWriter;
 using SyriacSources.Backend.Infrastructure.Services;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace SyriacSources.Backend.Infrastructure.Data;
 
@@ -22,7 +24,7 @@ public static class InitialiserExtensions
 
         await initialiser.SeedAsync();
 
-        await initialiser.RegisterApplicationPolicies(app);
+        await initialiser.RegisterApplicationPolicies(scope);
     }
 }
 
@@ -135,30 +137,72 @@ public class ApplicationDbContextInitialiser
             }
         }
     }
-    
-    public async Task RegisterApplicationPolicies(WebApplication app)
+
+    //public async Task RegisterApplicationPolicies(WebApplication app)
+    //{
+    //    var policies = new HashSet<string>();
+
+    //    // Get all endpoints
+    //    var endpoints = app.Services.GetRequiredService<EndpointDataSource>().Endpoints;
+
+    //    foreach (var endpoint in endpoints)
+    //    {
+    //        // Check for metadata that includes the Authorize attribute
+    //        var authorizeMetadata = endpoint.Metadata.GetMetadata<IAuthorizeData>();
+    //        if (authorizeMetadata != null && !string.IsNullOrEmpty(authorizeMetadata.Policy))
+    //        {
+    //            policies.Add(authorizeMetadata.Policy);
+    //        }
+    //    }
+
+    //    // Insert policies into the database if they do not exist
+    //    foreach (var policy in policies)
+
+    //        if (!await _context.ApplicationPermissions.AnyAsync(p => p.PolicyName == policy))
+    //        {
+    //            await _appPermissionService.CreatePolicy(policy, new CancellationToken());
+    //        }
+    //}
+
+    public async Task RegisterApplicationPolicies(IServiceScope scope)
     {
-        var policies = new HashSet<string>();
+        var authorizationPolicyCollectionProvider = scope.ServiceProvider
+            .GetRequiredService<IAuthorizationPolicyProvider>();
 
-        // Get all endpoints
-        var endpoints = app.Services.GetRequiredService<EndpointDataSource>().Endpoints;
+        var actionDescriptorCollectionProvider = scope.ServiceProvider.GetRequiredService<IEndpointRouteBuilder>();
 
-        foreach (var endpoint in endpoints)
+
+
+
+
+
+
+
+        var actionDescriptors = actionDescriptorCollectionProvider.ActionDescriptors.Items;
+
+        foreach (var actionDescriptor in actionDescriptors)
         {
-            // Check for metadata that includes the Authorize attribute
-            var authorizeMetadata = endpoint.Metadata.GetMetadata<IAuthorizeData>();
-            if (authorizeMetadata != null && !string.IsNullOrEmpty(authorizeMetadata.Policy))
+            if (actionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
             {
-                policies.Add(authorizeMetadata.Policy);
+                //string controllerName = controllerActionDescriptor.ControllerName;
+                //string actionName = controllerActionDescriptor.ActionName;
+                AuthorizeAttribute? authoriseAttribute = null;
+                var authorisation = (controllerActionDescriptor?.EndpointMetadata
+                    .Where(p => p.GetType() == typeof(AuthorizeAttribute)));
+
+                if (authorisation != null && authorisation.Any())
+                    authoriseAttribute = (AuthorizeAttribute)(authorisation).First();
+
+                if (authoriseAttribute != null)
+                {
+                    if (authoriseAttribute.Policy != null)
+                        await _appPermissionService.CreatePolicy(authoriseAttribute.Policy, new CancellationToken());
+                    
+                        //endpoint.AuthorizationPolicy = authorizationPolicyCollectionProvider
+                        //    .GetPolicyAsync(authoriseAttribute.Policy).Result;
+                }
+
             }
         }
-
-        // Insert policies into the database if they do not exist
-        foreach (var policy in policies)
-
-            if (!await _context.ApplicationPermissions.AnyAsync(p => p.PolicyName == policy))
-            {
-                await _appPermissionService.CreatePolicy(policy, new CancellationToken());
-            }
     }
 }
