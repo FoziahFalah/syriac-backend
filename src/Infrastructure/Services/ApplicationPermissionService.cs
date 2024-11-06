@@ -60,78 +60,6 @@ public class ApplicationPermissionService : IApplicationPermissionService
         return await _context.ApplicationPermissions.Where(x => x.PolicyName == policyName).FirstOrDefaultAsync();
     }
 
-    //public async Task<Result> CreatePolicy(
-    //    AuthorizationPolicyInfo policy,
-    //    CancellationToken cancellationToken = default(CancellationToken))
-    //{
-    //    if (policy == null) { throw new ArgumentException("policy cannot be null"); }
-        
-    //    try
-    //    {
-    //        var permissionEntity = await _context.ApplicationPermissions.Where(x => x.PolicyName == policy.Name).SingleOrDefaultAsync();
-
-    //        if(permissionEntity != null) {
-    //            return Result.Success();
-    //        }
-
-    //        IEnumerable<ApplicationRole> roles = (await _roleService.GetRolesAsync(cancellationToken)).Where(x => (policy.AllowedRoles.Any(r => r.NormalizeString() == x.NormalizedRoleName)));
-
-    //        var parentName = policy?.Name?.Split(":")[0];
-    //        var parentPermissionEntity = await _context.ApplicationPermissions.Where(c => c.PolicyName == parentName).FirstOrDefaultAsync();
-
-    //        //adding parent Policy
-    //        if(parentPermissionEntity == null && !String.IsNullOrEmpty(parentName)) 
-    //        {
-    //            parentPermissionEntity = new ApplicationPermission()
-    //            {
-    //                NameAR = parentName,
-    //                NameEN = parentName,
-    //                PolicyName = policy?.Name,
-    //                IsModule = true
-    //            };
-    //        }
-
-    //        //adding parentId to new Policy
-    //        permissionEntity = new ApplicationPermission
-    //        {
-    //            NameEN = policy?.Name,
-    //            NameAR = policy?.Name,
-    //            PolicyName = policy?.Name,
-    //            ParentId = parentPermissionEntity == null ? 0 : parentPermissionEntity.Id,
-
-    //        };
-
-    //        //Map Role to Permission
-    //        var result = await _context.SaveChangesAsync(cancellationToken);
-
-
-    //        //New Permissions are added to the default Roles
-    //        if (result > 0)
-    //        {
-    //            var rolePermissions = await _context.ApplicationRolePermissions.Where(x => roles.Any(r => r.Id == x.ApplicationRoleId)).ToListAsync(); // get roles identified in the AllowedRoles
-
-    //            foreach (var role in roles)
-    //            {
-    //                var rolePermission = rolePermissions?.Where(x => x.ApplicationRoleId == role.Id).SingleOrDefault();
-    //                string appendedPermissions = "";
-    //                if (rolePermission != null)
-    //                {
-    //                    appendedPermissions = rolePermission.ApplicationPermissionIds + "," + permissionEntity.Id;
-    //                }
-    //                await _roleService.UpdateRolePermissions(role.Id, appendedPermissions, cancellationToken);
-    //            }
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        _logger.LogError($"handled error {ex.Message}:{ex.StackTrace}");
-    //    }
-
-
-    //    return Result.Success();
-    //}
-
-
     public async Task<Result> CreatePolicy(
         string policy,
         CancellationToken cancellationToken = default(CancellationToken))
@@ -181,10 +109,8 @@ public class ApplicationPermissionService : IApplicationPermissionService
                 CreatedBy = "auto generated"
         };
             _context.ApplicationPermissions.Add(permissionEntity);
-
             //Map Role to Permission
             var result = await _context.SaveChangesAsync(cancellationToken);
-           
         }
         catch (Exception ex)
         {

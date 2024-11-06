@@ -59,7 +59,7 @@ public class TokenService : ITokenService
         {
             foreach (var policy in policies)
             {
-                authClaims.Add(new Claim("policies", policy));
+                authClaims.Add(new Claim("policies" , policy));
             }
 
         }
