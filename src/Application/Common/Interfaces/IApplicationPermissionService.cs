@@ -9,8 +9,8 @@ using SyriacSources.Backend.Domain.Entities;
 namespace SyriacSources.Backend.Application.Common.Interfaces;
 public interface IApplicationPermissionService
 {
-    //Task<Result> CreatePolicy(AuthorizationPolicyInfo policy, CancellationToken cancellationToken = default(CancellationToken));
-    Task<Result> CreatePolicy(string policy, CancellationToken cancellationToken = default(CancellationToken));
+    Task<List<string>?> FetchPoliciesAsync( CancellationToken cancellationToken = default(CancellationToken));
+    Task CreatePolicy(string policy, CancellationToken cancellationToken = default(CancellationToken));
     Task<ApplicationPermission?> FetchPolicyById(Guid policyId, CancellationToken cancellationToken = default(CancellationToken));
     Task<List<string>?> FetchPermissionsByRoleIdAsync(int roleId, CancellationToken cancellationToken = default(CancellationToken));
     Task<ApplicationPermission?> FetchPolicyByName(string policyName, CancellationToken cancellationToken = default(CancellationToken));

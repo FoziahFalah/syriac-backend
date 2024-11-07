@@ -24,7 +24,7 @@ public static class InitialiserExtensions
 
         await initialiser.SeedAsync();
 
-        await initialiser.RegisterApplicationPolicies(app);
+        await initialiser.SaveApplicationPolicies(app);
     }
 }
 
@@ -138,33 +138,7 @@ public class ApplicationDbContextInitialiser
         }
     }
 
-    //public async Task RegisterApplicationPolicies(WebApplication app)
-    //{
-    //    var policies = new HashSet<string>();
-
-    //    // Get all endpoints
-    //    var endpoints = app.Services.GetRequiredService<EndpointDataSource>().Endpoints;
-
-    //    foreach (var endpoint in endpoints)
-    //    {
-    //        // Check for metadata that includes the Authorize attribute
-    //        var authorizeMetadata = endpoint.Metadata.GetMetadata<IAuthorizeData>();
-    //        if (authorizeMetadata != null && !string.IsNullOrEmpty(authorizeMetadata.Policy))
-    //        {
-    //            policies.Add(authorizeMetadata.Policy);
-    //        }
-    //    }
-
-    //    // Insert policies into the database if they do not exist
-    //    foreach (var policy in policies)
-
-    //        if (!await _context.ApplicationPermissions.AnyAsync(p => p.PolicyName == policy))
-    //        {
-    //            await _appPermissionService.CreatePolicy(policy, new CancellationToken());
-    //        }
-    //}
-
-    public async Task RegisterApplicationPolicies(WebApplication app)
+    public async Task SaveApplicationPolicies(WebApplication app)
     {
         var endpoints = app.Services.GetServices<EndpointDataSource>().SelectMany(x => x.Endpoints).ToArray();
 
@@ -172,7 +146,7 @@ public class ApplicationDbContextInitialiser
         {
             var authorisation = (endpoint?.Metadata
                 .Where(p => p.GetType() == typeof(AuthorizeAttribute)))?.Cast<AuthorizeAttribute>();
-            
+
             if (authorisation == null)
                 continue;
 
@@ -180,7 +154,6 @@ public class ApplicationDbContextInitialiser
             {
                 if (authoriseAttribute.Policy != null)
                     await _appPermissionService.CreatePolicy(authoriseAttribute.Policy, new CancellationToken());
-                    
             }
         }
     }

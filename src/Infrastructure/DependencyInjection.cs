@@ -61,6 +61,21 @@ public static class DependencyInjection
              };
          });
 
+        services.AddScoped<PolicyRegistrationService>();
+
+        services.AddAuthorization(options =>
+        {
+            // Assume GetPoliciesFromDatabaseAsync() returns a list of policy names
+            options.PolicyRegistratonService();
+            var policies = GetPoliciesFromDatabaseAsync().Result;
+
+            foreach (var policy in policies)
+            {
+                options.AddPolicy(policy, policyOptions =>
+                    policyOptions.RequireClaim("policies", policy)); // Custom requirement
+            }
+        });
+
         services.AddAuthorizationBuilder();
 
         services
@@ -86,11 +101,20 @@ public static class DependencyInjection
         services.AddTransient<ITokenService, TokenService>();
 
         services.Configure<JWTToken>(configuration.GetSection("JWT"));
+        //services.AddHostedService<ApplicationPermissionService>(configuration.GetSection());
 
         services.AddAuthorization(options =>
             {
                 options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator));
                 options.AddPolicy(Policies.CanManageSystem, policy => policy.RequireRole(Roles.Administrator));
+                // Assume GetPoliciesFromDatabaseAsync() returns a list of policy names
+                var policies = GetPoliciesFromDatabaseAsync().Result;
+
+                foreach (var policy in policies)
+                {
+                    options.AddPolicy(policy, policyOptions =>
+                        policyOptions.RequireClaim("policies", policy)); // Custom requirement
+                }
             }
         );
 
