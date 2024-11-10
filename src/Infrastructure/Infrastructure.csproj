@@ -7,8 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Handlers\PermissionAuthorizationHandler.cs" />
     <Compile Remove="Identity\ApplicationRole.cs" />
     <Compile Remove="Identity\IdentityRoleService.cs" />
+    <Compile Remove="Services\PolicyRegistrationService.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +31,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Application\Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Handlers\" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Application.Roles.Commands.CreateRole;
-
+[Authorize(Policy = "roles:createrole")]
 public record CreateRoleCommand : IRequest<int>
 {
     public required string NameEN { get; init; }

@@ -18,6 +18,7 @@ namespace SyriacSources.Backend.Infrastructure.Services;
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
+    //private readonly IApplicationuser _configuration;
     private readonly IApplicationPermissionService _policyService;
     private readonly IApplicationRoleService _roleService;
     private readonly JWTToken _jwtToken;
@@ -63,7 +64,9 @@ public class TokenService : ITokenService
             }
 
         }
-        
+        //var principal = await _userManager.GetClaimsAsync(user);
+        //principal.AddIdentity(new ClaimsIdentity(claims));
+
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(_jwtToken.Secret))));
 
         var token = new JwtSecurityToken(

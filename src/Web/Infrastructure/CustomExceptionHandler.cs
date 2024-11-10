@@ -80,7 +80,7 @@ public class CustomExceptionHandler : IExceptionHandler
         await httpContext.Response.WriteAsJsonAsync(new ProblemDetails
         {
             Status = StatusCodes.Status403Forbidden,
-            Title = "Forbidden",
+            Title = "Forbidden. You don't have permission to view this resource",
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.3"
         });
     }

@@ -1,13 +1,11 @@
-﻿
-using Microsoft.AspNetCore.Authorization;
-using SyriacSources.Backend.Application.ApplicationRolePermissions.Commands.UpdateRolePermission;
+﻿using SyriacSources.Backend.Application.ApplicationRolePermissions.Commands.UpdateRolePermission;
 using SyriacSources.Backend.Application.RolePermissions.Queries.GetRolePermissions;
 using SyriacSources.Backend.Domain.Constants;
 
 namespace SyriacSources.Backend.Web.Endpoints;
 
 
-[Authorize(Policies.CanManageSystem)]
+[Authorize]
 public class RolePermissions: EndpointGroupBase
 {
     public override void Map(WebApplication app)

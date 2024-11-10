@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Common\Extensions\AuthorizationBuilderExtensions.cs" />
     <Compile Remove="Common\Models\AuthorizationPolicyInfo.cs" />
     <Compile Remove="Common\Models\ClaimRequirement.cs" />
     <Compile Remove="Common\Security\DynamicAuthorizationPolicyProvider.cs" />

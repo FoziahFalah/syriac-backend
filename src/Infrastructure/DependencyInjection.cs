@@ -13,12 +13,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection  AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         string secretKey = configuration.GetSection("JWT:Secret").Get<string>() ?? throw new InvalidOperationException("JWT secret must not be null.");
@@ -41,47 +42,12 @@ public static class DependencyInjection
         
         services.AddScoped<ApplicationDbContextInitialiser>();
 
-        services.AddAuthentication(x =>
-        {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        }).AddJwtBearer(options =>
-         {
-             options.TokenValidationParameters = new TokenValidationParameters
-             {
-                 ValidateIssuer = false,
-                 ValidateAudience = false,
-                 ValidateLifetime = true,
-                 ValidateIssuerSigningKey = true,
-                 RequireExpirationTime = true,
-                 ValidIssuer = configuration.GetSection("JWT:ValidIssuer").Get<string>(),
-                 ValidAudience = configuration.GetSection("JWT:ValidAudience").Get<string>(),
-                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(secretKey))))
-             };
-         });
-
-        services.AddScoped<PolicyRegistrationService>();
-
-        services.AddAuthorization(options =>
-        {
-            // Assume GetPoliciesFromDatabaseAsync() returns a list of policy names
-            options.PolicyRegistratonService();
-            var policies = GetPoliciesFromDatabaseAsync().Result;
-
-            foreach (var policy in policies)
-            {
-                options.AddPolicy(policy, policyOptions =>
-                    policyOptions.RequireClaim("policies", policy)); // Custom requirement
-            }
-        });
-
-        services.AddAuthorizationBuilder();
-
+        
         services
             .AddIdentityCore<ApplicationUser>()
             .AddUserManager<UserManager<ApplicationUser>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders()
             .AddApiEndpoints();
 
         services.AddSingleton(TimeProvider.System);
@@ -96,25 +62,38 @@ public static class DependencyInjection
         services.AddScoped<IApplicationUserRoleService, ApplicationUserRoleService>();
 
         services.AddScoped<IApplicationRoleService, ApplicationRoleService>();
+
         services.AddScoped<IApplicationPermissionService, ApplicationPermissionService>();
+
+        services.AddScoped<PolicyConfigurationService>();
 
         services.AddTransient<ITokenService, TokenService>();
 
         services.Configure<JWTToken>(configuration.GetSection("JWT"));
-        //services.AddHostedService<ApplicationPermissionService>(configuration.GetSection());
 
+        //services.AddAuthorizationBuilder();
+        //    .AddCustomPolicies();
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                RequireExpirationTime = true,
+                ValidIssuer = configuration.GetSection("JWT:ValidIssuer").Get<string>(),
+                ValidAudience = configuration.GetSection("JWT:ValidAudience").Get<string>(),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(secretKey))))
+            };
+        });
         services.AddAuthorization(options =>
             {
-                options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator));
-                options.AddPolicy(Policies.CanManageSystem, policy => policy.RequireRole(Roles.Administrator));
-                // Assume GetPoliciesFromDatabaseAsync() returns a list of policy names
-                var policies = GetPoliciesFromDatabaseAsync().Result;
+                var serviceProvider = services.BuildServiceProvider();
+                var authorizationConfigService = serviceProvider.GetRequiredService<PolicyConfigurationService>();
 
-                foreach (var policy in policies)
-                {
-                    options.AddPolicy(policy, policyOptions =>
-                        policyOptions.RequireClaim("policies", policy)); // Custom requirement
-                }
+                // Configure authorization options asynchronously
+                authorizationConfigService.AddPoliciesAsync(options).GetAwaiter().GetResult();
             }
         );
 

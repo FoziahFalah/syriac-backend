@@ -52,18 +52,16 @@ public class ApplicationPermissionService : IApplicationPermissionService
     public async Task<List<string>?> FetchPoliciesAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var rolePermission = await _context.ApplicationRolePermissions.Where(x => x.IsActive).SingleOrDefaultAsync();
+        var poliicies = await _context.ApplicationPermissions.Where(x => x.IsActive).Select(x=>x.PolicyName).ToListAsync();
 
-        if (rolePermission == null || rolePermission.ApplicationPermissionIds == null)
+        if (poliicies == null )
         {
             return null;
         }
 
-        List<string> permissionIds = rolePermission.ApplicationPermissionIds.Split(',').ToList();
+        //List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
 
-        List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
-
-        return policies;
+        return poliicies;
     }
 
     public async Task<ApplicationPermission?> FetchPolicyByName( string policyName, CancellationToken cancellationToken)
