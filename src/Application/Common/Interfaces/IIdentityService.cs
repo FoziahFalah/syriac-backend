@@ -6,11 +6,14 @@ namespace SyriacSources.Backend.Application.Common.Interfaces;
 public interface IIdentityService
 {
     Task<string?> GetUserNameAsync(string userId);
+
     Task<ApplicationUserDto?> GetUserAsync(string email);
 
     Task<bool> EmailExists(string email);
 
     Task<bool> AuthorizeAsync(string userId, string policyName);
+
+    //Task<bool> AuthorizeAsync(ApplicationUserDto user, string policyName);
 
     Task<(Result Result, int Id)> AuthenticateAsync(string email, string password);
 

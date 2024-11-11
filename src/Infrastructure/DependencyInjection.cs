@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.Extensions.Options;
 using System;
+using Infrastructure.Identity;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -57,23 +58,27 @@ public static class DependencyInjection
         //Registering Services
         services.AddTransient<IIdentityService, IdentityUserService>();
 
-        services.AddScoped<IApplicationUserService, ApplicationUserService>();
+        services.AddTransient<IApplicationUserService, ApplicationUserService>();
 
-        services.AddScoped<IApplicationUserRoleService, ApplicationUserRoleService>();
+        services.AddTransient<IApplicationUserRoleService, ApplicationUserRoleService>();
 
-        services.AddScoped<IApplicationRoleService, ApplicationRoleService>();
+        services.AddTransient<IApplicationRoleService, ApplicationRoleService>();
 
-        services.AddScoped<IApplicationPermissionService, ApplicationPermissionService>();
+        services.AddTransient<IApplicationPermissionService, ApplicationPermissionService>();
 
         services.AddScoped<PolicyConfigurationService>();
 
         services.AddTransient<ITokenService, TokenService>();
 
         services.Configure<JWTToken>(configuration.GetSection("JWT"));
-
+        
         //services.AddAuthorizationBuilder();
-        //    .AddCustomPolicies();
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+
+        // For dynamically create policy if not exist
+        //services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -87,15 +92,16 @@ public static class DependencyInjection
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(secretKey))))
             };
         });
+
         services.AddAuthorization(options =>
             {
                 var serviceProvider = services.BuildServiceProvider();
                 var authorizationConfigService = serviceProvider.GetRequiredService<PolicyConfigurationService>();
-
                 // Configure authorization options asynchronously
                 authorizationConfigService.AddPoliciesAsync(options).GetAwaiter().GetResult();
             }
         );
+
 
         return services;
     }

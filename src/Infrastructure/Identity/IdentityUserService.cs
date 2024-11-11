@@ -8,6 +8,8 @@ using System.ComponentModel.DataAnnotations;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using AutoMapper;
 using SyriacSources.Backend.Domain.Entities;
+using SyriacSources.Backend.Domain.Constants;
+using Microsoft.AspNetCore.Http;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
@@ -15,6 +17,7 @@ public class IdentityUserService : IIdentityService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
+    private readonly IHttpContextAccessor _contextAccessor;
     private readonly IApplicationRoleService _roleService;
     private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
@@ -22,12 +25,14 @@ public class IdentityUserService : IIdentityService
     public IdentityUserService(
         UserManager<ApplicationUser> userManager,
         IMapper mapper,
+        IHttpContextAccessor contextAccessor,
         IApplicationRoleService roleService,
         IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService)
     {
         _roleService = roleService;
         _userManager = userManager;
+        _contextAccessor = contextAccessor;
         _mapper = mapper;
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         _authorizationService = authorizationService;
@@ -73,14 +78,34 @@ public class IdentityUserService : IIdentityService
 
     public async Task<bool> AuthorizeAsync(string userId, string policyName)
     {
-        var user = await _userManager.FindByIdAsync(userId);
 
-        if (user == null)
+        //var user = _userManager.Users.SingleOrDefault(u => u.Id.ToString() == userId);
+
+        //if (user == null || !(await _userManager.GetClaimsAsync(user)).Any(i => i.Type == po && i.Value == value))
+        //{
+        //    return Result.Failure(new[] { $"User does not have claim for \"{type}\"." });
+        //}
+
+        //return result.Succeeded;
+
+
+
+        var user = await _userManager.FindByIdAsync(userId);
+        //var user = await _userManager.Users.SingleOrDefaultAsync(x => x.Id.ToString() == userId);
+        var principal = _contextAccessor.HttpContext?.User;
+        
+        if (user == null || principal == null)
         {
             return false;
         }
-
-        var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
+        //var principal = httpContext.Principal;
+        //var claims = await _userManager.Users..GetClaimsAsync(user);
+        //var principal = await _userClaimsPrincipalFactory.CreateAsync(user);
+        // Debug: Print all claims to check if policies claim is included
+        var policiesClaim = principal.Claims
+            .Where(c => c.Type == CustomClaimTypes.Permission)
+            .Select(c => c.Value)
+            .ToList();
 
         var result = await _authorizationService.AuthorizeAsync(principal, policyName);
 

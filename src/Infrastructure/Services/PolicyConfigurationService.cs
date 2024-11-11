@@ -33,7 +33,7 @@ public class PolicyConfigurationService
             foreach (var policy in policies)
             {
                 options.AddPolicy(policy, policyOptions =>
-                    policyOptions.RequireClaim("policies", policy)); // Custom requirement
+                    policyOptions.RequireClaim(CustomClaimTypes.Permission, policy)); // Custom requirement
             }
         }
     }

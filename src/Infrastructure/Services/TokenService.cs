@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Domain.Constants;
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Infrastructure.Services;
@@ -60,12 +61,10 @@ public class TokenService : ITokenService
         {
             foreach (var policy in policies)
             {
-                authClaims.Add(new Claim("policies" , policy));
+                authClaims.Add(new Claim(CustomClaimTypes.Permission, policy));
             }
 
         }
-        //var principal = await _userManager.GetClaimsAsync(user);
-        //principal.AddIdentity(new ClaimsIdentity(claims));
 
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(_jwtToken.Secret))));
 

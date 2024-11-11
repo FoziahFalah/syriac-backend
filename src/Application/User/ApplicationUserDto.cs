@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Permissions.Queries;
 using SyriacSources.Backend.Application.TodoLists.Queries.GetTodos;
 using SyriacSources.Backend.Domain.Entities;
 
