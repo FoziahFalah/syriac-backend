@@ -1,3 +1,4 @@
+using Serilog;
 using SyriacSources.Backend.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,22 +9,25 @@ builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
-var app = builder.Build();
 
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    await app.InitialiseDatabaseAsync();
-//}
-//else
-//{
-//    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-//    app.UseHsts();
-//}
+// Set up Serilog
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console() // Add more sinks as needed (e.g., file, Seq, etc.)
+    .CreateLogger();
+
+//Add support to logging with SERILOG
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
+
+
+var app = builder.Build();
 
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+//Add support to logging request with SERILOG
+app.UseSerilogRequestLogging();
 
 app.UseOpenApi();
 
@@ -50,10 +54,23 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-var task = app.RunAsync();
+try
+{
+    // Run the application
+    var task = app.RunAsync();
+    await app.InitialiseDatabaseAsync();
+    await task;
+}
+catch (Exception ex)
+{
+    // Log any startup errors
+    Log.Fatal(ex, "Application failed to start.");
+}
+finally
+{
+    // Ensure logs are flushed before the application exits
+    Log.CloseAndFlush();
+}
 
-await app.InitialiseDatabaseAsync();
-
-await task;
 
 public partial class Program { }
