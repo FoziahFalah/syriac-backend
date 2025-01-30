@@ -2,5 +2,5 @@
 public class ApplicationUserRole : BaseAuditableEntity
 {
     public string UserRoles { get; set; } = "";
-    public int ApplicationUserId { get; set; }
+    public int UserId { get; set; }
 }

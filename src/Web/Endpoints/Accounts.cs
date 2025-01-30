@@ -1,5 +1,4 @@
-﻿
-using SyriacSources.Backend.Application.Account.Commands.Login;
+﻿using SyriacSources.Backend.Application.Accounts.Commands.Login;
 
 namespace SyriacSources.Backend.Web.Endpoints;
 

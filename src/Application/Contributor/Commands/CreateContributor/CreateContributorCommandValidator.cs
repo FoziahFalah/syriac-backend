@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SyriacSources.Backend.Application.Common.Interfaces;
 
-namespace SyriacSources.Backend.Application.Users.Commands.CreateUser;
+namespace SyriacSources.Backend.Application.Contributors.Commands.CreateContributor;
 
-public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+public class CreateContributorCommandValidator : AbstractValidator<CreateContributorCommand>
 {
-    private readonly IIdentityService _identityService;
+    private readonly IIdentityApplicationUserService _identityService;
 
-    public CreateUserCommandValidator(IIdentityService identityService)
+    public CreateContributorCommandValidator(IIdentityApplicationUserService identityService)
     {
         _identityService = identityService;
 

@@ -20,17 +20,17 @@ public class ApplicationRoleService : IApplicationRoleService
         _context = context;
     }
 
-    public async Task<(Result , int)> CreateAsync(ApplicationRole role, CancellationToken cancellationToken)
+    public async Task<Result> CreateAsync(ApplicationRole role, CancellationToken cancellationToken)
     {
         role.NormalizedRoleName = role.NormalizedRoleName.NormalizeString();
         _context.ApplicationRoles.Add(role);
         var result = await _context.SaveChangesAsync(cancellationToken);
         if(result > 0)
         {
-            return (Result.Success(), role.Id);
+            return (Result.Success(role.Id));
         }
 
-        return (Result.Failure(new List<string> { "Failed" }), role.Id);
+        return (Result.Failure(new List<string> { "Failed" }));
     }
 
     public async Task<ApplicationRole?> FindByIdAsync(int roleId, CancellationToken cancellationToken)
@@ -61,14 +61,14 @@ public class ApplicationRoleService : IApplicationRoleService
     {
         role.NormalizedRoleName = role.NormalizedRoleName.NormalizeString();
         _context.ApplicationRoles.Update(role);
-        return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success());
+        return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success(role.Id));
     }
 
     public async Task<Result> DeleteAsync(ApplicationRole role, CancellationToken cancellationToken)
     {
 
         _context.ApplicationRoles.Remove(role);
-        return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x=> Result.Success());
+        return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x=> Result.Success(null));
     }
 
     public async Task<Result> UpdateRolePermissions(int roleId, string permissionIds, CancellationToken cancellationToken)
@@ -83,7 +83,7 @@ public class ApplicationRoleService : IApplicationRoleService
             ApplicationPermissionIds = permissionIds
         });
 
-        var result = await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success());
+        var result = await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success(null));
 
         return result;
     }

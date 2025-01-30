@@ -6,5 +6,5 @@ public class SourceIntroEditor : BaseAuditableEntity
 { 
     public int SourceId {  get; set; }
     public int EditorId {  get; set; }
-    public Contributor Editor {  get; set; } = new Contributor();
+    public ApplicationUser Editor {  get; set; } = new ApplicationUser();
 }

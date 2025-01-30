@@ -3,21 +3,17 @@ using SyriacSources.Backend.Application.User;
 
 namespace SyriacSources.Backend.Application.Common.Interfaces;
 
-public interface IIdentityService
+public interface IIdentityApplicationUserService
 {
     Task<string?> GetUserNameAsync(string userId);
-
-    Task<ApplicationUserDto?> GetUserAsync(string email);
 
     Task<bool> EmailExists(string email);
 
     Task<bool> AuthorizeAsync(string userId, string policyName);
 
-    //Task<bool> AuthorizeAsync(ApplicationUserDto user, string policyName);
+    Task<Result> AuthenticateAsync(string email, string password);
 
-    Task<(Result Result, int Id)> AuthenticateAsync(string email, string password);
-
-    Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password);
+    Task<int> CreateUserLoginAsync(string userName, string password, int userId);
 
     Task<Result> DeleteUserAsync(string userId);
 

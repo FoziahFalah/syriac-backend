@@ -1,33 +1,26 @@
-using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Common.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using SyriacSources.Backend.Application.User;
-using System.ComponentModel.DataAnnotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using AutoMapper;
-using SyriacSources.Backend.Domain.Entities;
 using SyriacSources.Backend.Domain.Constants;
 using Microsoft.AspNetCore.Http;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
-public class IdentityUserService : IIdentityService
+public class IdentityApplicationUserService : IIdentityApplicationUserService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<IdentityApplicationUser> _userManager;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IApplicationRoleService _roleService;
-    private readonly IUserClaimsPrincipalFactory<ApplicationUser> _userClaimsPrincipalFactory;
+    private readonly IUserClaimsPrincipalFactory<IdentityApplicationUser> _userClaimsPrincipalFactory;
     private readonly IAuthorizationService _authorizationService;
 
-    public IdentityUserService(
-        UserManager<ApplicationUser> userManager,
+    public IdentityApplicationUserService(
+        UserManager<IdentityApplicationUser> userManager,
         IMapper mapper,
         IHttpContextAccessor contextAccessor,
         IApplicationRoleService roleService,
-        IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
+        IUserClaimsPrincipalFactory<IdentityApplicationUser> userClaimsPrincipalFactory,
         IAuthorizationService authorizationService)
     {
         _roleService = roleService;
@@ -44,36 +37,40 @@ public class IdentityUserService : IIdentityService
 
         return user?.UserName;
     }
-    public async Task<ApplicationUserDto?> GetUserAsync(string email)
-    {
-        var entity = await _userManager.FindByEmailAsync(email);
-        if(entity == null)
-        {
-            return null;
-        }
-        ApplicationUserDto user = new ApplicationUserDto
-        {
-            EmailAddress = email,
-            Id = entity.Id
-        };
+    //public async Task<IdentityApplicationUser?> GetIdentityUserAsync(string email)
+    //{
+    //    var entity = (await _userManager.FindByEmailAsync(email));
+    //    if(entity == null)
+    //    {
+    //        return null;
+    //    }
+    //    IdentityApplicationUser user = new IdentityApplicationUser
+    //    {
+    //        Email = email,
+    //        Id = entity.Id,
+    //    };
 
-        return _mapper.Map<ApplicationUserDto>(user);
-    }
+    //    return user;
+    //}
     
     public async Task<bool> EmailExists(string email){
         return await _userManager.FindByEmailAsync(email) != null;
     }
-    public async Task<(Result Result, string UserId)> CreateUserAsync(string userName, string password)
+    public async Task<int> CreateUserLoginAsync(string email, string password, int userId)
     {
-        var user = new ApplicationUser
+        var username = email.Split("@")[1];
+        var user = new IdentityApplicationUser
         {
-            UserName = userName,
-            Email = userName,
+            Id = userId,
+            UserName = username,
+            NormalizedUserName = username.Normalize(),
+            Email = email,
+            NormalizedEmail = email.Normalize(),
         };
 
         var result = await _userManager.CreateAsync(user, password);
 
-        return (result.ToApplicationResult(), user.Id.ToString());
+        return (user.Id);
     }
 
     public async Task<bool> AuthorizeAsync(string userId, string policyName)
@@ -83,7 +80,7 @@ public class IdentityUserService : IIdentityService
 
         //if (user == null || !(await _userManager.GetClaimsAsync(user)).Any(i => i.Type == po && i.Value == value))
         //{
-        //    return Result.Failure(new[] { $"User does not have claim for \"{type}\"." });
+        //    return Result.Failure(new[] { $"ApplicationUser does not have claim for \"{type}\"." });
         //}
 
         //return result.Succeeded;
@@ -112,29 +109,29 @@ public class IdentityUserService : IIdentityService
         return result.Succeeded;
     }
 
-    public async Task<(Result Result,int Id)> AuthenticateAsync(string email, string password) 
+    public async Task<Result> AuthenticateAsync(string email, string password) 
     {
         var user = await _userManager.FindByEmailAsync(email);
 
         if(user == null)
-            return (Result.Failure(new List<string> {"User not Found"}), 0 );
+            return (Result.Failure(new List<string> {"ApplicationUser not Found"}));
 
         if (!await _userManager.CheckPasswordAsync(user, password))
         {
             var error = new List<string> { "Email or Password is incorrect" };
-            return (Result.Failure(error),0);
+            return (Result.Failure(error));
         }
 
-        return (Result.Success(), user.Id);
+        return (Result.Success(user.Id));
     }
     public async Task<Result> DeleteUserAsync(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
 
-        return user != null ? await DeleteUserAsync(user) : Result.Success();
+        return user != null ? await DeleteUserAsync(user) : Result.Success(userId);
     }
 
-    public async Task<Result> DeleteUserAsync(ApplicationUser user)
+    public async Task<Result> DeleteUserAsync(IdentityApplicationUser user)
     {
         var result = await _userManager.DeleteAsync(user);
 

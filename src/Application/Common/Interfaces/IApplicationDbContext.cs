@@ -12,7 +12,7 @@ public interface IApplicationDbContext
     public DbSet<Author> Authors { get; }
     public DbSet<Century> Centuries { get; }
     public DbSet<ExcerptComment> Comments { get; }
-    public DbSet<Contributor> Contributors { get; }
+    public DbSet<ApplicationUser> ApplicationUsers { get; }
     public DbSet<CoverPhoto> CoverPhotos { get; }
     public DbSet<ApplicationRolePermission> ApplicationRolePermissions { get; }
     public DbSet<ApplicationPermission> ApplicationPermissions { get; }

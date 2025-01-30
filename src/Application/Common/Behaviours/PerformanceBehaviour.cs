@@ -9,12 +9,12 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
     private readonly Stopwatch _timer;
     private readonly ILogger<TRequest> _logger;
     private readonly IUser _user;
-    private readonly IIdentityService _identityService;
+    private readonly IIdentityApplicationUserService _identityService;
 
     public PerformanceBehaviour(
         ILogger<TRequest> logger,
         IUser user,
-        IIdentityService identityService)
+        IIdentityApplicationUserService identityService)
     {
         _timer = new Stopwatch();
 

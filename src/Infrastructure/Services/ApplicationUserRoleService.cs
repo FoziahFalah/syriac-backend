@@ -34,7 +34,7 @@ public class ApplicationUserRoleService : IApplicationUserRoleService
         }
         result.UserRoles = string.Join("|", roles);
         await _context.ApplicationUserRoles.AddAsync(result);
-        return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success()); 
+        return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success(null)); 
     }
 
     public async Task<bool> IsInRoleAsync(int userId, int roleId, CancellationToken cancellationToken)

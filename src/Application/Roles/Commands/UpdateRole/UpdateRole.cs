@@ -7,7 +7,7 @@ using SyriacSources.Backend.Domain.Entities;
 namespace SyriacSources.Backend.Application.Roles.Commands.UpdateRole;
 
 
-[Authorize(Policy = "roles:updaterole")]
+//[Authorize(Policy = "roles:updaterole")]
 public record UpdateRoleCommand :IRequest<Result>
 {
     public int Id { get; set; }

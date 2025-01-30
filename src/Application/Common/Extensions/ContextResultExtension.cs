@@ -11,7 +11,7 @@ public static class ContextResultExtension
     public static Result ToApplicationResult(this int result)
     {
         return result > 0
-            ? Result.Success()
+            ? Result.Success(null)
             : Result.Failure(new List<String>() { "Error occured"});
     }
 }

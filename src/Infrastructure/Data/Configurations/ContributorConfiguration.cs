@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Infrastructure.Data.Configurations;
-public class ContributorConfiguration : IEntityTypeConfiguration<Contributor>
+public class ContributorConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<Contributor> builder)
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
 
         builder.Property(p => p.FullNameAR)

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace SyriacSources.Backend.Infrastructure.Data;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationIdentityRole, int>, IApplicationDbContext
+public class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, IdentityApplicationRole, int>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -19,7 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     public DbSet<Author> Authors => Set<Author>();
     public DbSet<Century> Centuries => Set<Century>();
     public DbSet<ExcerptComment> Comments => Set<ExcerptComment>();
-    public DbSet<Contributor> Contributors => Set<Contributor>();
+    public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
     public DbSet<CoverPhoto> CoverPhotos => Set<CoverPhoto>();
     public DbSet<ApplicationRolePermission> ApplicationRolePermissions => Set<ApplicationRolePermission>();
     public DbSet<ApplicationPermission> ApplicationPermissions => Set<ApplicationPermission>();

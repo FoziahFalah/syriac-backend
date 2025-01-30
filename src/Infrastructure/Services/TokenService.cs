@@ -1,25 +1,17 @@
-﻿using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
-using Microsoft.AspNetCore.Builder.Extensions;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Application.User;
 using SyriacSources.Backend.Domain.Constants;
-using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacSources.Backend.Infrastructure.Services;
+namespace EventManager.Backend.Infrastructure.Services;
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
-    //private readonly IApplicationuser _configuration;
     private readonly IApplicationPermissionService _policyService;
     private readonly IApplicationRoleService _roleService;
     private readonly JWTToken _jwtToken;
@@ -32,21 +24,25 @@ public class TokenService : ITokenService
         _policyService = policyService;
     }
 
-    public async Task<string> CreateJwtSecurityToken(string id, ApplicationUserRole userRoles)
+    public async Task<string> CreateJwtSecurityToken(UserBasicDetailsVm details)
     {
-        
+        if (String.IsNullOrEmpty(details.Roles))
+        {
+            return "";
+        }
+
         var authClaims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, id!),
+            new Claim(ClaimTypes.NameIdentifier, details.Id.ToString()!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 
         // Add roles to claims
-        var roleIds = userRoles.UserRoles.Split(',').Select(int.Parse).ToList<int>();
+        List<int> roleIds = details.Roles.Split(',').Select(int.Parse).ToList<int>();
 
         var roles = await _roleService.GetRolesAsync(roleIds, new CancellationToken());
 
-        if(roles != null)
+        if (roles != null)
         {
             foreach (var role in roles)
             {
@@ -55,7 +51,7 @@ public class TokenService : ITokenService
         }
 
         // Add policies as claims
-        var policies = await _policyService.FetchPermissionsByRoleIdAsync(userRoles.Id);
+        var policies = await _policyService.FetchPoliciesByRolesAsync(roleIds);
 
         if (policies != null)
         {

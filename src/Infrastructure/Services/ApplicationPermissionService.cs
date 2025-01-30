@@ -33,16 +33,33 @@ public class ApplicationPermissionService : IApplicationPermissionService
         return await _context.ApplicationPermissions.FindAsync(policyId);
     }
 
-    public async Task<List<string>?> FetchPermissionsByRoleIdAsync( int roleId, CancellationToken cancellationToken)
+    public async Task<List<string>?> FetchPoliciesByRoleIdAsync(int roleId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var rolePermission = await _context.ApplicationRolePermissions.Where(x => x.ApplicationRoleId == roleId &&x.IsActive).SingleOrDefaultAsync();
+        var rolePermission = await _context.ApplicationRolePermissions.Where(x => x.ApplicationRoleId == roleId && x.IsActive).SingleOrDefaultAsync();
 
-        if(rolePermission == null || rolePermission.ApplicationPermissionIds == null) {
+        if (rolePermission == null || rolePermission.ApplicationPermissionIds == null)
+        {
             return null;
         }
 
         List<string> permissionIds = rolePermission.ApplicationPermissionIds.Split(',').ToList();
+
+        List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
+
+        return policies;
+    }
+
+    public async Task<List<string>?> FetchPoliciesByRolesAsync(List<int> roles, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        // Ensure roles is not empty before querying
+        if (roles == null || !roles.Any())
+        {
+            return null; // Or handle as needed
+        }
+
+        List<string?> permissionIds = await _context.ApplicationRolePermissions.Where(x => roles.Contains(x.ApplicationRoleId) && x.IsActive).Select(x => x.ApplicationPermissionIds).ToListAsync(cancellationToken);
 
         List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
 

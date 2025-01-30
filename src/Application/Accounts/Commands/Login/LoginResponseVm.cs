@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SyriacSources.Backend.Application.User;
 using SyriacSources.Backend.Domain.Entities;
 
-namespace SyriacSources.Backend.Application.Account.Commands.Login;
+namespace SyriacSources.Backend.Application.Accounts.Commands.Login;
 public class LoginResponseVm
 {
     public UserBasicDetailsVm? UserBasicDetails { get; set; }

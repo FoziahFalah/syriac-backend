@@ -13,7 +13,7 @@ public class Source : BaseAuditableEntity
     public string? SourceTitleInSyriac { get; set; }
     public string? SourceTitleInForeignLanguage { get; set; }
     public List<SourceIntroEditor> SourceIntroductionEditors { get; set; } = new List<SourceIntroEditor>();
-    public Contributor IntroductionEditor { get; set; } = new Contributor();
+    public ApplicationUser IntroductionEditor { get; set; } = new ApplicationUser();
     public List<Publication> Publications { get; set; } = new List<Publication> { };
     public int CoverPhotoId { get; set; }
     public Attachment CoverPhoto { get; set; } = new Attachment();

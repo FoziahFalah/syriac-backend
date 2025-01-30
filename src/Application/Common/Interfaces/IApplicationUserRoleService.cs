@@ -1,5 +1,4 @@
 ﻿using SyriacSources.Backend.Application.Common.Models;
-using SyriacSources.Backend.Application.Users;
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Application.Common.Interfaces;

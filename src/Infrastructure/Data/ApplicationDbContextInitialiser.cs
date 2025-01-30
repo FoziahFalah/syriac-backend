@@ -33,13 +33,13 @@ public class ApplicationDbContextInitialiser
 {
     private readonly ILogger<ApplicationDbContextInitialiser> _logger;
     private readonly ApplicationDbContext _context;
-    private readonly IApplicationUserService _appUserService;
+    private readonly IContributorService _appUserService;
     private readonly IApplicationRoleService _appRoleService;
     private readonly IApplicationUserRoleService _appUserRoleService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IApplicationPermissionService _appPermissionService;
 
-    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, IApplicationPermissionService appPermissionService, IApplicationUserService appUserService, IApplicationUserRoleService userRoleService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, IApplicationRoleService appRoleService)
+    public ApplicationDbContextInitialiser(ILogger<ApplicationDbContextInitialiser> logger, IApplicationPermissionService appPermissionService, IContributorService appUserService, IApplicationUserRoleService userRoleService, ApplicationDbContext context, UserManager<ApplicationUser> userManager, IApplicationRoleService appRoleService)
     {
         _logger = logger;
         _context = context;
@@ -99,7 +99,7 @@ public class ApplicationDbContextInitialiser
 
         if(user == null)
         {
-            user = new Contributor
+            user = new ApplicationUser
             {
                 FullNameAR = "مدير نظام",
                 FullNameEN = Roles.Administrator,

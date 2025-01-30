@@ -22,6 +22,10 @@ builder.Host.UseSerilog((context, configuration) =>
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseCors(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+}
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -53,6 +57,8 @@ app.MapEndpoints();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseRouting();
 
 try
 {

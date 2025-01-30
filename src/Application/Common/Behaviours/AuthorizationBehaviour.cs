@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using SyriacSources.Backend.Application.Common.Exceptions;
 using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Application.Common.Security;
 
 namespace SyriacSources.Backend.Application.Common.Behaviours;
@@ -8,16 +9,19 @@ namespace SyriacSources.Backend.Application.Common.Behaviours;
 public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly IUser _user;
-    private readonly IIdentityService _identityService;
+    private readonly IIdentityApplicationUserService _identityService;
     private readonly IApplicationUserRoleService _appUserRoleService;
+    private readonly PolicyManagementOptions _policyManagementOptions;
 
     public AuthorizationBehaviour(
         IUser user,
         IApplicationUserRoleService appUserRoleService,
-        IIdentityService identityService)
+        PolicyManagementOptions policyManagementOptions,
+        IIdentityApplicationUserService identityService)
     {
         _user = user;
         _identityService = identityService;
+        _policyManagementOptions = policyManagementOptions;
         _appUserRoleService = appUserRoleService;
     }
 
@@ -33,12 +37,32 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
                 throw new UnauthorizedAccessException();
             }
 
+
+            // Roles-based Admin authorization
+            bool authorized = false;
+
+            string authorizedAllAttributes = _policyManagementOptions.AutoPolicyAllowedRoleNamesCsv; // || String.IsNullOrEmpty(authorizedAllAttributes
+            if (!String.IsNullOrEmpty(authorizedAllAttributes))
+            {
+                //Check if it's a super authenticated user
+                foreach (var role in authorizedAllAttributes.Split(';'))
+                {
+                    bool isInRole = await _appUserRoleService.IsInRoleAsync(Convert.ToInt32(_user.Id), Convert.ToInt32(role), cancellationToken);
+                    if (isInRole)
+                    {
+                        authorized = true;
+                        break;
+                    }
+                }
+            }
+
+
             // Role-based authorization
             var authorizeAttributesWithRoles = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Roles));
 
             if (authorizeAttributesWithRoles.Any())
             {
-                var authorized = false;
+                authorized = false;
 
                 foreach (var roles in authorizeAttributesWithRoles.Select(a => a.Roles.Split(',')))
                 {
@@ -66,7 +90,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             {
                 foreach (var policy in authorizeAttributesWithPolicies.Select(a => a.Policy))
                 {
-                    var authorized = await _identityService.AuthorizeAsync(_user.Id, policy);
+                    authorized = await _identityService.AuthorizeAsync(_user.Id, policy);
 
                     if (!authorized)
                     {

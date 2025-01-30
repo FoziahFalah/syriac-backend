@@ -1,15 +1,16 @@
 ﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Application.Roles.Commands.CreateRole;
-[Authorize(Policy = "roles:createrole")]
-public record CreateRoleCommand : IRequest<int>
+//[Authorize(Policy = "roles:createrole")]
+public record CreateRoleCommand : IRequest<Result>
 {
     public required string NameEN { get; init; }
     public required string NameAR { get; init; }
 }
 
-public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, int>
+public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, Result>
 {
     private readonly IApplicationDbContext _context;
     private readonly IApplicationRoleService _appRoleService;
@@ -20,7 +21,7 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, int>
         _appRoleService = appRoleService;
     }
 
-    public async Task<int> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
         var entity = new ApplicationRole
         {
@@ -29,8 +30,8 @@ public class CreateRoleCommandHandler : IRequestHandler<CreateRoleCommand, int>
             NameAR = request.NameAR,
         };
 
-        var role = await _appRoleService.CreateAsync(entity, cancellationToken);
+        var result = await _appRoleService.CreateAsync(entity, cancellationToken);
 
-        return role.RoleId;
+        return result;
     }
 }

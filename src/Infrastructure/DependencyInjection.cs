@@ -15,6 +15,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using System;
 using Infrastructure.Identity;
+using EventManager.Backend.Infrastructure.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -45,8 +46,8 @@ public static class DependencyInjection
 
         
         services
-            .AddIdentityCore<ApplicationUser>()
-            .AddUserManager<UserManager<ApplicationUser>>()
+            .AddIdentityCore<IdentityApplicationUser>()
+            .AddUserManager<UserManager<IdentityApplicationUser>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders()
             .AddApiEndpoints();
@@ -56,9 +57,9 @@ public static class DependencyInjection
         services.AddScoped<CurrentUser>();
 
         //Registering Services
-        services.AddTransient<IIdentityService, IdentityUserService>();
+        services.AddTransient<IIdentityApplicationUserService, IdentityApplicationUserService>();
 
-        services.AddTransient<IApplicationUserService, ApplicationUserService>();
+        services.AddTransient<IContributorService, ContributorService>();
 
         services.AddTransient<IApplicationUserRoleService, ApplicationUserRoleService>();
 

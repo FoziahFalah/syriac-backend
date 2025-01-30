@@ -6,10 +6,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Contributor\**" />
+    <EmbeddedResource Remove="Contributor\**" />
+    <None Remove="Contributor\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Common\Extensions\AuthorizationBuilderExtensions.cs" />
     <Compile Remove="Common\Models\AuthorizationPolicyInfo.cs" />
     <Compile Remove="Common\Models\ClaimRequirement.cs" />
     <Compile Remove="Common\Security\DynamicAuthorizationPolicyProvider.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Contributor\ApplicationUserDto.cs" />
+    <Compile Include="Contributor\Commands\CreateContributor\CreateContributor.cs" />
+    <Compile Include="Contributor\Commands\CreateContributor\CreateContributorCommandValidator.cs" />
+    <Compile Include="Contributor\Commands\DeleteContributor\DeleteContributor.cs" />
+    <Compile Include="Contributor\Commands\UpdateContributor\UpdateContributor.cs" />
+    <Compile Include="Contributor\Commands\UpdateContributor\UpdateContributorCommandValidator.cs" />
+    <Compile Include="Contributor\Queries\GetContributors\GetContributors.cs" />
+    <Compile Include="Contributor\Queries\GetContributor\GetContributor.cs" />
+    <Compile Include="Contributor\UserBasicDetailsVm.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,12 +46,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Account\Queries\" />
+    <Folder Include="Accounts\Commands\UpdateCredentials\" />
+    <Folder Include="Accounts\Commands\ResetPassword\" />
+    <Folder Include="Accounts\Queries\" />
     <Folder Include="Roles\Queries\GetRoles\" />
-    <Folder Include="User\Commands\DeleteUser\" />
-    <Folder Include="User\Commands\UpdateUser\" />
-    <Folder Include="User\Queries\GetUser\" />
-    <Folder Include="User\Queries\GetUsers\" />
   </ItemGroup>
 
 </Project>

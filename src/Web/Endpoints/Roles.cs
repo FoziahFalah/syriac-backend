@@ -1,4 +1,5 @@
-﻿using SyriacSources.Backend.Application.Roles;
+﻿using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Application.Roles;
 using SyriacSources.Backend.Application.Roles.Commands.CreateRole;
 using SyriacSources.Backend.Application.Roles.Commands.DeleteRole;
 using SyriacSources.Backend.Application.Roles.Commands.UpdateRole;
@@ -26,7 +27,7 @@ public class Roles : EndpointGroupBase
     }
 
     
-    public Task<int> CreateRole(ISender sender,CreateRoleCommand command)
+    public Task<Result> CreateRole(ISender sender,CreateRoleCommand command)
     {
         return sender.Send(command);
     }
