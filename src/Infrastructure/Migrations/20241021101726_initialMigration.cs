@@ -106,7 +106,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Contributors",
+                name: "ApplicationUsers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -122,7 +122,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Contributors", x => x.Id);
+                    table.PrimaryKey("PK_ApplicationUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -283,7 +283,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserRoles = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ContributorId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -294,9 +294,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_ApplicationUserRoles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ApplicationUserRoles_Contributors_ContributorId",
-                        column: x => x.ContributorId,
-                        principalTable: "Contributors",
+                        name: "FK_ApplicationUserRoles_ApplicationUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -307,7 +307,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ContributorId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -327,9 +327,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Contributors_ContributorId",
-                        column: x => x.ContributorId,
-                        principalTable: "Contributors",
+                        name: "FK_AspNetUsers_ApplicationUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -340,7 +340,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ContributorId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationUserId = table.Column<int>(type: "int", nullable: false),
                     Details = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Created = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
@@ -352,9 +352,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Contributors_ContributorId",
-                        column: x => x.ContributorId,
-                        principalTable: "Contributors",
+                        name: "FK_Comments_ApplicationUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -377,9 +377,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Footnotes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Footnotes_Contributors_CommenterId",
+                        name: "FK_Footnotes_ApplicationUsers_CommenterId",
                         column: x => x.CommenterId,
-                        principalTable: "Contributors",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -406,21 +406,21 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_ExcerptTexts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ExcerptTexts_Contributors_EditorId",
+                        name: "FK_ExcerptTexts_ApplicationUsers_EditorId",
                         column: x => x.EditorId,
-                        principalTable: "Contributors",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_ExcerptTexts_Contributors_ReviewerId",
+                        name: "FK_ExcerptTexts_ApplicationUsers_ReviewerId",
                         column: x => x.ReviewerId,
-                        principalTable: "Contributors",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_ExcerptTexts_Contributors_TranslatorId",
+                        name: "FK_ExcerptTexts_ApplicationUsers_TranslatorId",
                         column: x => x.TranslatorId,
-                        principalTable: "Contributors",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
@@ -612,9 +612,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Sources_Contributors_IntroductionEditorId",
+                        name: "FK_Sources_ApplicationUsers_IntroductionEditorId",
                         column: x => x.IntroductionEditorId,
-                        principalTable: "Contributors",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -688,9 +688,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_SourceInroductionEditors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SourceInroductionEditors_Contributors_EditorId",
+                        name: "FK_SourceInroductionEditors_ApplicationUsers_EditorId",
                         column: x => x.EditorId,
-                        principalTable: "Contributors",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -724,9 +724,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserRoles_ContributorId",
+                name: "IX_ApplicationUserRoles_ApplicationUserId",
                 table: "ApplicationUserRoles",
-                column: "ContributorId");
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -761,9 +761,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ContributorId",
+                name: "IX_AspNetUsers_ApplicationUserId",
                 table: "AspNetUsers",
-                column: "ContributorId");
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -788,24 +788,24 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_ContributorId",
+                name: "IX_Comments_ApplicationUserId",
                 table: "Comments",
-                column: "ContributorId");
+                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "ContributorEmailAddress",
-                table: "Contributors",
+                name: "ApplicationUserEmailAddress",
+                table: "ApplicationUsers",
                 column: "EmailAddress",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ContributorFullNameAR",
-                table: "Contributors",
+                name: "ApplicationUserFullNameAR",
+                table: "ApplicationUsers",
                 column: "FullNameAR");
 
             migrationBuilder.CreateIndex(
-                name: "ContributorFullNameEN",
-                table: "Contributors",
+                name: "ApplicationUserFullNameEN",
+                table: "ApplicationUsers",
                 column: "FullNameEN");
 
             migrationBuilder.CreateIndex(
@@ -921,7 +921,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Sources_Contributors_IntroductionEditorId",
+                name: "FK_Sources_ApplicationUsers_IntroductionEditorId",
                 table: "Sources");
 
             migrationBuilder.DropForeignKey(
@@ -998,7 +998,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                 name: "TodoLists");
 
             migrationBuilder.DropTable(
-                name: "Contributors");
+                name: "ApplicationUsers");
 
             migrationBuilder.DropTable(
                 name: "Sources");

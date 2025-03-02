@@ -4,7 +4,6 @@ using SyriacSources.Backend.Infrastructure.Data;
 using SyriacSources.Backend.Infrastructure.Data.Interceptors;
 using SyriacSources.Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using SyriacSources.Backend.Application.Common.Models;
@@ -12,20 +11,18 @@ using SyriacSources.Backend.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.Extensions.Options;
-using System;
-using Infrastructure.Identity;
 using EventManager.Backend.Infrastructure.Services;
+using Ganss.Xss;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection  AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection  AddInfrastructureServices(this IServiceCollection services, WebApplicationBuilder builder)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-        string secretKey = configuration.GetSection("JWT:Secret").Get<string>() ?? throw new InvalidOperationException("JWT secret must not be null.");
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+        string secretKey = builder.Configuration.GetSection("JWT:Secret").Get<string>() ?? throw new InvalidOperationException("JWT secret must not be null.");
 
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
@@ -59,7 +56,7 @@ public static class DependencyInjection
         //Registering Services
         services.AddTransient<IIdentityApplicationUserService, IdentityApplicationUserService>();
 
-        services.AddTransient<IContributorService, ContributorService>();
+        services.AddTransient<IApplicationUserService, ApplicationUserService>();
 
         services.AddTransient<IApplicationUserRoleService, ApplicationUserRoleService>();
 
@@ -71,12 +68,51 @@ public static class DependencyInjection
 
         services.AddTransient<ITokenService, TokenService>();
 
-        services.Configure<JWTToken>(configuration.GetSection("JWT"));
-        
-        //services.AddAuthorizationBuilder();
+        services.Configure<JWTToken>(builder.Configuration.GetSection("JWT"));
+
+        services.Configure<JsonDelimiters>(builder.Configuration.GetSection("JsonDelimiters"));
+
+        services.AddAuthorizationBuilder();
+
+        services.Configure<PolicyManagementOptions>(builder.Configuration.GetSection("PolicyManagementOptions"));
+
 
         // For dynamically create policy if not exist
         //services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+
+        services.AddTransient<IHtmlSanitizer, HtmlSanitizer>();
+
+        //services.AddTransient<IFileService, FileService>(file =>
+        //{
+        //    return new FileService(builder.Environment.WebRootPath, file.GetRequiredService<IHttpContextAccessor>());
+        //});
+
+        var origins = builder.Configuration.GetSection("AllowedOrigins").Value;
+
+        if (!String.IsNullOrEmpty(origins))
+        {
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigins",
+                policy =>
+                {
+                    policy.WithOrigins(origins.Split(";"))
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                });
+            });
+        }
+        else
+        {
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigins",
+                policy =>
+                {
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+        }
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -88,8 +124,8 @@ public static class DependencyInjection
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 RequireExpirationTime = true,
-                ValidIssuer = configuration.GetSection("JWT:ValidIssuer").Get<string>(),
-                ValidAudience = configuration.GetSection("JWT:ValidAudience").Get<string>(),
+                ValidIssuer = builder.Configuration.GetSection("JWT:ValidIssuer").Get<string>(),
+                ValidAudience = builder.Configuration.GetSection("JWT:ValidAudience").Get<string>(),
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(secretKey))))
             };
         });

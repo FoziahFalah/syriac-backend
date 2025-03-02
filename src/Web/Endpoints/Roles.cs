@@ -4,35 +4,38 @@ using SyriacSources.Backend.Application.Roles.Commands.CreateRole;
 using SyriacSources.Backend.Application.Roles.Commands.DeleteRole;
 using SyriacSources.Backend.Application.Roles.Commands.UpdateRole;
 using SyriacSources.Backend.Application.Roles.Queries.GetRole;
+using SyriacSources.Backend.Application.Roles.Queries.GetRoles;
 
 namespace SyriacSources.Backend.Web.Endpoints;
 
-[Authorize]
+//[Authorize]
 public class Roles : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .RequireAuthorization()
             .MapPost(CreateRole ,"Create")
-            .MapGet(GetRole, "Get")
+            .MapGet(GetRole, "Get/{id}")
+            .MapGet(GetRoles, "Get")
             .MapPut(UpdateRole, "Update/{id}")
             .MapDelete(DeleteRole, "Delete/{id}");
     }
 
-   
     public Task<ApplicationRoleDto> GetRole(ISender sender, int id)
     {
         return sender.Send(new GetRoleQuery(id));
     }
 
-    
+    public Task<List<ApplicationRoleDto>> GetRoles(ISender sender)
+    {
+        return sender.Send(new GetRolesQuery());
+    }
+
     public Task<Result> CreateRole(ISender sender,CreateRoleCommand command)
     {
         return sender.Send(command);
     }
 
-   
     public async Task<IResult> UpdateRole(ISender sender, int id, UpdateRoleCommand command)
     {
         if (id != command.Id) return Results.BadRequest();

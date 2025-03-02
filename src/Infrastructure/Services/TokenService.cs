@@ -15,13 +15,15 @@ public class TokenService : ITokenService
     private readonly IApplicationPermissionService _policyService;
     private readonly IApplicationRoleService _roleService;
     private readonly JWTToken _jwtToken;
+    private readonly JsonDelimiters _jsonDelimiters;
 
-    public TokenService(IConfiguration configuration, IApplicationPermissionService policyService, IApplicationRoleService roleService, IOptions<JWTToken> jwtToken)
+    public TokenService(IConfiguration configuration, IApplicationPermissionService policyService, IApplicationRoleService roleService, IOptions<JWTToken> jwtToken,IOptions<JsonDelimiters> jsonDelimiters)
     {
         _configuration = configuration;
         _jwtToken = jwtToken.Value;
         _roleService = roleService;
         _policyService = policyService;
+        _jsonDelimiters = jsonDelimiters.Value;
     }
 
     public async Task<string> CreateJwtSecurityToken(UserBasicDetailsVm details)
@@ -38,7 +40,7 @@ public class TokenService : ITokenService
         };
 
         // Add roles to claims
-        List<int> roleIds = details.Roles.Split(',').Select(int.Parse).ToList<int>();
+        List<int> roleIds = details.Roles.Split(_jsonDelimiters.CSVDelimiter).Select(int.Parse).ToList<int>();
 
         var roles = await _roleService.GetRolesAsync(roleIds, new CancellationToken());
 

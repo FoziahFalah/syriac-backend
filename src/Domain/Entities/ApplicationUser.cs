@@ -9,6 +9,6 @@ public class ApplicationUser : BaseAuditableEntity
 {
     public string? FullNameEN{ get; set; }
     public string? FullNameAR { get; set; }
-    public string? EmailAddress { get; set; }
+    public string? Email { get; set; }
     public UserType UserType { get; set; }
 }

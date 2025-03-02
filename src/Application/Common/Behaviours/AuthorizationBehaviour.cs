@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.Extensions.Options;
 using SyriacSources.Backend.Application.Common.Exceptions;
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Common.Models;
@@ -16,12 +17,12 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
     public AuthorizationBehaviour(
         IUser user,
         IApplicationUserRoleService appUserRoleService,
-        PolicyManagementOptions policyManagementOptions,
+        IOptions<PolicyManagementOptions> policyManagementOptions,
         IIdentityApplicationUserService identityService)
     {
         _user = user;
         _identityService = identityService;
-        _policyManagementOptions = policyManagementOptions;
+        _policyManagementOptions = policyManagementOptions.Value;
         _appUserRoleService = appUserRoleService;
     }
 
@@ -42,6 +43,7 @@ public class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRe
             bool authorized = false;
 
             string authorizedAllAttributes = _policyManagementOptions.AutoPolicyAllowedRoleNamesCsv; // || String.IsNullOrEmpty(authorizedAllAttributes
+
             if (!String.IsNullOrEmpty(authorizedAllAttributes))
             {
                 //Check if it's a super authenticated user

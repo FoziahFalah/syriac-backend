@@ -264,7 +264,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.ToTable("ApplicationRolePermissions");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationUserRole", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -272,8 +272,61 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApplicationUserId")
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FullNameAR")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("FullNameEN")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserType")
                         .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ApplicationUserEmailAddress");
+
+                    b.HasIndex("FullNameAR")
+                        .HasDatabaseName("ApplicationUserFullNameAR");
+
+                    b.HasIndex("FullNameEN")
+                        .HasDatabaseName("ApplicationUserFullNameEN");
+
+                    b.ToTable("ApplicationUsers");
+                });
+
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationUserRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
@@ -289,6 +342,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserRoles")
                         .IsRequired()
@@ -417,59 +473,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasDatabaseName("CenturyName");
 
                     b.ToTable("Centuries");
-                });
-
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Contributor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("FullNameAR")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("FullNameEN")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmailAddress")
-                        .IsUnique()
-                        .HasDatabaseName("ContributorEmailAddress");
-
-                    b.HasIndex("FullNameAR")
-                        .HasDatabaseName("ContributorFullNameAR");
-
-                    b.HasIndex("FullNameEN")
-                        .HasDatabaseName("ContributorFullNameEN");
-
-                    b.ToTable("Contributors");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.CoverPhoto", b =>
@@ -616,7 +619,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ContributorId")
+                    b.Property<int>("ApplicationUserId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Created")
@@ -641,7 +644,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContributorId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Comments");
                 });
@@ -1066,7 +1069,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.ToTable("TodoLists");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Infrastructure.Identity.ApplicationIdentityRole", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Infrastructure.Identity.IdentityApplicationRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1096,7 +1099,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Infrastructure.Identity.IdentityApplicationUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1110,9 +1113,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ContributorId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -1156,8 +1156,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContributorId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -1171,7 +1169,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationIdentityRole", null)
+                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.IdentityApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1180,7 +1178,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.IdentityApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1189,7 +1187,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.IdentityApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1198,13 +1196,13 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationIdentityRole", null)
+                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.IdentityApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.IdentityApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1213,7 +1211,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("SyriacSources.Backend.Infrastructure.Identity.IdentityApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1253,18 +1251,18 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptComment", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Contributor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ContributorId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contributor");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptText", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Editor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Editor")
                         .WithMany()
                         .HasForeignKey("EditorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1276,13 +1274,13 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Reviewer")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Reviewer")
                         .WithMany()
                         .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Translator")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Translator")
                         .WithMany()
                         .HasForeignKey("TranslatorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1299,7 +1297,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Footnote", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Commenter")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Commenter")
                         .WithMany()
                         .HasForeignKey("CommenterId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1337,7 +1335,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "IntroductionEditor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "IntroductionEditor")
                         .WithMany()
                         .HasForeignKey("IntroductionEditorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1354,7 +1352,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroEditor", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Editor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Editor")
                         .WithMany()
                         .HasForeignKey("EditorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1401,17 +1399,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.Navigation("Colour")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SyriacSources.Backend.Infrastructure.Identity.ApplicationUser", b =>
-                {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Contributor")
-                        .WithMany()
-                        .HasForeignKey("ContributorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contributor");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Source", b =>

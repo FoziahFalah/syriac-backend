@@ -277,7 +277,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ContributorId")
+                    b.Property<int>("ApplicationUserId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Created")
@@ -301,7 +301,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContributorId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("ApplicationUserRoles");
                 });
@@ -426,7 +426,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.ToTable("Centuries");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Contributor", b =>
+            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -468,15 +468,15 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasIndex("EmailAddress")
                         .IsUnique()
-                        .HasDatabaseName("ContributorEmailAddress");
+                        .HasDatabaseName("ApplicationUserEmailAddress");
 
                     b.HasIndex("FullNameAR")
-                        .HasDatabaseName("ContributorFullNameAR");
+                        .HasDatabaseName("ApplicationUserFullNameAR");
 
                     b.HasIndex("FullNameEN")
-                        .HasDatabaseName("ContributorFullNameEN");
+                        .HasDatabaseName("ApplicationUserFullNameEN");
 
-                    b.ToTable("Contributors");
+                    b.ToTable("ApplicationUsers");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.CoverPhoto", b =>
@@ -623,7 +623,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ContributorId")
+                    b.Property<int>("ApplicationUserId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("Created")
@@ -648,7 +648,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContributorId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Comments");
                 });
@@ -1118,7 +1118,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ContributorId")
+                    b.Property<int>("ApplicationUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -1163,7 +1163,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContributorId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -1248,13 +1248,13 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ApplicationUserRole", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Contributor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ContributorId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contributor");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Attachment", b =>
@@ -1279,18 +1279,18 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptComment", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Contributor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ContributorId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contributor");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.ExcerptText", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Editor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Editor")
                         .WithMany()
                         .HasForeignKey("EditorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1302,13 +1302,13 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Reviewer")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Reviewer")
                         .WithMany()
                         .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Translator")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Translator")
                         .WithMany()
                         .HasForeignKey("TranslatorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1325,7 +1325,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Footnote", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Commenter")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Commenter")
                         .WithMany()
                         .HasForeignKey("CommenterId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1363,7 +1363,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "IntroductionEditor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "IntroductionEditor")
                         .WithMany()
                         .HasForeignKey("IntroductionEditorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1380,7 +1380,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroEditor", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Editor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Editor")
                         .WithMany()
                         .HasForeignKey("EditorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1431,13 +1431,13 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
             modelBuilder.Entity("SyriacSources.Backend.Infrastructure.Identity.ApplicationUser", b =>
                 {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Contributor", "Contributor")
+                    b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ContributorId")
+                        .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contributor");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.Source", b =>

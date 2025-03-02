@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Infrastructure.Data.Configurations;
-public class ContributorConfiguration : IEntityTypeConfiguration<ApplicationUser>
+public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
@@ -17,19 +17,19 @@ public class ContributorConfiguration : IEntityTypeConfiguration<ApplicationUser
             .HasMaxLength(200)
             .IsRequired();
 
-        builder.Property(p => p.EmailAddress)
+        builder.Property(p => p.Email)
             .HasMaxLength(200)
             .IsRequired();
 
         //Indexes
         builder.HasIndex(p => p.FullNameEN)
-            .HasDatabaseName("ContributorFullNameEN");
+            .HasDatabaseName("ApplicationUserFullNameEN");
 
         builder.HasIndex(p => p.FullNameAR)
-            .HasDatabaseName("ContributorFullNameAR");
+            .HasDatabaseName("ApplicationUserFullNameAR");
 
-        builder.HasIndex(p => p.EmailAddress)
+        builder.HasIndex(p => p.Email)
             .IsUnique()
-            .HasDatabaseName("ContributorEmailAddress");
+            .HasDatabaseName("ApplicationUserEmailAddress");
     }
 }

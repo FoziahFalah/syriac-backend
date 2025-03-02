@@ -30,10 +30,17 @@ public class IdentityApplicationUserService : IIdentityApplicationUserService
         _userClaimsPrincipalFactory = userClaimsPrincipalFactory;
         _authorizationService = authorizationService;
     }
-
-    public async Task<string?> GetUserNameAsync(string userId)
+    
+    public async Task<string?> GetUserByUsernameAsync(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
+
+        return user?.UserName;
+    }
+
+    public async Task<string?> GetUserByEmailAsync(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
 
         return user?.UserName;
     }
@@ -52,7 +59,7 @@ public class IdentityApplicationUserService : IIdentityApplicationUserService
 
     //    return user;
     //}
-    
+
     public async Task<bool> EmailExists(string email){
         return await _userManager.FindByEmailAsync(email) != null;
     }

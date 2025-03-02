@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SyriacSources.Backend.Application.Common.Extensions;
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Common.Models;
@@ -14,16 +15,19 @@ public class ApplicationPermissionService : IApplicationPermissionService
     private readonly ILogger _logger;
     private readonly IApplicationDbContext _context;
     private readonly IApplicationRoleService _roleService;
+    private readonly JsonDelimiters _jsonDelimiters;
 
     public ApplicationPermissionService(
          IApplicationDbContext context,
          IApplicationRoleService roleService,
-         ILogger<ApplicationPermissionService> logger
+         ILogger<ApplicationPermissionService> logger,
+         IOptions<JsonDelimiters> jsonDelimiters
     )
     {
         _context = context;
         _logger = logger;
         _roleService = roleService;
+        _jsonDelimiters = jsonDelimiters.Value;
     }
 
     public async Task<ApplicationPermission?> FetchPolicyById( Guid policyId, CancellationToken cancellationToken)
@@ -43,7 +47,7 @@ public class ApplicationPermissionService : IApplicationPermissionService
             return null;
         }
 
-        List<string> permissionIds = rolePermission.ApplicationPermissionIds.Split(',').ToList();
+        List<string> permissionIds = rolePermission.ApplicationPermissionIds.Split(_jsonDelimiters.CSVDelimiter).ToList();
 
         List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
 
@@ -61,7 +65,7 @@ public class ApplicationPermissionService : IApplicationPermissionService
 
         List<string?> permissionIds = await _context.ApplicationRolePermissions.Where(x => roles.Contains(x.ApplicationRoleId) && x.IsActive).Select(x => x.ApplicationPermissionIds).ToListAsync(cancellationToken);
 
-        List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
+        List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => !string.IsNullOrEmpty(p) && p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
 
         return policies;
     }
@@ -103,7 +107,7 @@ public class ApplicationPermissionService : IApplicationPermissionService
                 throw new ArgumentException("policy cannot be null");
             }
 
-            var parentName = policy.Split(":")[0];
+            var parentName = policy.Split(_jsonDelimiters.PermissionDelimiter)[0];
             var parentPermissionEntity = await _context.ApplicationPermissions.Where(c => c.PolicyName == parentName).FirstOrDefaultAsync();
 
             //adding parent Policy

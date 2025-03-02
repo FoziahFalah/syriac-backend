@@ -25,7 +25,7 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
 
         if (!string.IsNullOrEmpty(userId))
         {
-            userName = await _identityService.GetUserNameAsync(userId);
+            userName = await _identityService.GetUserByUsernameAsync(userId);
         }
 
         _logger.LogInformation("SyriacSources.Backend Request: {Name} {@UserId} {@UserName} {@Request}",

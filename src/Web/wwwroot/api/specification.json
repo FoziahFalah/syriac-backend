@@ -359,15 +359,10 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
-    "/api/Roles/Get": {
+    "/api/Roles/Get/{id}": {
       "get": {
         "tags": [
           "Roles"
@@ -376,7 +371,7 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "integer",
@@ -396,12 +391,30 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
+        }
+      }
+    },
+    "/api/Roles/Get": {
+      "get": {
+        "tags": [
+          "Roles"
+        ],
+        "operationId": "GetRoles",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApplicationRoleDto"
+                  }
+                }
+              }
+            }
           }
-        ]
+        }
       }
     },
     "/api/Roles/Update/{id}": {
@@ -438,12 +451,7 @@
           "200": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/Roles/Delete/{id}": {
@@ -468,12 +476,7 @@
           "200": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/TodoItems": {
@@ -859,7 +862,7 @@
             "type": "string",
             "nullable": true
           },
-          "role": {
+          "roles": {
             "type": "string",
             "nullable": true
           }

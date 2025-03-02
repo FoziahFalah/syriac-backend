@@ -46,6 +46,7 @@ public class ApplicationRoleService : IApplicationRoleService
     {
         return await _context.ApplicationRoles.ToListAsync();
     }
+
     public async Task<ApplicationRole?> GetRoleAsync(int roleId, CancellationToken cancellationToken)
     {
         return await _context.ApplicationRoles.FindAsync(roleId);

@@ -4,12 +4,12 @@ using SyriacSources.Backend.Application.Common.Interfaces;
 
 namespace SyriacSources.Backend.Application.Permissions.Commands.UpdatePermission;
 
-public class UpdateContributorCommandValidator : AbstractValidator<UpdatePermissionCommand>
+public class UpdateApplicationUserCommandValidator : AbstractValidator<UpdatePermissionCommand>
 {
        private readonly IApplicationDbContext _context;
        private readonly IApplicationRoleService _roleManager;
 
-    public UpdateContributorCommandValidator(IApplicationDbContext context, IApplicationRoleService roleManager)
+    public UpdateApplicationUserCommandValidator(IApplicationDbContext context, IApplicationRoleService roleManager)
     {
         _context = context;
         _roleManager = roleManager;

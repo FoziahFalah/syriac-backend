@@ -5,7 +5,8 @@ namespace SyriacSources.Backend.Application.Common.Interfaces;
 
 public interface IIdentityApplicationUserService
 {
-    Task<string?> GetUserNameAsync(string userId);
+    Task<string?> GetUserByUsernameAsync(string userId);
+    Task<string?> GetUserByEmailAsync(string userId);
 
     Task<bool> EmailExists(string email);
 

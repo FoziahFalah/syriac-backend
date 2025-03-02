@@ -33,7 +33,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseVm
             return new LoginResponseVm { Succeeded = false, Errors = new String[]{ "Username or Password is incorrect"} };
         }
 
-        var appUser = await _context.ApplicationUsers.SingleOrDefaultAsync(x => x.EmailAddress == request.Email);
+        var appUser = await _context.ApplicationUsers.SingleOrDefaultAsync(x => x.Email == request.Email);
 
         if (appUser == null) {
             return new LoginResponseVm { Succeeded = false, Errors = new String[] { "User is not authorized" } };

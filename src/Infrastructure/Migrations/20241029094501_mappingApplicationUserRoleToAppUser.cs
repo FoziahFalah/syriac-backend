@@ -11,15 +11,15 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_ApplicationUserRoles_Contributors_ContributorId",
+                name: "FK_ApplicationUserRoles_ApplicationUsers_ApplicationUserId",
                 table: "ApplicationUserRoles");
 
             migrationBuilder.DropIndex(
-                name: "IX_ApplicationUserRoles_ContributorId",
+                name: "IX_ApplicationUserRoles_ApplicationUserId",
                 table: "ApplicationUserRoles");
 
             migrationBuilder.RenameColumn(
-                name: "ContributorId",
+                name: "ApplicationUserId",
                 table: "ApplicationUserRoles",
                 newName: "ApplicationUserId");
         }
@@ -30,18 +30,18 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
             migrationBuilder.RenameColumn(
                 name: "ApplicationUserId",
                 table: "ApplicationUserRoles",
-                newName: "ContributorId");
+                newName: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserRoles_ContributorId",
+                name: "IX_ApplicationUserRoles_ApplicationUserId",
                 table: "ApplicationUserRoles",
-                column: "ContributorId");
+                column: "ApplicationUserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_ApplicationUserRoles_Contributors_ContributorId",
+                name: "FK_ApplicationUserRoles_ApplicationUsers_ApplicationUserId",
                 table: "ApplicationUserRoles",
-                column: "ContributorId",
-                principalTable: "Contributors",
+                column: "ApplicationUserId",
+                principalTable: "ApplicationUsers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
