@@ -14,6 +14,10 @@ public class Result
     public string[] Errors { get; init; }
 
     public object? Body { get; init; } // Body for successful results
+    public static Result Success()
+    {
+        return new Result(true, Array.Empty<string>(),null);
+    }
 
     public static Result Success(object? body)
     {

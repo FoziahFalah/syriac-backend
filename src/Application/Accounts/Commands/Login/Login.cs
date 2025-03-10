@@ -1,4 +1,5 @@
 ﻿using SyriacSources.Backend.Application.Common.Interfaces;
+using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Application.User;
 using SyriacSources.Backend.Domain.Entities;
 
@@ -26,11 +27,12 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseVm
     {
         LoginResponseVm loginResponse = new LoginResponseVm();
 
-        var user = await _identityService.AuthenticateAsync(request.Email, request.Password);
+        //Identity User Authentication
+        var user = await _identityService.AuthenticateAsync(request.Email, request.Password); //will return he user
 
-        if (!user.Succeeded)
+        if (!user.result.Succeeded)
         {
-            return new LoginResponseVm { Succeeded = false, Errors = new String[]{ "Username or Password is incorrect"} };
+            return new LoginResponseVm { Succeeded = false, Errors = user.result.Errors };
         }
 
         var appUser = await _context.ApplicationUsers.SingleOrDefaultAsync(x => x.Email == request.Email);
@@ -40,8 +42,9 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseVm
         }
 
         UserBasicDetailsVm details = new UserBasicDetailsVm { 
-            Email = request.Email,
-            Id = appUser.Id,
+            Email = appUser.Email,
+            Id = user.id, //IdentityId
+            UserName = appUser.UserName,
             Name = appUser.FullNameEN
         };
 

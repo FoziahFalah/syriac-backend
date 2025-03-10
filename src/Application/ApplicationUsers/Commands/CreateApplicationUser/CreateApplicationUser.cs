@@ -36,14 +36,14 @@ public class CreateApplicationUserCommandHandler : IRequestHandler<CreateApplica
         {
             FullNameAR = request.Name,
             FullNameEN = request.Name,
-            Email = request.Email
+            Email = request.Email,
         };
     
         _context.ApplicationUsers.Add(applicationUser);
 
         var contributorId = await _context.SaveChangesAsync(cancellationToken);
 
-        int userLogin = await _identityService.CreateUserLoginAsync(request.Name , request.Password, contributorId);
+        int userLogin = await _identityService.CreateUserLoginAsync(applicationUser, request.Password);
 
         if(userLogin > 0)
         {

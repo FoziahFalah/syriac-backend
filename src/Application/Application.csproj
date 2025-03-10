@@ -3,6 +3,7 @@
   <PropertyGroup>
     <RootNamespace>SyriacSources.Backend.Application</RootNamespace>
     <AssemblyName>SyriacSources.Backend.Application</AssemblyName>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

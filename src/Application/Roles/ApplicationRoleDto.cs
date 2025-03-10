@@ -14,12 +14,14 @@ public class ApplicationRoleDto
     public string? NormalizedRoleName { get; set; }
     public string? NameEN { get; set; }
     public string? NameAR { get; set; }
+    public string? Name => $"{NameEN} - {NameAR}"; //=> read-only
 
     private class Mapping : Profile
     {
         public Mapping()
         {
-            CreateMap<ApplicationRole, ApplicationRoleDto>();
+            CreateMap<ApplicationRole, ApplicationRoleDto>()
+                .ForMember(x=>x.Name, opt => opt.Ignore());
         }
     }
 }

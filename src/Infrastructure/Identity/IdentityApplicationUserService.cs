@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using SyriacSources.Backend.Domain.Constants;
 using Microsoft.AspNetCore.Http;
+using SyriacSources.Backend.Domain.Entities;
+using SyriacSources.Backend.Application.Common.Interfaces;
 
 namespace SyriacSources.Backend.Infrastructure.Identity;
 
@@ -63,16 +65,20 @@ public class IdentityApplicationUserService : IIdentityApplicationUserService
     public async Task<bool> EmailExists(string email){
         return await _userManager.FindByEmailAsync(email) != null;
     }
-    public async Task<int> CreateUserLoginAsync(string email, string password, int userId)
+
+    public async Task<int> CreateUserLoginAsync(ApplicationUser applicationUser, string password)
     {
-        var username = email.Split("@")[1];
+        if(applicationUser == null)
+        {
+            return 0;
+        }
+        var username = applicationUser.UserName;
         var user = new IdentityApplicationUser
         {
-            Id = userId,
-            UserName = username,
-            NormalizedUserName = username.Normalize(),
-            Email = email,
-            NormalizedEmail = email.Normalize(),
+            UserName = applicationUser.Email,
+            NormalizedUserName = applicationUser.Email?.Normalize(),
+            Email = applicationUser.Email,
+            NormalizedEmail = applicationUser.Email?.Normalize(),
         };
 
         var result = await _userManager.CreateAsync(user, password);
@@ -116,21 +122,25 @@ public class IdentityApplicationUserService : IIdentityApplicationUserService
         return result.Succeeded;
     }
 
-    public async Task<Result> AuthenticateAsync(string email, string password) 
+    public async Task<(Result result, int id)> AuthenticateAsync(string email, string password) 
     {
-        var user = await _userManager.FindByEmailAsync(email);
+         var user = await _userManager.FindByEmailAsync(email);
 
-        if(user == null)
-            return (Result.Failure(new List<string> {"ApplicationUser not Found"}));
+        if (user == null)
+        {
+            var error = new List<string> { "Email or Password is incorrect" };
+            return (Result.Failure(error), 0);
+        }
 
         if (!await _userManager.CheckPasswordAsync(user, password))
         {
             var error = new List<string> { "Email or Password is incorrect" };
-            return (Result.Failure(error));
+            return (Result.Failure(error),0);
         }
 
-        return (Result.Success(user.Id));
+        return (Result.Success(), user.Id);
     }
+
     public async Task<Result> DeleteUserAsync(string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
