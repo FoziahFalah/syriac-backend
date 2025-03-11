@@ -147,7 +147,7 @@ public class ApplicationDbContextInitialiser
             {
                 user = new ApplicationUser
                 {
-                    Id = administrator.Id,
+                    //Id = administrator.Id,
                     FullNameAR = details.FullNameAR,
                     FullNameEN = details.FullNameEN,
                     Email = details.Email,

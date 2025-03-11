@@ -1,5 +1,6 @@
 using Serilog;
 using SyriacSources.Backend.Infrastructure.Data;
+using SyriacSources.Backend.Web.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,4 +80,4 @@ finally
 }
 
 
-public partial class Program { }
+public partial class Program { }  

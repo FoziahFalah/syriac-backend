@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using EventManager.Backend.Infrastructure.Services;
 using Ganss.Xss;
+using SyriacSources.Backend.Application.Languages;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -75,6 +76,8 @@ public static class DependencyInjection
         services.AddAuthorizationBuilder();
 
         services.Configure<PolicyManagementOptions>(builder.Configuration.GetSection("PolicyManagementOptions"));
+
+        services.AddAutoMapper(typeof(LanguageDto));
 
 
         // For dynamically create policy if not exist
