@@ -12,7 +12,8 @@ public class Permissions: EndpointGroupBase
     public override void Map(WebApplication app)
     {
         app.MapGroup(this)
-            .RequireAuthorization()
+            //.RequireAuthorization()
+            .AllowAnonymous()
             .MapGet(GetPermissions, "Get")
             .MapPost(CreatePermission, "Create")
             .MapPut(UpdatePermission, "Update/{id}")

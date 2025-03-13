@@ -10,6 +10,8 @@ using SyriacSources.Backend.Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Reflection;
+using MediatR;
 
 namespace SyriacSources.Backend.Infrastructure.Data;
 
@@ -21,13 +23,17 @@ public static class InitialiserExtensions
 
         var initialiser = scope.ServiceProvider;
 
-        var services = initialiser.GetRequiredService<ApplicationDbContextInitialiser>(); 
+        var services = initialiser.GetRequiredService<ApplicationDbContextInitialiser>();
+
+        var policyService = scope.ServiceProvider.GetRequiredService<ApplicationPoliciesService>();
 
         await services.SaveApplicationPolicies(app);
 
         await services.InitialiseAsync();
 
         await services.SeedAsync();
+
+        await policyService.RegisterApplicationPoliciesAsync();
     }
 }
 
@@ -201,24 +207,36 @@ public class ApplicationDbContextInitialiser
 
     public async Task SaveApplicationPolicies(WebApplication app)
     {
-        var endpoints = app.Services.GetServices<EndpointDataSource>().SelectMany(x => x.Endpoints).ToArray();
+        var discoveredPolicies = new HashSet<string>();
 
-        foreach (var endpoint in endpoints)
+        // scan all application types for `[Authorize(Policy = "...")]`
+        var typesWithAuthorize = Assembly.GetExecutingAssembly()
+            .GetTypes()
+            .Where(t => t.GetCustomAttributes(typeof(AuthorizeAttribute), true).Any());
+
+        foreach (var type in typesWithAuthorize)
         {
-            var authorisation = (endpoint?.Metadata
-                .Where(p => p.GetType() == typeof(AuthorizeAttribute)))?.Cast<AuthorizeAttribute>();
-
-            if (authorisation == null)
-                continue;
-
-            foreach (var authoriseAttribute in authorisation)
+            var authorizeAttributes = type.GetCustomAttributes<AuthorizeAttribute>();
+            foreach (var attr in authorizeAttributes)
             {
-                if (authoriseAttribute.Policy != null)
-                    await _appPermissionService.CreatePolicy(authoriseAttribute.Policy, new CancellationToken());
+                if (!string.IsNullOrEmpty(attr.Policy))
+                {
+                    discoveredPolicies.Add(attr.Policy);
+                }
             }
-            var allPolicies = await _appPermissionService.FetchPoliciesAsync(new CancellationToken());
-
-            //_appRoleService.UpdateRolePermissions(allPolicies, new CancellationToken());
         }
+
+        // Store policies in the database if they don't exist
+        foreach (var policy in discoveredPolicies)
+        {
+            if (!await _appPermissionService.PolicyExistsAsync(policy))
+            {
+                await _appPermissionService.CreatePolicy(policy, new CancellationToken());
+            }
+        }
+
+        // 3️⃣ Fetch all policies and sync with roles
+        var allPolicies = await _appPermissionService.FetchPoliciesAsync(new CancellationToken());
+        await _appPermissionService.CreatePoliciesBatch(allPolicies, new CancellationToken());
     }
 }

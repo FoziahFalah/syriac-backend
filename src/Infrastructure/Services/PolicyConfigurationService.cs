@@ -19,6 +19,13 @@ public class PolicyConfigurationService
         _applicationPermissions = applicationPermissions;
     }
 
+
+    /// <summary>
+    /// Adds authorization policies to the provided <see cref="AuthorizationOptions"/>.
+    /// This includes both pre-defined policies and dynamically retrieved policies from the database.
+    /// </summary>
+    /// <param name="options">The authorization options to which policies will be added.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
     public async Task AddPoliciesAsync(AuthorizationOptions options)
     {
         // Add pre-defined policies

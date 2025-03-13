@@ -4,7 +4,7 @@ using SyriacSources.Backend.Application.Common.Interfaces;
 namespace SyriacSources.Backend.Application.Roles.Queries.GetRole;
 
 
-//[Authorize(Policy = "roles:getrole")]
+[Authorize(Policy = "roles:getrole")]
 public record GetRoleQuery(int id) : IRequest<ApplicationRoleDto>
 {
    

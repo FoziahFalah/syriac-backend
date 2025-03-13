@@ -59,12 +59,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/Permissions/Create": {
@@ -146,12 +141,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/Permissions/Update/{id}": {
@@ -206,12 +196,7 @@
           "200": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/Permissions/Delete/{id}": {
@@ -246,12 +231,7 @@
           "200": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/RolePermissions/Get": {

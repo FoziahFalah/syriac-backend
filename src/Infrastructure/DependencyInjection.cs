@@ -13,6 +13,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using EventManager.Backend.Infrastructure.Services;
 using Ganss.Xss;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Http;
+using System.Net;
+using System.Runtime.Intrinsics.X86;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -64,7 +68,6 @@ public static class DependencyInjection
 
         services.AddTransient<IApplicationPermissionService, ApplicationPermissionService>();
 
-        services.AddScoped<PolicyConfigurationService>();
 
         services.AddTransient<ITokenService, TokenService>();
 
@@ -76,9 +79,9 @@ public static class DependencyInjection
 
         services.Configure<PolicyManagementOptions>(builder.Configuration.GetSection("PolicyManagementOptions"));
 
-
-        // For dynamically create policy if not exist
-        //services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        services.AddScoped<PolicyConfigurationService>();
+        // For dynamically creating policies if not exist
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
         services.AddTransient<IHtmlSanitizer, HtmlSanitizer>();
 
@@ -114,8 +117,7 @@ public static class DependencyInjection
             });
         }
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -129,10 +131,10 @@ public static class DependencyInjection
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(secretKey))))
             };
         });
-
+        //Policies are required if you use custom authorization logic with IAuthorizationService in middleware, filters, or services.
         services.AddAuthorization(options =>
-            {
-                var serviceProvider = services.BuildServiceProvider();
+        {
+            var serviceProvider = services.BuildServiceProvider();
                 var authorizationConfigService = serviceProvider.GetRequiredService<PolicyConfigurationService>();
                 // Configure authorization options asynchronously
                 authorizationConfigService.AddPoliciesAsync(options).GetAwaiter().GetResult();

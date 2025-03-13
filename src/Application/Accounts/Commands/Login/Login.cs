@@ -1,5 +1,4 @@
 ﻿using SyriacSources.Backend.Application.Common.Interfaces;
-using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Application.User;
 using SyriacSources.Backend.Domain.Entities;
 
@@ -42,8 +41,8 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseVm
         }
 
         UserBasicDetailsVm details = new UserBasicDetailsVm { 
-            Email = appUser.Email,
             Id = user.id, //IdentityId
+            Email = appUser.Email,
             UserName = appUser.UserName,
             Name = appUser.FullNameEN
         };

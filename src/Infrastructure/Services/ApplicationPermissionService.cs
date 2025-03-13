@@ -70,19 +70,14 @@ public class ApplicationPermissionService : IApplicationPermissionService
         return policies;
     }
 
-    public async Task<List<string>?> FetchPoliciesAsync(CancellationToken cancellationToken)
+    public async Task<List<string>> FetchPoliciesAsync(CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-        var poliicies = await _context.ApplicationPermissions.Where(x => x.IsActive).Select(x=>x.PolicyName).ToListAsync();
+        return await _context.ApplicationPermissions.Where(x => x.IsActive).Select(x=>x.PolicyName).ToListAsync(cancellationToken) ?? new List<string>();
+    }
 
-        if (poliicies == null )
-        {
-            return null;
-        }
-
-        //List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
-
-        return poliicies;
+    public async Task<bool> PolicyExistsAsync(string policy, CancellationToken cancellationToken)
+    {
+        return await _context.ApplicationPermissions.AnyAsync(x => x.PolicyName ==  policy);
     }
 
     public async Task<ApplicationPermission?> FetchPolicyByName( string policyName, CancellationToken cancellationToken)
@@ -146,4 +141,19 @@ public class ApplicationPermissionService : IApplicationPermissionService
             _logger.LogError($"handled error {ex.Message}:{ex.StackTrace}");
         }
     }
+    public async Task CreatePoliciesBatch(List<string> policies, CancellationToken cancellationToken)
+    {
+        var newPolicies = policies.Select(policy => new ApplicationPermission
+        {
+            NameEN = policy,
+            NameAR = policy,
+            PolicyName = policy,
+            Created = DateTime.Now,
+            CreatedBy = "auto generated"
+        }).ToList();
+
+        _context.ApplicationPermissions.AddRange(newPolicies); // Batch insert
+        await _context.SaveChangesAsync(cancellationToken); // Commit once
+    }
+
 }
