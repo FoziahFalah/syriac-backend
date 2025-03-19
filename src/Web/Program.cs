@@ -20,8 +20,21 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
 
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") // ?????? ??????? ??? ????????
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 var app = builder.Build();
+app.UseCors(MyAllowSpecificOrigins);
+
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -64,7 +77,7 @@ app.UseRouting();
 try
 {
     // Run the application
-    var task = app.RunAsync();
+         var task = app.RunAsync();
     await app.InitialiseDatabaseAsync();
     await task;
 }

@@ -189,6 +189,156 @@
         }
       }
     },
+    "/api/Authors/Create": {
+      "post": {
+        "tags": [
+          "Authors"
+        ],
+        "operationId": "CreateAuthor",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAuthorCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Authors/Get/{id}": {
+      "get": {
+        "tags": [
+          "Authors"
+        ],
+        "operationId": "GetAuthor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Authors/Get": {
+      "get": {
+        "tags": [
+          "Authors"
+        ],
+        "operationId": "GetAuthors",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuthorDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Authors/Update/{id}": {
+      "put": {
+        "tags": [
+          "Authors"
+        ],
+        "operationId": "UpdateAuthor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAuthorCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Authors/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Authors"
+        ],
+        "operationId": "DeleteAuthor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/Centuries/Create": {
       "post": {
         "tags": [
@@ -1370,6 +1520,41 @@
             "type": "string"
           },
           "password": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateAuthorCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthorDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateAuthorCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
             "type": "string"
           }
         }
