@@ -33,4 +33,9 @@ public class Result
     {
         return Failure(new[] { error });
     }
+
+    internal static Result Success()
+    {
+        throw new NotImplementedException();
+    }
 }
