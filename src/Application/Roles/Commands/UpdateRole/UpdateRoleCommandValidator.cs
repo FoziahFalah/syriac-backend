@@ -14,7 +14,7 @@ public class UpdateApplicationUserCommandValidator : AbstractValidator<UpdatePer
         _context = context;
         _roleManager = roleManager;
 
-        RuleFor(v => v.Name)
+        RuleFor(v => v.NameAR)
             .NotEmpty()
             .MaximumLength(100)
             .MustAsync(BeUnique)

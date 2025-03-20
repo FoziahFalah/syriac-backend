@@ -1,4 +1,5 @@
 ﻿
+using SyriacSources.Backend.Application.Common.Constants;
 using SyriacSources.Backend.Application.Common.Interfaces;
 
 namespace SyriacSources.Backend.Application.Permissions.Commands.UpdatePermission;
@@ -11,16 +12,12 @@ public class UpdatePermissionCommandValidator : AbstractValidator<UpdatePermissi
     {
         _context = context;
 
-        RuleFor(v => v.Name)
+        RuleFor(v => v.NameAR)
             .NotEmpty()
-            .MaximumLength(100)
-            .MustAsync(BeUnique)
-                .WithMessage("'{PropertyName}' must be unique.")
-                .WithErrorCode("Unique");
+            .MaximumLength(DefaultFieldLengthConsts.MaxNameLength);
 
         RuleFor(v => v.Description)
-            .MaximumLength(200)
-            .NotEmpty();
+            .MaximumLength(200);
 
     }
 

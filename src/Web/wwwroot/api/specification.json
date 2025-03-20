@@ -53,7 +53,43 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/PermissionDto"
+                    "$ref": "#/components/schemas/PermissionTreeNodeDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Permissions/GetPermissionIdsByRoleId/{roleId}": {
+      "get": {
+        "tags": [
+          "Permissions"
+        ],
+        "operationId": "GetPermissionIdsByRoleId",
+        "parameters": [
+          {
+            "name": "roleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "int32"
                   }
                 }
               }
@@ -160,38 +196,20 @@
               "format": "int32"
             },
             "x-position": 1
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          },
-          {
-            "name": "Name",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 3
-          },
-          {
-            "name": "Description",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 4
           }
         ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePermissionCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
         "responses": {
           "200": {
             "description": ""
@@ -215,16 +233,6 @@
               "format": "int32"
             },
             "x-position": 1
-          },
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
           }
         ],
         "responses": {
@@ -234,44 +242,7 @@
         }
       }
     },
-    "/api/RolePermissions/Get": {
-      "get": {
-        "tags": [
-          "RolePermissions"
-        ],
-        "operationId": "GetRolePermissions",
-        "parameters": [
-          {
-            "name": "RoleId",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RolePermissionVm"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
-      }
-    },
-    "/api/RolePermissions/Update": {
+    "/api/RolePermissions/Update/{roleId}": {
       "put": {
         "tags": [
           "RolePermissions"
@@ -279,8 +250,8 @@
         "operationId": "UpdateRolePermissions",
         "parameters": [
           {
-            "name": "RoleId",
-            "in": "query",
+            "name": "roleId",
+            "in": "path",
             "required": true,
             "schema": {
               "type": "integer",
@@ -864,7 +835,34 @@
           }
         }
       },
-      "PermissionDto": {
+      "PermissionTreeNodeDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "checked": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/ApplicationPermissionDto"
+          },
+          "children": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PermissionTreeNodeDto"
+            }
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ApplicationPermissionDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -872,14 +870,16 @@
             "type": "integer",
             "format": "int32"
           },
-          "policyName": {
-            "type": "string"
+          "isModule": {
+            "type": "boolean"
           },
           "nameEN": {
-            "type": "string",
-            "nullable": true
+            "type": "string"
           },
           "nameAR": {
+            "type": "string"
+          },
+          "description": {
             "type": "string",
             "nullable": true
           },
@@ -887,30 +887,29 @@
             "type": "integer",
             "format": "int32"
           },
-          "isModule": {
-            "type": "boolean"
-          },
-          "description": {
+          "label": {
             "type": "string",
             "nullable": true
           }
         }
       },
-      "RolePermissionVm": {
+      "UpdatePermissionCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "applicationRoleId": {
+          "id": {
             "type": "integer",
             "format": "int32"
           },
-          "applicationPermissionIds": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
+          "nameAR": {
+            "type": "string"
+          },
+          "nameEN": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

@@ -43,8 +43,9 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         
-        services.AddScoped<ApplicationDbContextInitialiser>();
+        services.AddTransient<IPolicyScannerService,PolicyScannerService>();
 
+        services.AddScoped<ApplicationDbContextInitialiser>();
         
         services
             .AddIdentityCore<IdentityApplicationUser>()
@@ -65,6 +66,7 @@ public static class DependencyInjection
         services.AddTransient<IApplicationUserRoleService, ApplicationUserRoleService>();
 
         services.AddTransient<IApplicationRoleService, ApplicationRoleService>();
+
 
         services.AddTransient<IApplicationPermissionService, ApplicationPermissionService>();
 
@@ -131,6 +133,7 @@ public static class DependencyInjection
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Convert.ToBase64String(Encoding.UTF8.GetBytes(secretKey))))
             };
         });
+
         //Policies are required if you use custom authorization logic with IAuthorizationService in middleware, filters, or services.
         services.AddAuthorization(options =>
         {

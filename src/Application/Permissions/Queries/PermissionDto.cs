@@ -18,7 +18,7 @@ public class PermissionDto
     //public required string EndpointGroup { get; init; }
     //public string Policy => $"{EndpointGroup}:{EndpointName}";
     //public string? DisplayName { get; init; }
-    //public IEnumerable<PermissionDto>? Actions { get; init; }
+    //public IEnumerable<ApplicationPermissionDto>? Actions { get; init; }
 
     private class Mapping : Profile
     {

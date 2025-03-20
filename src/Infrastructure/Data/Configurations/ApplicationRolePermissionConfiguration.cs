@@ -12,6 +12,9 @@ public class ApplicationRolePermissionConfiguration : IEntityTypeConfiguration<A
 {
     public void Configure(EntityTypeBuilder<ApplicationRolePermission> builder)
     {
-
+        //Indexes
+        builder
+        .HasIndex("ApplicationRoleId", "ApplicationPermissionId")
+        .IsUnique();
     }
 }

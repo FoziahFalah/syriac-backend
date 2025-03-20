@@ -25,15 +25,14 @@ public static class InitialiserExtensions
 
         var services = initialiser.GetRequiredService<ApplicationDbContextInitialiser>();
 
-        var policyService = scope.ServiceProvider.GetRequiredService<ApplicationPoliciesService>();
-
-        await services.SaveApplicationPolicies(app);
+        var policScannerService = initialiser.GetRequiredService<IPolicyScannerService>();
 
         await services.InitialiseAsync();
 
         await services.SeedAsync();
 
-        await policyService.RegisterApplicationPoliciesAsync();
+        await services.SaveApplicationPoliciesAsync(policScannerService.DiscoverPolicies());
+
     }
 }
 
@@ -205,38 +204,15 @@ public class ApplicationDbContextInitialiser
         }
     }
 
-    public async Task SaveApplicationPolicies(WebApplication app)
+    public async Task SaveApplicationPoliciesAsync(HashSet<string> policies )
     {
-        var discoveredPolicies = new HashSet<string>();
-
-        // scan all application types for `[Authorize(Policy = "...")]`
-        var typesWithAuthorize = Assembly.GetExecutingAssembly()
-            .GetTypes()
-            .Where(t => t.GetCustomAttributes(typeof(AuthorizeAttribute), true).Any());
-
-        foreach (var type in typesWithAuthorize)
+        // Insert policies into the database if they do not exist
+        foreach (var policy in policies)
         {
-            var authorizeAttributes = type.GetCustomAttributes<AuthorizeAttribute>();
-            foreach (var attr in authorizeAttributes)
-            {
-                if (!string.IsNullOrEmpty(attr.Policy))
-                {
-                    discoveredPolicies.Add(attr.Policy);
-                }
-            }
-        }
-
-        // Store policies in the database if they don't exist
-        foreach (var policy in discoveredPolicies)
-        {
-            if (!await _appPermissionService.PolicyExistsAsync(policy))
+            if (!await _context.ApplicationPermissions.AnyAsync(p => p.PolicyName == policy))
             {
                 await _appPermissionService.CreatePolicy(policy, new CancellationToken());
             }
         }
-
-        // 3️⃣ Fetch all policies and sync with roles
-        var allPolicies = await _appPermissionService.FetchPoliciesAsync(new CancellationToken());
-        await _appPermissionService.CreatePoliciesBatch(allPolicies, new CancellationToken());
     }
 }

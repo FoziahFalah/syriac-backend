@@ -21,9 +21,12 @@ public class GetRolePermissionsQueryHandler : IRequestHandler<GetRolePermissions
 
     public async Task<RolePermissionVm> Handle(GetRolePermissionsQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _context.ApplicationRolePermissions.Where(x => x.ApplicationRoleId == request.RoleId).SingleOrDefaultAsync(cancellationToken);
-        if (entity == null) { return new RolePermissionVm(); }
-        return new RolePermissionVm() { ApplicationRoleId = entity.ApplicationRoleId, ApplicationPermissionIds = entity.ApplicationPermissionIds?.Split(",").Select(int.Parse).ToList() };
-        
+        var entity = await _context.ApplicationRolePermissions.Where(x => x.ApplicationRoleId == request.roleId).ToListAsync(cancellationToken);
+
+        //Guard.Against.NotFound(request.roleId, entity);
+
+        if (entity == null || entity.Count == 0) { return new List<int>(); }
+
+        return entity.Select(x => x.ApplicationPermissionId).ToList();
     }
 }

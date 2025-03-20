@@ -18,7 +18,7 @@ public class ApplicationPoliciesService
     /// <summary>
     /// Scans all MediatR request classes for [Authorize(Policy = "...")] and registers them in the database.
     /// </summary>
-    public async Task RegisterApplicationPoliciesAsync()
+    public async Task SaveApplicationPoliciesAsync()
     {
         var policies = new HashSet<string>();
 
@@ -52,7 +52,7 @@ public class ApplicationPoliciesService
         }
     }
 
-    //public async Task RegisterApplicationPoliciesAsync(WebApplication app)
+    //public async Task SaveApplicationPoliciesAsync(WebApplication app)
     //{
     //    var policies = new HashSet<string>();
 
