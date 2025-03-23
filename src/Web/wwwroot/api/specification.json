@@ -242,43 +242,29 @@
         }
       }
     },
-    "/api/RolePermissions/Update/{roleId}": {
+    "/api/RolePermissions/Update": {
       "put": {
         "tags": [
           "RolePermissions"
         ],
         "operationId": "UpdateRolePermissions",
-        "parameters": [
-          {
-            "name": "roleId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRolePermissionCommand"
+              }
+            }
           },
-          {
-            "name": "PermissionIds",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "nullable": true
-            },
-            "x-position": 2
-          }
-        ],
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/api/Roles/Create": {
@@ -908,6 +894,20 @@
             "type": "string"
           },
           "description": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateRolePermissionCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "roleId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "permissionIds": {
             "type": "string",
             "nullable": true
           }
