@@ -6,7 +6,7 @@ using SyriacSources.Backend.Domain.Entities;
 namespace SyriacSources.Backend.Application.Roles.Commands.DeleteRole;
 
 
-//[Authorize(Policy = "roles:deleterole")]
+[Authorize(Policy = "roles:delete-role")]
 public record DeleteRoleCommand(int Id) : IRequest {}
 public class DeleteRoleHandler : IRequestHandler<DeleteRoleCommand>
 {

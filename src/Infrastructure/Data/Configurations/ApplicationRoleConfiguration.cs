@@ -12,9 +12,6 @@ public class ApplicationRoleConfiguration : IEntityTypeConfiguration<Application
 {
     public void Configure(EntityTypeBuilder<ApplicationRole> builder)
     {
-
-        //builder.HasIndex(u => u.NormalizedRoleName).HasDatabaseName("RoleIndex").IsUnique();
-
         // indexing
         builder.HasIndex(u=>u.NormalizedRoleName)
             .IsUnique()

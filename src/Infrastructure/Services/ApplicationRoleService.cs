@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Formatters.Xml;
-using Microsoft.EntityFrameworkCore;
-using SyriacSources.Backend.Application.Common.Interfaces;
+﻿
 using SyriacSources.Backend.Application.Common.Models;
-using SyriacSources.Backend.Application.Common;
 using SyriacSources.Backend.Domain.Entities;
 using SyriacSources.Backend.Infrastructure.Data;
 using SyriacSources.Backend.Application.Common.Extensions;
@@ -74,16 +70,37 @@ public class ApplicationRoleService : IApplicationRoleService
 
     public async Task<Result> UpdateRolePermissions(int roleId, string permissionIds, CancellationToken cancellationToken)
     {
-        // Fetch existing role permissions for the specified role
-        List<ApplicationRolePermission> entity = await _context.ApplicationRolePermissions
-           .Where(r => r.Id == roleId).ToListAsync();
 
-        _context.ApplicationRolePermissions.Add(new ApplicationRolePermission
+        // Convert comma-separated permissionIds into a list of integers
+        var permissionIdList = permissionIds.Split(',')
+                                            .Select(id => int.TryParse(id, out var parsedId) ? parsedId : (int?)null)
+                                            .Where(id => id.HasValue)
+                                            .Select(id => id!.Value)
+                                            .ToList();
+
+        if (!permissionIdList.Any())
+        {
+            return Result.Failure("Invalid permissions provided.");
+        }
+
+        // Fetch existing role permissions for the specified role
+        var existingPermissions = await _context.ApplicationRolePermissions
+            .Where(rp => rp.ApplicationRoleId == roleId)
+            .ToListAsync(cancellationToken);
+
+        // Remove old permissions
+        _context.ApplicationRolePermissions.RemoveRange(existingPermissions);
+
+        // Add new permissions
+        var newPermissions = permissionIdList.Select(permissionId => new ApplicationRolePermission
         {
             ApplicationRoleId = roleId,
-            ApplicationPermissionIds = permissionIds
+            ApplicationPermissionId = permissionId
         });
 
+        await _context.ApplicationRolePermissions.AddRangeAsync(newPermissions, cancellationToken);
+
+        // Save changes
         var result = await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success(null));
 
         return result;

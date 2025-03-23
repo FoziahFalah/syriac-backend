@@ -7,28 +7,27 @@ namespace SyriacSources.Backend.Application.Permissions.Commands.UpdatePermissio
 public record UpdatePermissionCommand :IRequest<int>
 {
     public int Id { get; set; }
-    public required string Name { get; init; }
-    public required string Description { get; init; }
+    public required string NameAR { get; init; }
+    public required string NameEN { get; init; }
+    public string? Description { get; init; }
 }
 public class UpdatePermissionHandler : IRequestHandler<UpdatePermissionCommand, int>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IApplicationRoleService _identityRoleService;
 
-    public UpdatePermissionHandler(IApplicationDbContext context, IApplicationRoleService identityRoleService)
+    public UpdatePermissionHandler(IApplicationDbContext context)
     {
         _context = context;
-        _identityRoleService = identityRoleService;
     }
 
     public async Task<int> Handle(UpdatePermissionCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.ApplicationPermissions
-           .FindAsync(new object[] { request.Id }, cancellationToken);
+        var entity = await _context.ApplicationPermissions.FindAsync(request.Id);
 
         Guard.Against.NotFound(request.Id, entity);
 
-        entity.PolicyName = request.Name;
+        entity.NameAR = request.NameAR;
+        entity.NameEN = request.NameEN;
         entity.Description = request.Description;
 
         await _context.SaveChangesAsync(cancellationToken);

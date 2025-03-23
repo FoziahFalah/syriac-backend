@@ -8,8 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="ApplicationUser\**" />
+    <Compile Remove="RolePermissions\Queries\GetRolePermissions\**" />
     <EmbeddedResource Remove="ApplicationUser\**" />
+    <EmbeddedResource Remove="RolePermissions\Queries\GetRolePermissions\**" />
     <None Remove="ApplicationUser\**" />
+    <None Remove="RolePermissions\Queries\GetRolePermissions\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +41,7 @@
     <Folder Include="Accounts\Commands\UpdateCredentials\" />
     <Folder Include="Accounts\Commands\ResetPassword\" />
     <Folder Include="Accounts\Queries\" />
+    <Folder Include="RolePermissions\Queries\" />
   </ItemGroup>
 
 </Project>

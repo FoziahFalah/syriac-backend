@@ -1,5 +1,4 @@
 ﻿using SyriacSources.Backend.Application.Common.Interfaces;
-using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Application.User;
 using SyriacSources.Backend.Domain.Entities;
 
@@ -42,15 +41,22 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginResponseVm
         }
 
         UserBasicDetailsVm details = new UserBasicDetailsVm { 
-            Email = appUser.Email,
             Id = user.id, //IdentityId
+            Email = appUser.Email,
             UserName = appUser.UserName,
             Name = appUser.FullNameEN
         };
 
-        ApplicationUserRole? userRole = await _context.ApplicationUserRoles.Where(x => x.UserId == appUser.Id).FirstOrDefaultAsync(cancellationToken);
+        List<ApplicationUserRole>? applicationUserRole = await _context.ApplicationUserRoles
+            .Where(x => x.ApplicationUserId == appUser.Id)
+            .Include(x=>x.ApplicationRole)
+            .ToListAsync(cancellationToken);
+        if(applicationUserRole == null)
+        {
+            details.Roles = "";
+        }
 
-        details.Roles = userRole?.UserRoles ?? "";
+        details.Roles = string.Join(",", applicationUserRole?.Select(x=>x.ApplicationRole?.Id.ToString()).ToList() ?? new List<string?>());
 
         return loginResponse = new LoginResponseVm
         {

@@ -3,5 +3,6 @@ public class ApplicationRolePermission: BaseAuditableEntity
 {
     public int ApplicationRoleId { get; set; }
     public ApplicationRole? ApplicationRole { get; init; }
-    public string? ApplicationPermissionIds { get; set; } 
+    public int ApplicationPermissionId { get; set; }
+    public ApplicationPermission? ApplicationPermission { get; set; }
 }

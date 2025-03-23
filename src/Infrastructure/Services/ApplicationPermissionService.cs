@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SyriacSources.Backend.Application.Common.Constants;
 using SyriacSources.Backend.Application.Common.Extensions;
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Common.Models;
+using SyriacSources.Backend.Domain.Constants;
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Infrastructure.Services;
@@ -15,19 +17,16 @@ public class ApplicationPermissionService : IApplicationPermissionService
     private readonly ILogger _logger;
     private readonly IApplicationDbContext _context;
     private readonly IApplicationRoleService _roleService;
-    private readonly JsonDelimiters _jsonDelimiters;
 
     public ApplicationPermissionService(
          IApplicationDbContext context,
          IApplicationRoleService roleService,
-         ILogger<ApplicationPermissionService> logger,
-         IOptions<JsonDelimiters> jsonDelimiters
+         ILogger<ApplicationPermissionService> logger
     )
     {
         _context = context;
         _logger = logger;
         _roleService = roleService;
-        _jsonDelimiters = jsonDelimiters.Value;
     }
 
     public async Task<ApplicationPermission?> FetchPolicyById( Guid policyId, CancellationToken cancellationToken)
@@ -37,52 +36,50 @@ public class ApplicationPermissionService : IApplicationPermissionService
         return await _context.ApplicationPermissions.FindAsync(policyId);
     }
 
-    public async Task<List<string>?> FetchPoliciesByRoleIdAsync(int roleId, CancellationToken cancellationToken)
+    public async Task<List<string?>> FetchPoliciesByRoleIdAsync(int roleId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var rolePermission = await _context.ApplicationRolePermissions.Where(x => x.ApplicationRoleId == roleId && x.IsActive).SingleOrDefaultAsync();
 
-        if (rolePermission == null || rolePermission.ApplicationPermissionIds == null)
-        {
-            return null;
-        }
+        // Ensure roles is not empty before querying
 
-        List<string> permissionIds = rolePermission.ApplicationPermissionIds.Split(_jsonDelimiters.CSVDelimiter).ToList();
+        List<ApplicationRolePermission> permissions = await _context.ApplicationRolePermissions.Where(x => x.ApplicationRoleId == roleId)
+            .Include(x => x.ApplicationPermission)
+                    .AsNoTracking()
+                    .ToListAsync(cancellationToken); ;
 
-        List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
+        List<string?> policies = permissions.Select(x => x.ApplicationPermission?.PolicyName).ToList();
 
         return policies;
     }
 
-    public async Task<List<string>?> FetchPoliciesByRolesAsync(List<int> roles, CancellationToken cancellationToken)
+    public async Task<List<string?>> FetchPoliciesByRolesAsync(List<int> roles, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
+
         // Ensure roles is not empty before querying
         if (roles == null || !roles.Any())
         {
-            return null; // Or handle as needed
+            return new List<string?>(); // Or handle as needed
         }
 
-        List<string?> permissionIds = await _context.ApplicationRolePermissions.Where(x => roles.Contains(x.ApplicationRoleId) && x.IsActive).Select(x => x.ApplicationPermissionIds).ToListAsync(cancellationToken);
-
-        List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => !string.IsNullOrEmpty(p) && p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
+        List<ApplicationRolePermission> permissions = await _context.ApplicationRolePermissions.Where(x => roles.Contains(x.ApplicationRoleId) && x.IsActive)
+                    .Include(x=>x.ApplicationPermission)
+                    .AsNoTracking()
+                    .ToListAsync(cancellationToken);
+        
+        List<string?> policies = permissions.Select(x => x.ApplicationPermission?.PolicyName).ToList();
 
         return policies;
     }
 
-    public async Task<List<string>?> FetchPoliciesAsync(CancellationToken cancellationToken)
+    public async Task<List<string>> FetchPoliciesAsync(CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-        var poliicies = await _context.ApplicationPermissions.Where(x => x.IsActive).Select(x=>x.PolicyName).ToListAsync();
+        return await _context.ApplicationPermissions.Where(x => x.IsActive).Select(x=>x.PolicyName).ToListAsync(cancellationToken) ?? new List<string>();
+    }
 
-        if (poliicies == null )
-        {
-            return null;
-        }
-
-        //List<string>? policies = await _context.ApplicationPermissions.Where(x => permissionIds.Any(p => p.Trim() == x.Id.ToString())).Select(n => n.PolicyName).ToListAsync();
-
-        return poliicies;
+    public async Task<bool> PolicyExistsAsync(string policy, CancellationToken cancellationToken)
+    {
+        return await _context.ApplicationPermissions.AnyAsync(x => x.PolicyName ==  policy);
     }
 
     public async Task<ApplicationPermission?> FetchPolicyByName( string policyName, CancellationToken cancellationToken)
@@ -96,6 +93,7 @@ public class ApplicationPermissionService : IApplicationPermissionService
         try
         {
             var permissionEntity = await _context.ApplicationPermissions.Where(x => x.PolicyName == policy).SingleOrDefaultAsync();
+            int parentId = 0;
 
             if (permissionEntity != null)
             {
@@ -107,11 +105,14 @@ public class ApplicationPermissionService : IApplicationPermissionService
                 throw new ArgumentException("policy cannot be null");
             }
 
-            var parentName = policy.Split(_jsonDelimiters.PermissionDelimiter)[0];
-            var parentPermissionEntity = await _context.ApplicationPermissions.Where(c => c.PolicyName == parentName).FirstOrDefaultAsync();
+            var splitPolicy = policy.Split(TextDelimitersConstants.PolicyDelimiter);
+
+            var parentName = splitPolicy[0];
+
+            var parentPermissionEntity = await _context.ApplicationPermissions.FirstOrDefaultAsync(c => c.PolicyName == parentName);
 
             //adding parent Policy
-            if (parentPermissionEntity == null && !String.IsNullOrEmpty(parentName))
+            if (parentPermissionEntity == null)
             {
                 parentPermissionEntity = new ApplicationPermission()
                 {
@@ -123,27 +124,48 @@ public class ApplicationPermissionService : IApplicationPermissionService
                     CreatedBy = "auto generated"
                 };
                 _context.ApplicationPermissions.Add(parentPermissionEntity);
+                parentId = await _context.SaveChangesAsync(cancellationToken);
             }
-            var result = await _context.SaveChangesAsync(cancellationToken);
-            
-            //adding parentId to new Policy
-            permissionEntity = new ApplicationPermission
+            else
             {
-                NameEN = policy,
-                NameAR = policy,
-                PolicyName = policy,
-                ParentId = result,
-                Created = DateTime.Now,
-                CreatedBy = "auto generated"
-        };
-            _context.ApplicationPermissions.Add(permissionEntity);
+                parentId = parentPermissionEntity.Id;
+            }
 
-            //Map Role to Permission
-            result = await _context.SaveChangesAsync(cancellationToken);
+            //adding parentId to new sub-policy
+            if (!String.IsNullOrEmpty(splitPolicy[1]))
+            {
+                permissionEntity = new ApplicationPermission
+                {
+                    NameEN = splitPolicy[1],
+                    NameAR = splitPolicy[1],
+                    PolicyName = policy,
+                    ParentId = parentId,
+                    Created = DateTime.Now,
+                    CreatedBy = "auto generated"
+                };
+                _context.ApplicationPermissions.Add(permissionEntity);
+
+                await _context.SaveChangesAsync(cancellationToken);
+            }
         }
         catch (Exception ex)
         {
             _logger.LogError($"handled error {ex.Message}:{ex.StackTrace}");
         }
     }
+    public async Task CreatePoliciesBatch(List<string> policies, CancellationToken cancellationToken)
+    {
+        var newPolicies = policies.Select(policy => new ApplicationPermission
+        {
+            NameEN = policy,
+            NameAR = policy,
+            PolicyName = policy,
+            Created = DateTime.Now,
+            CreatedBy = "auto generated"
+        }).ToList();
+
+        _context.ApplicationPermissions.AddRange(newPolicies); // Batch insert
+        await _context.SaveChangesAsync(cancellationToken); // Commit once
+    }
+
 }

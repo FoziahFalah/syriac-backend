@@ -8,6 +8,13 @@ public class PermissionPolicyProvider : DefaultAuthorizationPolicyProvider
     {
     }
 
+    /// <summary>
+    /// Retrieves an authorization policy by name. If not found in memory, checks the database.
+    /// </summary>
+    /// <param name="policyName">The name of the policy being requested.</param>
+    /// <returns>
+    /// An <see cref="AuthorizationPolicy"/> if found; otherwise, null.
+    /// </returns>
     public override async Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
         var policy = await base.GetPolicyAsync(policyName);

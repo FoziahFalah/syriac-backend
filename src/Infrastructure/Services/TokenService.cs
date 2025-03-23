@@ -53,13 +53,14 @@ public class TokenService : ITokenService
         }
 
         // Add policies as claims
-        var policies = await _policyService.FetchPoliciesByRolesAsync(roleIds);
+        var policies = await _policyService.FetchPoliciesByRolesAsync(roleIds, new CancellationToken());
 
         if (policies != null)
         {
             foreach (var policy in policies)
             {
-                authClaims.Add(new Claim(CustomClaimTypes.Permission, policy));
+                if(policy !=null) // Code needs to be reviewed
+                    authClaims.Add(new Claim(CustomClaimTypes.Permission, policy));
             }
 
         }

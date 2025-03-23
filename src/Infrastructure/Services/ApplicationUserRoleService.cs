@@ -1,13 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using SyriacSources.Backend.Application.Common.Interfaces;
+﻿using Microsoft.Extensions.Options;
 using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Domain.Entities;
 using SyriacSources.Backend.Infrastructure.Data;
@@ -24,31 +15,34 @@ public class ApplicationUserRoleService : IApplicationUserRoleService
         _jsonDelimiters = jsonDelimiters.Value;
     }
 
+    
     public async Task<Result> AddToRolesAsync(int userId, List<int> roles, CancellationToken cancellationToken)
     {
-        ApplicationUserRole? result = await _context.ApplicationUserRoles.SingleOrDefaultAsync(x => x.UserId == userId);
+        // Fetch existing role permissions for the specified role
+        var existingRoles = await _context.ApplicationUserRoles
+                                        .Where(rp => rp.ApplicationUserId == userId)
+                                        .ToListAsync(cancellationToken);
 
-        if (result == null)
+        // Remove old permissions
+        _context.ApplicationUserRoles.RemoveRange(existingRoles);
+
+        // Add new permissions
+        var newRoles = roles.Select(roleId => new ApplicationUserRole
         {
-            result = new ApplicationUserRole()
-            {
-                UserId = userId,
-            };
-        }
-        result.UserRoles = string.Join("|", roles);
-        await _context.ApplicationUserRoles.AddAsync(result);
-        return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success(null)); 
+            ApplicationRoleId = roleId,
+            ApplicationUserId = userId
+        });
+
+        await _context.ApplicationUserRoles.AddRangeAsync(newRoles, cancellationToken);
+
+        // Save changes
+        return await _context.SaveChangesAsync(cancellationToken).ContinueWith(x => Result.Success(null));
     }
+
 
     public async Task<bool> IsInRoleAsync(int userId, int roleId, CancellationToken cancellationToken)
     {
-        ApplicationUserRole? userRoles = await _context.ApplicationUserRoles.Where(r => r.UserId == userId).SingleOrDefaultAsync();
-        if (userRoles == null )
-        {
-            return false;
-        }
-        string[] roles = userRoles.UserRoles.Split(_jsonDelimiters.CSVDelimiter);
-        
-        return roles.Any(x => x == roleId.ToString());
+        return await _context.ApplicationUserRoles.AnyAsync(r => r.ApplicationUserId == userId && r.ApplicationRoleId == roleId);
+
     }
 }

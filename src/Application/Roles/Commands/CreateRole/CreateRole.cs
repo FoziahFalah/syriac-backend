@@ -3,7 +3,7 @@ using SyriacSources.Backend.Application.Common.Models;
 using SyriacSources.Backend.Domain.Entities;
 
 namespace SyriacSources.Backend.Application.Roles.Commands.CreateRole;
-//[Authorize(Policy = "roles:createrole")]
+[Authorize(Policy = "roles:create-role")]
 public record CreateRoleCommand : IRequest<Result>
 {
     public required string NameEN { get; init; }

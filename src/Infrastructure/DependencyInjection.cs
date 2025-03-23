@@ -13,7 +13,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using EventManager.Backend.Infrastructure.Services;
 using Ganss.Xss;
-using SyriacSources.Backend.Application.Languages;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Http;
+using System.Net;
+using System.Runtime.Intrinsics.X86;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -40,8 +43,9 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
         
-        services.AddScoped<ApplicationDbContextInitialiser>();
+        services.AddTransient<IPolicyScannerService,PolicyScannerService>();
 
+        services.AddScoped<ApplicationDbContextInitialiser>();
         
         services
             .AddIdentityCore<IdentityApplicationUser>()
@@ -63,9 +67,9 @@ public static class DependencyInjection
 
         services.AddTransient<IApplicationRoleService, ApplicationRoleService>();
 
+
         services.AddTransient<IApplicationPermissionService, ApplicationPermissionService>();
 
-        services.AddScoped<PolicyConfigurationService>();
 
         services.AddTransient<ITokenService, TokenService>();
 
@@ -77,11 +81,9 @@ public static class DependencyInjection
 
         services.Configure<PolicyManagementOptions>(builder.Configuration.GetSection("PolicyManagementOptions"));
 
-        services.AddAutoMapper(typeof(LanguageDto));
-
-
-        // For dynamically create policy if not exist
-        //services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+        services.AddScoped<PolicyConfigurationService>();
+        // For dynamically creating policies if not exist
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
 
         services.AddTransient<IHtmlSanitizer, HtmlSanitizer>();
 
@@ -117,8 +119,7 @@ public static class DependencyInjection
             });
         }
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -133,9 +134,10 @@ public static class DependencyInjection
             };
         });
 
+        //Policies are required if you use custom authorization logic with IAuthorizationService in middleware, filters, or services.
         services.AddAuthorization(options =>
-            {
-                var serviceProvider = services.BuildServiceProvider();
+        {
+            var serviceProvider = services.BuildServiceProvider();
                 var authorizationConfigService = serviceProvider.GetRequiredService<PolicyConfigurationService>();
                 // Configure authorization options asynchronously
                 authorizationConfigService.AddPoliciesAsync(options).GetAwaiter().GetResult();

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +11,7 @@ namespace SyriacSources.Backend.Application.Common.Security;
 public class DynamicAuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
 {
     private readonly PolicyManagementOptions _policyOptions;
-    IOptions<AuthorizationOptions> options,
+    private readonly IOptions<AuthorizationOptions> options;
     private readonly IApplicationPermissionService _permissionService;
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly IConfiguration _configuration;
@@ -59,7 +53,7 @@ public class DynamicAuthorizationPolicyProvider : DefaultAuthorizationPolicyProv
                 //initialize policy in the data storage
                 var newPolicy = new AuthorizationPolicyInfo();
                 newPolicy.Name = policyName;
-                //var allowedRoles = _policyOptions.AutoPolicyAllowedRoleNamesCsv.Split(',');
+                var allowedRoles = _policyOptions.AutoPolicyAllowedRoleNamesCsv.Split(',');
 
                 if (_policyOptions.PolicyNamesToConfigureAsAllowAnonymous.Contains(policyName))
                 {
@@ -74,7 +68,7 @@ public class DynamicAuthorizationPolicyProvider : DefaultAuthorizationPolicyProv
                 }
                 else
                 {
-                    var allowedRoles = _policyOptions.AutoPolicyAllowedRoleNamesCsv.Split(',');
+                    //var allowedRoles = _policyOptions.AutoPolicyAllowedRoleNamesCsv.Split(',');
 
                     var roleList = new List<string>(allowedRoles);
                     newPolicy.AllowedRoles = roleList;
