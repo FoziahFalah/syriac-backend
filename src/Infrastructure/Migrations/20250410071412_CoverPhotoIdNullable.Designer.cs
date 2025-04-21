@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SyriacSources.Backend.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SyriacSources.Backend.Infrastructure.Data;
 namespace SyriacSources.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250410071412_CoverPhotoIdNullable")]
+    partial class CoverPhotoIdNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -897,6 +900,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<int?>("CoverPhotoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("CoverPhotoId1")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("datetimeoffset");
 
@@ -947,7 +953,7 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasIndex("CenturyId");
 
-                    b.HasIndex("CoverPhotoId");
+                    b.HasIndex("CoverPhotoId1");
 
                     b.HasIndex("IntroductionEditorId");
 
@@ -1367,8 +1373,9 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
 
                     b.HasOne("SyriacSources.Backend.Domain.Entities.Attachment", "CoverPhoto")
                         .WithMany()
-                        .HasForeignKey("CoverPhotoId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("CoverPhotoId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "IntroductionEditor")
                         .WithMany()

@@ -19,7 +19,7 @@ public class GetLanguageQueryHandler : IRequestHandler<GetLanguageQuery, Languag
         var entity = await _context.Languages
             .Where(l => l.Id == request.Id)
             .FirstOrDefaultAsync(cancellationToken);
-        Guard.Against.NotFound(request.Id, entity); // يمنع إرجاع null
+        Guard.Against.NotFound(request.Id, entity); 
         return _mapper.Map<LanguageDto>(entity);
     }
 }

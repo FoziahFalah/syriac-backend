@@ -1016,6 +1016,148 @@
         }
       }
     },
+    "/api/Sources/Create": {
+      "post": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "CreateSource",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSourceCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Sources/Get/{id}": {
+      "get": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "GetSource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Sources/Get": {
+      "get": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "GetSources",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SourceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Sources/Update/{id}": {
+      "put": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "UpdateSource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSource"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Sources/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "DeleteSource",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/TodoItems": {
       "get": {
         "tags": [
@@ -1465,33 +1607,6 @@
           }
         }
       },
-      "PermissionTreeNodeDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "key": {
-            "type": "string"
-          },
-          "checked": {
-            "type": "boolean",
-            "nullable": true
-          },
-          "data": {
-            "$ref": "#/components/schemas/ApplicationPermissionDto"
-          },
-          "children": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "$ref": "#/components/schemas/PermissionTreeNodeDto"
-            }
-          },
-          "label": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
       "CreateAuthorCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -1606,7 +1721,34 @@
           }
         }
       },
-      "PermissionDto": {
+      "PermissionTreeNodeDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "checked": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/ApplicationPermissionDto"
+          },
+          "children": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PermissionTreeNodeDto"
+            }
+          },
+          "label": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ApplicationPermissionDto": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1740,6 +1882,266 @@
           },
           "nameAR": {
             "type": "string"
+          }
+        }
+      },
+      "CreateSourceCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "authorName": {
+            "type": "string"
+          },
+          "centuryName": {
+            "type": "string"
+          },
+          "documentedOnHijri": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "documentedOnGregorian": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "introduction": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInArabic": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInSyriac": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInForeignLanguage": {
+            "type": "string",
+            "nullable": true
+          },
+          "introductionEditorName": {
+            "type": "string",
+            "nullable": true
+          },
+          "additionalInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "coverPhoto": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AttachmentDto"
+              }
+            ]
+          },
+          "otherAttachments": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AttachmentDto"
+            }
+          },
+          "publications": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PublicationDto"
+            }
+          }
+        }
+      },
+      "AttachmentDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "filePath": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileExtension": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "PublicationDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "SourceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "authorName": {
+            "type": "string"
+          },
+          "centuryName": {
+            "type": "string"
+          },
+          "documentedOnHijri": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "documentedOnGregorian": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "introduction": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInArabic": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInSyriac": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInForeignLanguage": {
+            "type": "string",
+            "nullable": true
+          },
+          "introductionEditorName": {
+            "type": "string",
+            "nullable": true
+          },
+          "additionalInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "publications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicationDto2"
+            }
+          },
+          "otherAttachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttachmentDto2"
+            }
+          }
+        }
+      },
+      "PublicationDto2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "AttachmentDto2": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "filePath": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileExtension": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateSource": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "authorName": {
+            "type": "string",
+            "nullable": true
+          },
+          "centuryName": {
+            "type": "string",
+            "nullable": true
+          },
+          "documentedOnHijri": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "documentedOnGregorian": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "introduction": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInArabic": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInSyriac": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInForeignLanguage": {
+            "type": "string",
+            "nullable": true
+          },
+          "introductionEditorName": {
+            "type": "string",
+            "nullable": true
+          },
+          "additionalInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "coverPhoto": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AttachmentDto2"
+              }
+            ]
+          },
+          "otherAttachments": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AttachmentDto2"
+            }
+          },
+          "publications": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PublicationDto2"
+            }
           }
         }
       },

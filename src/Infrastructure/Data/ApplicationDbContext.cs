@@ -39,5 +39,10 @@ public class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, I
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.Entity<Source>()
+         .HasOne(s => s.CoverPhoto)
+         .WithMany()
+         .HasForeignKey(s => s.CoverPhotoId)
+         .OnDelete(DeleteBehavior.Restrict);
     }
 }
