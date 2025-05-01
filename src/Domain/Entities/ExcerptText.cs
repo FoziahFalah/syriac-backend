@@ -17,5 +17,5 @@ public class ExcerptText : BaseAuditableEntity
     public ApplicationUser Reviewer { get; set; } = new ApplicationUser();
     public int TranslatorId { get; set; }
     public ApplicationUser Translator { get; set; } = new ApplicationUser();
-
+     
 }

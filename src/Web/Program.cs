@@ -1,6 +1,8 @@
+﻿using Microsoft.Extensions.FileProviders;
 using Serilog;
 using SyriacSources.Backend.Infrastructure.Data;
 using SyriacSources.Backend.Web.Endpoints;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +75,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseRouting();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
+    RequestPath = "/uploads"
+});
 
 try
 {

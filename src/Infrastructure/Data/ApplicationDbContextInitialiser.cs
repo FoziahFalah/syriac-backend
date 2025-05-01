@@ -164,7 +164,7 @@ public class ApplicationDbContextInitialiser
 
                 _context.ApplicationUsers.Add(user);
 
-                result = await _context.SaveChangesAsync();
+              
 
                 if (result <= 0)
                 {

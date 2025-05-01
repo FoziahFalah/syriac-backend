@@ -12,7 +12,7 @@ public class UpdateSource : IRequest
 {
     public int Id { get; set; }
     public string? AuthorName { get; set; }
-    public string? CenturyName { get; set; }
+    public string? CenturyName { get; set; }      
     public DateTime DocumentedOnHijri { get; set; }
     public DateTime DocumentedOnGregorian { get; set; }
     public string? Introduction { get; set; }
@@ -21,7 +21,7 @@ public class UpdateSource : IRequest
     public string? SourceTitleInForeignLanguage { get; set; }
     public string? IntroductionEditorName { get; set; }
     public string? AdditionalInfo { get; set; }
-    public AttachmentDto? CoverPhoto { get; set; }
+    public CoverPhotoDto? CoverPhoto { get; set; }
     public List<AttachmentDto>? OtherAttachments { get; set; }
     public List<PublicationDto>? Publications { get; set; }
 }
@@ -37,14 +37,12 @@ public class UpdateSourceHandler : IRequestHandler<UpdateSource>
         var entity = await _context.Sources
             .Include(s => s.Publications)
             .Include(s => s.OtherAttachments)
-            .Include(s => s.CoverPhoto)
+            .Include(s => s.CoverPhoto) // مهم إذا بتعدل صورة الغلاف
             .FirstOrDefaultAsync(s => s.Id == request.Id, cancellationToken);
         if (entity == null)
             throw new NotFoundException(nameof(Source), request.Id.ToString());
-        var author = await _context.Authors
-            .FirstOrDefaultAsync(a => a.Name == request.AuthorName, cancellationToken);
-        var century = await _context.Centuries
-            .FirstOrDefaultAsync(c => c.Name == request.CenturyName, cancellationToken);
+        var author = await _context.Authors.FirstOrDefaultAsync(a => a.Name == request.AuthorName, cancellationToken);
+        var century = await _context.Centuries.FirstOrDefaultAsync(c => c.Name == request.CenturyName, cancellationToken);
         if (author == null || century == null)
             throw new Exception("اسم المؤلف أو القرن غير موجود.");
         ApplicationUser? editor = null;
@@ -55,6 +53,7 @@ public class UpdateSourceHandler : IRequestHandler<UpdateSource>
                     u.FullNameAR == request.IntroductionEditorName || u.FullNameEN == request.IntroductionEditorName,
                     cancellationToken);
         }
+        // تحديث الخصائص الأساسية
         entity.AuthorId = author.Id;
         entity.CenturyId = century.Id;
         entity.DocumentedOnHijri = request.DocumentedOnHijri;
@@ -65,48 +64,51 @@ public class UpdateSourceHandler : IRequestHandler<UpdateSource>
         entity.SourceTitleInForeignLanguage = request.SourceTitleInForeignLanguage;
         entity.AdditionalInfo = request.AdditionalInfo;
         entity.IntroductionEditor = editor ?? new ApplicationUser();
-        // تحديث CoverPhoto فقط إذا كانت البيانات موجودة
-        entity.CoverPhoto = request.CoverPhoto != null &&
-                            !string.IsNullOrWhiteSpace(request.CoverPhoto.FileName) &&
-                            !string.IsNullOrWhiteSpace(request.CoverPhoto.FilePath) &&
-                            !string.IsNullOrWhiteSpace(request.CoverPhoto.FileExtension)
-            ? new Attachment
+        // تحديث صورة الغلاف
+        if (request.CoverPhoto != null)
+        {
+            var existingCover = await _context.CoverPhotos.FirstOrDefaultAsync(c => c.SourceId == entity.Id, cancellationToken);
+            if (existingCover != null)
+            {
+                _context.CoverPhotos.Remove(existingCover);
+            }
+            _context.CoverPhotos.Add(new CoverPhoto
             {
                 FileName = request.CoverPhoto.FileName,
                 FilePath = request.CoverPhoto.FilePath,
-                FileExtension = request.CoverPhoto.FileExtension
-            }
-            : null;
-        // تحديث Publications
-        entity.Publications.Clear();
-        if (request.Publications != null)
-        {
-            foreach (var pub in request.Publications)
-            {
-                entity.Publications.Add(new Publication
-                {
-                    Description = pub.Description,
-                    Url = pub.Url
-                });
-            }
+                FileExtension = request.CoverPhoto.FileExtension,
+                SourceId = entity.Id
+            });
         }
-        // تحديث OtherAttachments
-        entity.OtherAttachments.Clear();
-        if (request.OtherAttachments != null)
+        // تحديث المرفقات
+        var existingAttachments = _context.Attachments.Where(a => a.SourceId == entity.Id);
+        _context.Attachments.RemoveRange(existingAttachments);
+        if (request.OtherAttachments is not null)
         {
             foreach (var att in request.OtherAttachments)
             {
-                if (!string.IsNullOrWhiteSpace(att.FileName) &&
-                    !string.IsNullOrWhiteSpace(att.FilePath) &&
-                    !string.IsNullOrWhiteSpace(att.FileExtension))
+                _context.Attachments.Add(new Attachment
                 {
-                    entity.OtherAttachments.Add(new Attachment
-                    {
-                        FileName = att.FileName,
-                        FilePath = att.FilePath,
-                        FileExtension = att.FileExtension
-                    });
-                }
+                    FileName = att.FileName,
+                    FilePath = att.FilePath,
+                    FileExtension = att.FileExtension,
+                    SourceId = entity.Id
+                });
+            }
+        }
+        // تحديث النشرات
+        var existingPublications = _context.Publications.Where(p => p.SourceId == entity.Id);
+        _context.Publications.RemoveRange(existingPublications);
+        if (request.Publications is not null)
+        {
+            foreach (var pub in request.Publications)
+            {
+                _context.Publications.Add(new Publication
+                {
+                    Description = pub.Description,
+                    Url = pub.Url,
+                    SourceId = entity.Id
+                });
             }
         }
         await _context.SaveChangesAsync(cancellationToken);

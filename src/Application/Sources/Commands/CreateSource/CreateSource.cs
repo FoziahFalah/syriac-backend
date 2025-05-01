@@ -14,7 +14,7 @@ public class CreateSourceCommand : IRequest<int>
     public string? SourceTitleInForeignLanguage { get; set; }
     public string? IntroductionEditorName { get; set; }
     public string? AdditionalInfo { get; set; }
-    public AttachmentDto? CoverPhoto { get; set; } // بدلاً من CoverPhotoId
+    public CoverPhotoDto? CoverPhoto { get; set; } // بدلاً من CoverPhotoId
     public List<AttachmentDto>? OtherAttachments { get; set; } 
     public List<PublicationDto> ? Publications { get; set; } 
 }
@@ -69,25 +69,27 @@ public class CreateSourceCommandHandler : IRequestHandler<CreateSourceCommand, i
             OtherAttachments = new List<Attachment>()
         };
         _context.Sources.Add(entity);
-        await _context.SaveChangesAsync(cancellationToken); // يتم الحفظ للحصول على ID
-        // إضافة صورة الغلاف بعد الحفظ وربطها بالـ SourceId
+        await _context.SaveChangesAsync(cancellationToken); // للحصول على ID المصدر
+                                                            // حفظ صورة الغلاف إن وُجدت
         if (request.CoverPhoto is not null)
         {
-            var cover = new Attachment
+            var cover = new CoverPhoto
             {
                 FileName = request.CoverPhoto.FileName,
                 FilePath = request.CoverPhoto.FilePath,
                 FileExtension = request.CoverPhoto.FileExtension,
                 SourceId = entity.Id
             };
-            entity.CoverPhoto = cover;
+            _context.CoverPhotos.Add(cover);
+           
+
         }
-        // إضافة المرفقات الأخرى بعد الحفظ
+        // حفظ المرفقات إن وُجدت
         if (request.OtherAttachments is not null)
         {
             foreach (var attach in request.OtherAttachments)
             {
-                entity.OtherAttachments.Add(new Attachment
+                _context.Attachments.Add(new Attachment
                 {
                     FileName = attach.FileName,
                     FilePath = attach.FilePath,
@@ -96,15 +98,16 @@ public class CreateSourceCommandHandler : IRequestHandler<CreateSourceCommand, i
                 });
             }
         }
-        // إضافة النشرات
+        // حفظ النشرات
         if (request.Publications is not null)
         {
             foreach (var pub in request.Publications)
             {
-                entity.Publications.Add(new Publication
+                _context.Publications.Add(new Publication
                 {
+                    Url = pub.Url,
                     Description = pub.Description,
-                    Url = pub.Url
+                    SourceId = entity.Id
                 });
             }
         }

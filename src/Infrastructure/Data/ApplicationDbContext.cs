@@ -35,14 +35,20 @@ public class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, I
     public DbSet<SourceIntroEditor> SourceIntroductionEditors => Set<SourceIntroEditor>();
     public DbSet<Source> Sources => Set<Source>();
 
+    public Task SaveChangesAsync()
+    {
+        throw new NotImplementedException();
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        // الربط الصحيح بين Source و CoverPhoto
         builder.Entity<Source>()
-         .HasOne(s => s.CoverPhoto)
-         .WithMany()
-         .HasForeignKey(s => s.CoverPhotoId)
-         .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(s => s.CoverPhoto)
+            .WithOne()
+            .HasForeignKey<CoverPhoto>(c => c.SourceId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

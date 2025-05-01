@@ -17,6 +17,12 @@ public class SourceDto
     public string? AdditionalInfo { get; set; }
     public List<PublicationDto> Publications { get; set; } = new();
     public List<AttachmentDto> OtherAttachments { get; set; } = new();
+    public CoverPhotoDto? CoverPhoto { get; set; }
+    // الخصائص من الكلاس الأب:
+    public DateTimeOffset Created { get; set; }
+    public string? CreatedBy { get; set; }
+    public DateTimeOffset LastModified { get; set; }
+    public string? LastModifiedBy { get; set; }
     private class Mapping : Profile
     {
         public Mapping()
@@ -24,13 +30,14 @@ public class SourceDto
             CreateMap<Source, SourceDto>()
                 .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author.Name))
                 .ForMember(dest => dest.CenturyName, opt => opt.MapFrom(src => src.Century.Name))
-                .ForMember(dest => dest.IntroductionEditorName, opt => opt.MapFrom(src => src.IntroductionEditor.FullNameAR));
+                .ForMember(dest => dest.IntroductionEditorName,
+                    opt => opt.MapFrom(src => src.IntroductionEditor != null ? src.IntroductionEditor.FullNameAR : null));
             CreateMap<Attachment, AttachmentDto>();
             CreateMap<Publication, PublicationDto>();
+            CreateMap<CoverPhoto, CoverPhotoDto>();
         }
     }
 }
-
 
 
 
