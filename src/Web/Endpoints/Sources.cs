@@ -15,7 +15,8 @@ public class Sources : EndpointGroupBase
 
     public override void Map(WebApplication app)
     {
-//           
+
+          
         app.MapGroup(this)
             .MapPost(CreateSource, "Create")
             .MapGet(GetSource, "Get/{id}")
@@ -48,7 +49,7 @@ public class Sources : EndpointGroupBase
 .WithName("UploadCoverPhoto");
 
         app.MapPost("/api/sources/search", async (
-    [FromBody] SearchSourcesQuery query,
+    [FromBody] SearchSources query,
     ISender sender) =>
         {
             var result = await sender.Send(query);
@@ -59,7 +60,7 @@ public class Sources : EndpointGroupBase
 
 
     }
-    public async Task<IResult> CreateSource(ISender sender, CreateSourceCommand command)
+    public async Task<IResult> CreateSource(ISender sender, CreateSource command)
     {
         var id = await sender.Send(command);
         return Results.Ok(id);
@@ -68,9 +69,14 @@ public class Sources : EndpointGroupBase
     {
         return sender.Send(new GetSource(id));
     }
-    public Task<List<SourceDto>> GetSources(ISender sender)
+    public async Task<IResult> GetSources(ISender sender, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
-        return sender.Send(new GetSourcesQuery());
+        var result = await sender.Send(new GetSourcesWithPagination
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        });
+        return Results.Ok(result);
     }
     public async Task<IResult> UpdateSource(ISender sender, int id, UpdateSource command)
     {

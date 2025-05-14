@@ -7,29 +7,32 @@ using SyriacSources.Backend.Application.Common.Interfaces;
 
 namespace SyriacSources.Backend.Application.Sources.Queries.SearchSources
 {
-    public class SearchSourcesQuery : IRequest<List<SourceDto>>
+    public class SearchSources : IRequest<List<SourceDto>>
     {
         public string? SourceTitleInArabic { get; set; }
         public string? SourceTitleInSyriac { get; set; }
         public string? SourceTitleInForeignLanguage { get; set; }
         public string? Introduction { get; set; }
-        public string? AuthorName { get; set; }
-        public string? IntroductionEditorName { get; set; }
-        public string? CenturyName { get; set; }
-        public string? DocumentedOn { get; set; }
+        public List<int>? AuthorIds { get; set; }
+        public List<int>? CenturyIds { get; set; }
+        public int? IntroductionEditorId { get; set; }
+        public int? FromYear { get; set; }
+        public int? ToYear { get; set; }
+        public string? Period { get; set; }
     }
-    public class SearchSourcesQueryHandler : IRequestHandler<SearchSourcesQuery, List<SourceDto>>
+    public class SearchSourcesHandler : IRequestHandler<SearchSources, List<SourceDto>>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public SearchSourcesQueryHandler(IApplicationDbContext context, IMapper mapper)
+        public SearchSourcesHandler(IApplicationDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
-        public async Task<List<SourceDto>> Handle(SearchSourcesQuery request, CancellationToken cancellationToken)
+        public async Task<List<SourceDto>> Handle(SearchSources request, CancellationToken cancellationToken)
         {
             var query = _context.Sources
+                .Include(x => x.SourceDates).ThenInclude(d => d.DateFormat)
                 .Include(x => x.Author)
                 .Include(x => x.Century)
                 .Include(x => x.IntroductionEditor)
@@ -42,24 +45,26 @@ namespace SyriacSources.Backend.Application.Sources.Queries.SearchSources
                 query = query.Where(x => x.SourceTitleInForeignLanguage != null && x.SourceTitleInForeignLanguage.Contains(request.SourceTitleInForeignLanguage));
             if (!string.IsNullOrWhiteSpace(request.Introduction))
                 query = query.Where(x => x.Introduction != null && x.Introduction.Contains(request.Introduction));
-            if (!string.IsNullOrWhiteSpace(request.AuthorName))
-                query = query.Where(x => x.Author.Name.Contains(request.AuthorName));
-            if (!string.IsNullOrWhiteSpace(request.CenturyName))
-                query = query.Where(x => x.Century.Name.Contains(request.CenturyName));
-            if (!string.IsNullOrWhiteSpace(request.IntroductionEditorName))
-            {
-                query = query.Where(x =>
-                    (x.IntroductionEditor.FullNameAR != null && x.IntroductionEditor.FullNameAR.Contains(request.IntroductionEditorName)) ||
-                    (x.IntroductionEditor.FullNameEN != null && x.IntroductionEditor.FullNameEN.Contains(request.IntroductionEditorName)));
-            }
-            if (!string.IsNullOrWhiteSpace(request.DocumentedOn))
-            {
-                query = query.Where(x =>
-                    x.DocumentedOnHijri.ToString().Contains(request.DocumentedOn) ||
-                    x.DocumentedOnGregorian.ToString().Contains(request.DocumentedOn));
-            }
+            if (request.AuthorIds != null && request.AuthorIds.Any())
+                query = query.Where(x => request.AuthorIds.Contains(x.AuthorId));
+            if (request.CenturyIds != null && request.CenturyIds.Any())
+                query = query.Where(x => request.CenturyIds.Contains(x.CenturyId));
+            if (request.IntroductionEditorId.HasValue)
+                query = query.Where(x => x.IntroductionEditorId == request.IntroductionEditorId.Value);
+            if (!string.IsNullOrWhiteSpace(request.Period))
+                query = query.Where(x => x.SourceDates.Any(d => d.DateFormat != null && d.DateFormat.Period == request.Period));
+            if (request.FromYear.HasValue)
+                query = query.Where(x => x.SourceDates.Any(d => d.FromYear >= request.FromYear.Value));
+            if (request.ToYear.HasValue)
+                query = query.Where(x => x.SourceDates.Any(d => d.ToYear <= request.ToYear.Value));
             var result = await query.ToListAsync(cancellationToken);
             return _mapper.Map<List<SourceDto>>(result);
         }
     }
 }
+
+
+
+
+
+

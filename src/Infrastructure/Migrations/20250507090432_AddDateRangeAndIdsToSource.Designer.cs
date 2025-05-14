@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SyriacSources.Backend.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SyriacSources.Backend.Infrastructure.Data;
 namespace SyriacSources.Backend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250507090432_AddDateRangeAndIdsToSource")]
+    partial class AddDateRangeAndIdsToSource
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -903,6 +906,18 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("DocumentedOnGregorianFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DocumentedOnGregorianTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DocumentedOnHijriFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DocumentedOnHijriTo")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Introduction")
                         .IsRequired()
                         .HasMaxLength(2000)
@@ -912,6 +927,12 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsBeforeGregorianEra")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsBeforeHijriEra")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset>("LastModified")
@@ -947,50 +968,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                         .HasDatabaseName("SourceTitleInArabic");
 
                     b.ToTable("Sources");
-                });
-
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceDate", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("Created")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DateFormatId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FromYear")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset>("LastModified")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SourceId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ToYear")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DateFormatId");
-
-                    b.HasIndex("SourceId");
-
-                    b.ToTable("SourceDates", (string)null);
                 });
 
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroEditor", b =>
@@ -1421,25 +1398,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Navigation("IntroductionEditor");
                 });
 
-            modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceDate", b =>
-                {
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.DateFormat", "DateFormat")
-                        .WithMany()
-                        .HasForeignKey("DateFormatId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SyriacSources.Backend.Domain.Entities.Source", "Source")
-                        .WithMany("SourceDates")
-                        .HasForeignKey("SourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DateFormat");
-
-                    b.Navigation("Source");
-                });
-
             modelBuilder.Entity("SyriacSources.Backend.Domain.Entities.SourceIntroEditor", b =>
                 {
                     b.HasOne("SyriacSources.Backend.Domain.Entities.ApplicationUser", "Editor")
@@ -1498,8 +1456,6 @@ namespace SyriacSources.Backend.Infrastructure.Migrations
                     b.Navigation("OtherAttachments");
 
                     b.Navigation("Publications");
-
-                    b.Navigation("SourceDates");
 
                     b.Navigation("SourceIntroductionEditors");
                 });

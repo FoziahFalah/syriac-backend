@@ -4,8 +4,7 @@ public class Source : BaseAuditableEntity
 {
     public int AuthorId { get; set; }
     public Author Author { get; set; } = null!;
-    public DateTime DocumentedOnHijri { get; set; }
-    public DateTime DocumentedOnGregorian { get; set; }
+    public List<SourceDate> SourceDates { get; set; } = new();
     public int CenturyId { get; set; }
     public Century Century { get; set; } = null!;
     public string? Introduction { get; set; }
@@ -13,10 +12,10 @@ public class Source : BaseAuditableEntity
     public string? SourceTitleInSyriac { get; set; }
     public string? SourceTitleInForeignLanguage { get; set; }
     public List<SourceIntroEditor> SourceIntroductionEditors { get; set; } = new();
-    public ApplicationUser IntroductionEditor { get; set; } = new();
+    public ApplicationUser ? IntroductionEditor { get; set; } 
+    public int? IntroductionEditorId { get; set; }
     public List<Publication> Publications { get; set; } = new();
-    public CoverPhoto? CoverPhoto { get; set; } // فقط هذا موجود
+    public CoverPhoto? CoverPhoto { get; set; }
     public List<Attachment> OtherAttachments { get; set; } = new();
     public string? AdditionalInfo { get; set; }
-    public int? IntroductionEditorId { get; set; }
 }

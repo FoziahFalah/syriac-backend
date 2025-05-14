@@ -2,116 +2,107 @@
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Domain.Entities;
 namespace SyriacSources.Backend.Application.Sources.Commands.CreateSource;
-public class CreateSourceCommand : IRequest<int>
+public class CreateSource : IRequest<int>
 {
-    public string AuthorName { get; set; } = string.Empty;
-    public string CenturyName { get; set; } = string.Empty;
-    public DateTime DocumentedOnHijri { get; set; }
-    public DateTime DocumentedOnGregorian { get; set; }
+    public int AuthorId { get; set; }
+    public int CenturyId { get; set; }
+    public int? IntroductionEditorId { get; set; }
+    public List<SourceDateDto>? SourceDates { get; set; }
     public string? Introduction { get; set; }
     public string? SourceTitleInArabic { get; set; }
     public string? SourceTitleInSyriac { get; set; }
     public string? SourceTitleInForeignLanguage { get; set; }
-    public string? IntroductionEditorName { get; set; }
     public string? AdditionalInfo { get; set; }
-    public CoverPhotoDto? CoverPhoto { get; set; } // بدلاً من CoverPhotoId
-    public List<AttachmentDto>? OtherAttachments { get; set; } 
-    public List<PublicationDto> ? Publications { get; set; } 
+    public CoverPhotoDto? CoverPhoto { get; set; }
+    public List<AttachmentDto>? OtherAttachments { get; set; }
+    public List<PublicationDto>? Publications { get; set; }
 }
-public class AttachmentDto
-{
-    public string? FileName { get; set; }
-    public string? FilePath { get; set; } 
-    public string? FileExtension { get; set; }
-}
-public class PublicationDto
-{
-    public string? Description { get; set; }
-    public string Url { get; set; } = string.Empty;
-}
-public class CreateSourceCommandHandler : IRequestHandler<CreateSourceCommand, int>
+
+public class CreateSourceHandler : IRequestHandler<CreateSource, int>
 {
     private readonly IApplicationDbContext _context;
-    public CreateSourceCommandHandler(IApplicationDbContext context)
+    public CreateSourceHandler(IApplicationDbContext context)
     {
         _context = context;
     }
-    public async Task<int> Handle(CreateSourceCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateSource request, CancellationToken cancellationToken)
     {
-        var author = await _context.Authors
-            .FirstOrDefaultAsync(a => a.Name == request.AuthorName, cancellationToken);
-        var century = await _context.Centuries
-            .FirstOrDefaultAsync(c => c.Name == request.CenturyName, cancellationToken);
-        if (author == null || century == null)
-            throw new Exception("الاسم غير موجود في قاعدة البيانات");
+        var author = await _context.Authors.FindAsync(new object[] { request.AuthorId }, cancellationToken);
+        var century = await _context.Centuries.FindAsync(new object[] { request.CenturyId }, cancellationToken);
+        Guard.Against.NotFound(request.AuthorId, author);
+        Guard.Against.NotFound(request.CenturyId, century);
         ApplicationUser? editor = null;
-        if (!string.IsNullOrEmpty(request.IntroductionEditorName))
+        if (request.IntroductionEditorId.HasValue)
         {
-            editor = await _context.ApplicationUsers
-                .FirstOrDefaultAsync(u =>
-                    u.FullNameAR == request.IntroductionEditorName || u.FullNameEN == request.IntroductionEditorName,
-                    cancellationToken);
+            editor = await _context.ApplicationUsers.FindAsync(new object[] { request.IntroductionEditorId.Value }, cancellationToken);
+            Guard.Against.NotFound(request.IntroductionEditorId.Value, editor);
         }
-        // إنشاء المصدر بدون المرفقات
         var entity = new Source
         {
             AuthorId = author.Id,
             CenturyId = century.Id,
-            DocumentedOnHijri = request.DocumentedOnHijri,
-            DocumentedOnGregorian = request.DocumentedOnGregorian,
             Introduction = request.Introduction,
             SourceTitleInArabic = request.SourceTitleInArabic,
             SourceTitleInSyriac = request.SourceTitleInSyriac,
             SourceTitleInForeignLanguage = request.SourceTitleInForeignLanguage,
             AdditionalInfo = request.AdditionalInfo,
-            IntroductionEditor = editor ?? new ApplicationUser(),
-            Publications = new List<Publication>(),
-            OtherAttachments = new List<Attachment>()
+            IntroductionEditorId = editor?.Id,
+            Publications = new(),
+            OtherAttachments = new()
         };
         _context.Sources.Add(entity);
-        await _context.SaveChangesAsync(cancellationToken); // للحصول على ID المصدر
-                                                            // حفظ صورة الغلاف إن وُجدت
-        if (request.CoverPhoto is not null)
-        {
-            var cover = new CoverPhoto
-            {
-                FileName = request.CoverPhoto.FileName,
-                FilePath = request.CoverPhoto.FilePath,
-                FileExtension = request.CoverPhoto.FileExtension,
-                SourceId = entity.Id
-            };
-            _context.CoverPhotos.Add(cover);
-           
-
-        }
-        // حفظ المرفقات إن وُجدت
-        if (request.OtherAttachments is not null)
-        {
-            foreach (var attach in request.OtherAttachments)
-            {
-                _context.Attachments.Add(new Attachment
-                {
-                    FileName = attach.FileName,
-                    FilePath = attach.FilePath,
-                    FileExtension = attach.FileExtension,
-                    SourceId = entity.Id
-                });
-            }
-        }
-        // حفظ النشرات
-        if (request.Publications is not null)
-        {
-            foreach (var pub in request.Publications)
-            {
-                _context.Publications.Add(new Publication
-                {
-                    Url = pub.Url,
-                    Description = pub.Description,
-                    SourceId = entity.Id
-                });
-            }
-        }
+        await _context.SaveChangesAsync(cancellationToken); 
+        AddSourceDates(request.SourceDates, entity.Id);
+        AddCoverPhoto(request.CoverPhoto, entity.Id);
+        AddAttachments(request.OtherAttachments, entity.Id);
+        AddPublications(request.Publications, entity.Id);
         await _context.SaveChangesAsync(cancellationToken);
         return entity.Id;
+    }
+    private void AddSourceDates(IEnumerable<SourceDateDto>? dates, int sourceId)
+    {
+        if (dates is null || !dates.Any()) return;
+        var sourceDates = dates.Select(d => new SourceDate
+        {
+            SourceId = sourceId,
+            DateFormatId = d.DateFormatId,
+            FromYear = d.FromYear,
+            ToYear = d.ToYear
+        });
+        _context.SourceDates.AddRange(sourceDates);
+    }
+    private void AddCoverPhoto(CoverPhotoDto? cover, int sourceId)
+    {
+        if (cover == null) return;
+        _context.CoverPhotos.Add(new CoverPhoto
+        {
+            FileName = cover.FileName,
+            FilePath = cover.FilePath,
+            FileExtension = cover.FileExtension,
+            SourceId = sourceId
+        });
+    }
+    private void AddAttachments(IEnumerable<AttachmentDto>? attachments, int sourceId)
+    {
+        if (attachments is null) return;
+        var files = attachments.Select(a => new Attachment
+        {
+            FileName = a.FileName,
+            FilePath = a.FilePath,
+            FileExtension = a.FileExtension,
+            SourceId = sourceId
+        });
+        _context.Attachments.AddRange(files);
+    }
+    private void AddPublications(IEnumerable<PublicationDto>? publications, int sourceId)
+    {
+        if (publications is null) return;
+        var pubs = publications.Select(p => new Publication
+        {
+            Url = p.Url,
+            Description = p.Description,
+            SourceId = sourceId
+        });
+        _context.Publications.AddRange(pubs);
     }
 }

@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.FileProviders;
+﻿using FluentValidation;
+using Microsoft.Extensions.FileProviders;
 using Serilog;
+using SyriacSources.Backend.Application.Sources.Commands.CreateSource;
 using SyriacSources.Backend.Infrastructure.Data;
 using SyriacSources.Backend.Web.Endpoints;
 
@@ -12,6 +14,7 @@ builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder);
 builder.Services.AddWebServices();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateSourceValidator>();
 
 // Set up Serilog
 Log.Logger = new LoggerConfiguration()

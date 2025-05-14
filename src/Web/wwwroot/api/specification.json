@@ -39,7 +39,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SearchSourcesQuery"
+                "$ref": "#/components/schemas/SearchSources"
               }
             }
           },
@@ -1083,7 +1083,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateSourceCommand"
+                "$ref": "#/components/schemas/CreateSource"
               }
             }
           },
@@ -1135,19 +1135,31 @@
           "Sources"
         ],
         "operationId": "GetSources",
+        "parameters": [
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            },
+            "x-position": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            },
+            "x-position": 2
+          }
+        ],
         "responses": {
           "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SourceDto"
-                  }
-                }
-              }
-            }
+            "description": ""
           }
         }
       }
@@ -1561,19 +1573,28 @@
             "type": "integer",
             "format": "int32"
           },
+          "authorId": {
+            "type": "integer",
+            "format": "int32"
+          },
           "authorName": {
             "type": "string"
+          },
+          "centuryId": {
+            "type": "integer",
+            "format": "int32"
           },
           "centuryName": {
             "type": "string"
           },
-          "documentedOnHijri": {
-            "type": "string",
-            "format": "date-time"
+          "introductionEditorId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
-          "documentedOnGregorian": {
+          "introductionEditorName": {
             "type": "string",
-            "format": "date-time"
+            "nullable": true
           },
           "introduction": {
             "type": "string",
@@ -1588,10 +1609,6 @@
             "nullable": true
           },
           "sourceTitleInForeignLanguage": {
-            "type": "string",
-            "nullable": true
-          },
-          "introductionEditorName": {
             "type": "string",
             "nullable": true
           },
@@ -1618,6 +1635,12 @@
                 "$ref": "#/components/schemas/CoverPhotoDto"
               }
             ]
+          },
+          "sourceDates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceDateDto"
+            }
           },
           "created": {
             "type": "string",
@@ -1687,7 +1710,33 @@
           }
         }
       },
-      "SearchSourcesQuery": {
+      "SourceDateDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dateFormatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fromYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "toYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "period": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "SearchSources": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1707,19 +1756,38 @@
             "type": "string",
             "nullable": true
           },
-          "authorName": {
-            "type": "string",
+          "authorIds": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "centuryIds": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "introductionEditorId": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
-          "introductionEditorName": {
-            "type": "string",
+          "fromYear": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
-          "centuryName": {
-            "type": "string",
+          "toYear": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
-          "documentedOn": {
+          "period": {
             "type": "string",
             "nullable": true
           }
@@ -2113,23 +2181,29 @@
           }
         }
       },
-      "CreateSourceCommand": {
+      "CreateSource": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "authorName": {
-            "type": "string"
+          "authorId": {
+            "type": "integer",
+            "format": "int32"
           },
-          "centuryName": {
-            "type": "string"
+          "centuryId": {
+            "type": "integer",
+            "format": "int32"
           },
-          "documentedOnHijri": {
-            "type": "string",
-            "format": "date-time"
+          "introductionEditorId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
-          "documentedOnGregorian": {
-            "type": "string",
-            "format": "date-time"
+          "sourceDates": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/SourceDateDto"
+            }
           },
           "introduction": {
             "type": "string",
@@ -2144,10 +2218,6 @@
             "nullable": true
           },
           "sourceTitleInForeignLanguage": {
-            "type": "string",
-            "nullable": true
-          },
-          "introductionEditorName": {
             "type": "string",
             "nullable": true
           },
@@ -2167,46 +2237,15 @@
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/AttachmentDto2"
+              "$ref": "#/components/schemas/AttachmentDto"
             }
           },
           "publications": {
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/PublicationDto2"
+              "$ref": "#/components/schemas/PublicationDto"
             }
-          }
-        }
-      },
-      "AttachmentDto2": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "fileName": {
-            "type": "string",
-            "nullable": true
-          },
-          "filePath": {
-            "type": "string",
-            "nullable": true
-          },
-          "fileExtension": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "PublicationDto2": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "url": {
-            "type": "string"
           }
         }
       },
@@ -2218,21 +2257,25 @@
             "type": "integer",
             "format": "int32"
           },
-          "authorName": {
-            "type": "string",
+          "authorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "centuryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "introductionEditorId": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
-          "centuryName": {
-            "type": "string",
-            "nullable": true
-          },
-          "documentedOnHijri": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "documentedOnGregorian": {
-            "type": "string",
-            "format": "date-time"
+          "sourceDates": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/SourceDateDto"
+            }
           },
           "introduction": {
             "type": "string",
@@ -2247,10 +2290,6 @@
             "nullable": true
           },
           "sourceTitleInForeignLanguage": {
-            "type": "string",
-            "nullable": true
-          },
-          "introductionEditorName": {
             "type": "string",
             "nullable": true
           },

@@ -12,4 +12,4 @@ public class CreateUserCommandValidator : AbstractValidator<CreateRoleCommand>
             .MaximumLength(200)
             .NotEmpty();
     }
-}
+} 

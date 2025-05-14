@@ -24,21 +24,24 @@ public class GetSourceHandler : IRequestHandler<GetSource, SourceDto>
             .Include(x => x.Publications)
             .Include(x => x.OtherAttachments)
             .Include(x => x.CoverPhoto)
+            .Include(x => x.SourceDates)
+                .ThenInclude(d => d.DateFormat)
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         if (entity == null)
             throw new NotFoundException(nameof(Source), request.Id.ToString());
         return new SourceDto
         {
             Id = entity.Id,
+            AuthorId = entity.AuthorId,
             AuthorName = entity.Author.Name,
+            CenturyId = entity.CenturyId,
             CenturyName = entity.Century.Name,
-            DocumentedOnHijri = entity.DocumentedOnHijri,
-            DocumentedOnGregorian = entity.DocumentedOnGregorian,
+            IntroductionEditorId = entity.IntroductionEditorId,
+            IntroductionEditorName = entity.IntroductionEditor?.FullNameAR,
             Introduction = entity.Introduction,
             SourceTitleInArabic = entity.SourceTitleInArabic,
             SourceTitleInSyriac = entity.SourceTitleInSyriac,
             SourceTitleInForeignLanguage = entity.SourceTitleInForeignLanguage,
-            IntroductionEditorName = entity.IntroductionEditor.FullNameAR,
             AdditionalInfo = entity.AdditionalInfo,
             Created = entity.Created,
             CreatedBy = entity.CreatedBy,
@@ -62,7 +65,16 @@ public class GetSourceHandler : IRequestHandler<GetSource, SourceDto>
                     FilePath = entity.CoverPhoto.FilePath,
                     FileExtension = entity.CoverPhoto.FileExtension
                 }
-                : null
+                : null,
+            SourceDates = entity.SourceDates.Select(d => new SourceDateDto
+            {
+                DateFormatId = d.DateFormatId,
+                FromYear = d.FromYear,
+                ToYear = d.ToYear,
+                Format = d.DateFormat != null ? d.DateFormat.Format : null,
+                Period = d.DateFormat != null ? d.DateFormat.Period : null
+            }).ToList()
         };
     }
 }
+

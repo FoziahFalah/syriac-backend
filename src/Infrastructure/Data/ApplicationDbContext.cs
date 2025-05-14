@@ -5,6 +5,7 @@ using SyriacSources.Backend.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System.Reflection.Emit;
 
 namespace SyriacSources.Backend.Infrastructure.Data;
 
@@ -20,6 +21,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, I
     public DbSet<Century> Centuries => Set<Century>();
     public DbSet<ExcerptComment> Comments => Set<ExcerptComment>();
     public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
+    public DbSet<SourceDate> SourceDates => Set<SourceDate>();
     public DbSet<CoverPhoto> CoverPhotos => Set<CoverPhoto>();
     public DbSet<ApplicationRolePermission> ApplicationRolePermissions => Set<ApplicationRolePermission>();
     public DbSet<ApplicationPermission> ApplicationPermissions => Set<ApplicationPermission>();
@@ -49,6 +51,10 @@ public class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, I
             .HasOne(s => s.CoverPhoto)
             .WithOne()
             .HasForeignKey<CoverPhoto>(c => c.SourceId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<SourceDate>()
+        .HasOne(d => d.Source)
+       .WithMany(s => s.SourceDates)
+       .HasForeignKey(d => d.SourceId);
     }
 }

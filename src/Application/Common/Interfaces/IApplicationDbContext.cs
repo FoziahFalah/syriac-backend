@@ -6,7 +6,7 @@ public interface IApplicationDbContext
 {
 
     public DbSet<TodoList> TodoLists{ get; }
-
+    public DbSet<SourceDate> SourceDates { get; }
     public DbSet<TodoItem> TodoItems { get; }
     public DbSet<Attachment> Attachments { get; }
     public DbSet<Author> Authors { get; }
