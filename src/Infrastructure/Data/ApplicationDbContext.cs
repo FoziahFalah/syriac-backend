@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection.Emit;
+using SyriacSources.Backend.Infrastructure.Data.Configurations;
 
 namespace SyriacSources.Backend.Infrastructure.Data;
 
@@ -46,15 +47,8 @@ public class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, I
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        // الربط الصحيح بين Source و CoverPhoto
-        builder.Entity<Source>()
-            .HasOne(s => s.CoverPhoto)
-            .WithOne()
-            .HasForeignKey<CoverPhoto>(c => c.SourceId)
-            .OnDelete(DeleteBehavior.Restrict);
-        builder.Entity<SourceDate>()
-        .HasOne(d => d.Source)
-       .WithMany(s => s.SourceDates)
-       .HasForeignKey(d => d.SourceId);
+        builder.ApplyConfiguration(new SourceConfiguration());
+        builder.ApplyConfiguration(new SourceDateConfiguration());
+
     }
 }

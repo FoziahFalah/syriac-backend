@@ -32,5 +32,9 @@ public class SourceConfiguration : IEntityTypeConfiguration<Source>
         builder.HasIndex(p => p.SourceTitleInArabic)
             .HasDatabaseName("SourceTitleInArabic");
 
+        builder.HasOne(s => s.CoverPhoto)
+          .WithOne()
+          .HasForeignKey<CoverPhoto>(c => c.SourceId)
+          .OnDelete(DeleteBehavior.Restrict);
     }
 }

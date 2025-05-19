@@ -24,6 +24,9 @@ namespace SyriacSources.Backend.Infrastructure.Data.Configurations
                    .OnDelete(DeleteBehavior.Restrict);
             builder.Property(sd => sd.FromYear).IsRequired();
             builder.Property(sd => sd.ToYear).IsRequired();
+            builder.HasOne(d => d.Source)
+                   .WithMany(s => s.SourceDates)
+                   .HasForeignKey(d => d.SourceId);
         }
     }
 }

@@ -11,7 +11,7 @@ public class GetSourcesWithPagination : IRequest<PaginatedList<SourceDto>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
-    // فلترة
+   
     public int? AuthorId { get; init; }
     public int? CenturyId { get; init; }
 }

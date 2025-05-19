@@ -28,7 +28,7 @@ public class Sources : EndpointGroupBase
             var file = request.Form.Files["file"];
             if (file == null || file.Length == 0)
                 return Results.BadRequest("الملف غير موجود");
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
             if (!Directory.Exists(uploadsFolder))
                 Directory.CreateDirectory(uploadsFolder);
             var fileName = $"PHOTO-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}-{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
@@ -40,13 +40,13 @@ public class Sources : EndpointGroupBase
             return Results.Ok(new
             {
                 FileName = fileName,
-                FilePath = $"/uploads/{fileName}",
+                FilePath = $"/uploads/{fileName}",  
                 FileExtension = Path.GetExtension(file.FileName)
             });
         })
-.Accepts<IFormFile>("multipart/form-data")
-.Produces(200)
-.WithName("UploadCoverPhoto");
+ .Accepts<IFormFile>("multipart/form-data")
+ .Produces(200)
+ .WithName("UploadCoverPhoto");
 
         app.MapPost("/api/sources/search", async (
     [FromBody] SearchSources query,

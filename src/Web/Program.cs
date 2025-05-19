@@ -79,12 +79,19 @@ app.UseAuthorization();
 
 app.UseRouting();
 
+app.UseStaticFiles(); 
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
-    RequestPath = "/uploads"
+FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")),
+RequestPath = "/uploads"
 });
+
+
+
+
+
+
 
 try
 {

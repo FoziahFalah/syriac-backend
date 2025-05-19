@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SyriacSources.Backend.Application.Sources
 {
-    public class AttachmentDto
+    public class AttachmentDto  
     {
         public string? FileName { get; set; }
         public string? FilePath { get; set; }

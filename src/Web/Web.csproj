@@ -38,7 +38,84 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="uploads\" />
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\uploads\PHOTO-1446-10-24-12-14-20-ac5563fd-a4b0-41db-8438-0eda4524c251.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-24-14-09-42-d9eb03ba-f81d-4f9c-88c9-e8b25cfd7494.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-24-14-20-28-f4be861c-5696-4232-8078-e110270de022.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-25-14-57-10-a2c36417-eea1-4d17-9f3d-a788cdd7b16b.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-25-15-01-08-a9c9111c-3bfd-4aa0-9383-9d661777b0af.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-26-12-00-32-e364e515-94dc-4376-8441-264325c696c6.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-26-12-00-39-46b94568-0350-4f9b-ac4a-79431a038e67.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-26-13-57-18-db5d55f1-524c-4c6b-bec2-8640cd4f5751.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-29-11-29-46-fec98592-7ec6-4e29-880d-4e057d9884f8.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-29-11-45-28-df2b7d06-d7bc-4d1b-aae8-179380f12bae.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-29-15-15-48-b127b793-98e9-4cc1-bbe5-1f18afe9bd2d.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-11-06-20-8f334e0c-231d-402f-95e0-a3acc1544690.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-11-07-06-8980c36e-74ec-4b70-8cf7-f21310bd8a70.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-11-08-34-53b49655-8503-42d3-b2bb-a65b5cb3cc1b.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-11-11-25-59a9a3ce-b11f-4ac0-9bae-ed284c13d95f.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-13-57-18-9398071b-c42a-4d95-9fdd-fd9f2a8dfe1a.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-13-57-22-345d23a3-fcd8-448d-9181-25b3097e071e.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-14-20-00-83b94fbc-a9ad-4e1c-bd36-b8d3ebbfe2c3.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-14-20-08-8185203d-d6e7-4332-8bea-5cc0ae41150b.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-14-25-44-779ddd8b-f52c-4394-a91c-3bc61033f78d.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-14-25-48-de768c46-835e-419f-82ef-5fa2b9aae6da.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-14-30-33-ee5ed88f-b587-4201-9dfa-f7fc212e415d.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-14-30-37-08a42313-9334-4bd8-a530-4cfb9f7120e8.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-14-44-23-58d831d9-19d6-4221-976e-7e6cca655311.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-14-44-29-d9d85462-6282-4475-bfe1-532694a09eed.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-15-15-31-0b854d9b-8ec3-441a-8ddc-29668e403ad4.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-10-30-15-15-35-438f3444-c3ef-4658-8665-639471ad8848.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-10-00-57-cc53160a-683d-4db4-a784-8249d1922b0f.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-11-05-38-506fa046-3300-42f1-96b6-61853125fb07.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-11-07-27-3b8a2232-4f98-423d-a4e9-7bfc32fdebd6.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-11-08-19-e3f17570-cb95-4fb9-97f1-c20f06dd15a1.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-12-49-20-786e41cb-3df0-477e-8d76-938ac05b7c9e.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-12-50-42-bc14c836-c0d3-4945-8349-3fb8ed0c0098.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-12-58-15-6f944ed8-3233-4a43-b37f-aa8697b9dffa.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-12-58-19-eb93cd14-c666-4c21-9d08-f10263513572.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-13-49-40-60c60e84-6319-48e3-ad31-3ecdab7b14f3.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-13-49-44-acf54ebd-b034-4bd3-a5eb-0701dabe9baf.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-03-32-4a9dfe1b-bcff-435e-8220-cea4765c1507.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-03-36-9c70671a-5121-44f6-8e11-52ba5f4c94b3.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-08-40-8d611c19-e72b-468c-ae1e-327a0f0c8bb5.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-08-44-0c0026ba-0118-4ec6-856a-818eba9ff33a.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-13-14-e4458121-3bdd-4fe3-81df-5266e15089e2.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-13-19-77f967e9-9f3f-4ea9-83bc-19817d69a2ee.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-22-28-3595e213-3e1d-4f3a-bd33-3c8ecf625844.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-36-37-a90e109b-b7ef-46f9-acd9-00776e8cfe5b.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-45-20-b0632f72-05f2-40df-adb7-80d543f216aa.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-45-23-fb617890-e9df-46d5-a67c-478d2e181f2d.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-51-27-e9b6cd7d-6f45-4b09-81a7-0ee52daefda9.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-14-51-31-7c55cd1f-6ed9-4f41-b122-dbbdd9039e98.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-15-49-16-ad0a0497-aafb-454f-a19f-24cb43bf6d7f.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-02-15-49-19-36e6d77d-83a3-4222-9eeb-e1ed8d582d1a.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-11-13-01-8ae8e0c9-533c-4922-a900-6b61a1951ce8.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-11-40-56-142c4f6d-cc02-4db4-8a08-d9b2dbf4304f.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-11-41-07-9603658d-3744-4d13-bda7-242ae5555e83.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-11-43-41-2c6b877b-d503-4f5f-b1d7-b46a7c42b7f6.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-11-43-47-dde58ecf-90f0-477b-b98c-d7df5c2fc9ac.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-11-43-51-d67bef0f-79f7-4e51-ad7b-9ca6f44c133c.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-11-59-11-2a7e2237-bbd2-4d11-a467-20f89a2ffbcb.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-12-26-03-31d282f9-46c9-48fc-8509-06e2f7c9cfb2.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-12-27-19-63c4fbfe-528d-411a-8017-6502b4c4cb9b.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-14-20-43-5be29331-7b32-4ea0-b9b9-0b02dda65a8e.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-14-22-53-f232bf84-81fb-499d-bbc7-83431b3ad770.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-14-23-03-2d90036d-81b4-4ed3-9db0-77355ed33a72.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-14-42-45-f6f7678d-4034-4f2a-a562-b73cb3c75068.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-15-07-40-c73a4f54-fc30-4a45-9719-a14fe1720bb1.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-03-15-08-02-978ab5af-a2ba-432e-9779-676e3fd1b994.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-08-10-43-42-4de45d16-0846-4036-b698-2cc366e4208f.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-08-10-43-47-15b2ab4f-7a62-4623-b0f7-f2efab287f21.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-08-14-52-48-559bcfea-3712-4002-8087-1a45605d81bb.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-08-14-52-52-c8655cde-a27c-468f-8ed6-e6dd101f727a.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-15-15-07-23-fb67c609-9b85-4ccc-af85-3e68b5af365a.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-15-15-07-51-b86c6028-3067-4099-8cd3-ea749044d5f6.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-15-15-10-09-0c4e29c5-0e82-4cbf-b22d-797ea5f07b2b.jpg" />
+    <None Include="wwwroot\uploads\PHOTO-1446-11-15-15-10-13-87630562-70db-4130-82e8-29ccfb2f3ffe.jpg" />
   </ItemGroup>
 
   <!-- Auto-generated Open API specification and Angular TypeScript clients -->
