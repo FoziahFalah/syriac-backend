@@ -22,7 +22,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, I
     public DbSet<Century> Centuries => Set<Century>();
     public DbSet<ExcerptComment> Comments => Set<ExcerptComment>();
     public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
-    public DbSet<SourceDate> SourceDates => Set<SourceDate>();
+    
     public DbSet<CoverPhoto> CoverPhotos => Set<CoverPhoto>();
     public DbSet<ApplicationRolePermission> ApplicationRolePermissions => Set<ApplicationRolePermission>();
     public DbSet<ApplicationPermission> ApplicationPermissions => Set<ApplicationPermission>();
@@ -37,6 +37,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, I
     public DbSet<Publication> Publications => Set<Publication>();
     public DbSet<SourceIntroEditor> SourceIntroductionEditors => Set<SourceIntroEditor>();
     public DbSet<Source> Sources => Set<Source>();
+    public DbSet<SourceDate> SourceDates => Set<SourceDate>();
 
     public Task SaveChangesAsync()
     {
