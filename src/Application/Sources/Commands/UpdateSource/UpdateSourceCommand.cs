@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using MediatR;
 namespace SyriacSources.Backend.Application.Sources.Commands.UpdateSource;
 
-public class UpdateSource : IRequest
+public class UpdateSourceCommand : IRequest
 {
     public int Id { get; set; }
     public int AuthorId { get; set; }
@@ -24,14 +24,14 @@ public class UpdateSource : IRequest
     public List<AttachmentDto>? OtherAttachments { get; set; }
     public List<PublicationDto>? Publications { get; set; }
 }
-public class UpdateSourceHandler : IRequestHandler<UpdateSource>
+public class UpdateSourceHandler : IRequestHandler<UpdateSourceCommand>
 {
     private readonly IApplicationDbContext _context;
     public UpdateSourceHandler(IApplicationDbContext context)
     {
         _context = context;
     }
-        public async Task<Unit> Handle(UpdateSource request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateSourceCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.Sources
                 .Include(s => s.SourceDates)
@@ -113,7 +113,7 @@ public class UpdateSourceHandler : IRequestHandler<UpdateSource>
             return Unit.Value;
         }
 
-    Task IRequestHandler<UpdateSource>.Handle(UpdateSource request, CancellationToken cancellationToken)
+    Task IRequestHandler<UpdateSourceCommand>.Handle(UpdateSourceCommand request, CancellationToken cancellationToken)
     {
         return Handle(request, cancellationToken);
     }

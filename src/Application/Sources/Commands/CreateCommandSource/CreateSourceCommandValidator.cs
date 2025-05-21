@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SyriacSources.Backend.Application.Common.Constants;
-using SyriacSources.Backend.Application.Common.Interfaces;
 
-namespace SyriacSources.Backend.Application.Sources.Commands.UpdateSource
+namespace SyriacSources.Backend.Application.Sources.Commands.CreateSource
 {
-    public class UpdateSourceValidator : AbstractValidator<UpdateSource>
+    public class CreateSourceCommandValidator : AbstractValidator<CreateSource>
     {
-        public UpdateSourceValidator()
+        public CreateSourceCommandValidator()
         {
             RuleFor(v => v.AuthorId)
-                .GreaterThan(0).WithMessage("يجب اختيار مؤلف.");
+                 .GreaterThan(0).WithMessage("يجب اختيار مؤلف.");
             RuleFor(v => v.CenturyId)
                 .GreaterThan(0).WithMessage("يجب اختيار قرن.");
             RuleFor(v => v.SourceTitleInArabic)

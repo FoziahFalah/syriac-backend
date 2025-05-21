@@ -3,23 +3,23 @@ using SyriacSources.Backend.Application.Common.Exceptions;
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Domain.Entities;
 namespace SyriacSources.Backend.Application.Sources.Commands;
-public class DeleteSource : IRequest
+public class DeleteSourceCommand : IRequest
 {
-    public DeleteSource(int id)
+    public DeleteSourceCommand(int id)
     {
         Id = id;
     }
 
     public int Id { get; set; }
 }
-public class DeleteSourceHandler : IRequestHandler<DeleteSource>
+public class DeleteSourceHandler : IRequestHandler<DeleteSourceCommand>
 {
     private readonly IApplicationDbContext _context;
     public DeleteSourceHandler(IApplicationDbContext context)
     {
         _context = context;
     }
-    public async Task<Unit> Handle(DeleteSource request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(DeleteSourceCommand request, CancellationToken cancellationToken)
     {
         var source = await _context.Sources
             .Include(s => s.SourceDates)
@@ -44,7 +44,7 @@ public class DeleteSourceHandler : IRequestHandler<DeleteSource>
         return Unit.Value;
     }
 
-    Task IRequestHandler<DeleteSource>.Handle(DeleteSource request, CancellationToken cancellationToken)
+    Task IRequestHandler<DeleteSourceCommand>.Handle(DeleteSourceCommand request, CancellationToken cancellationToken)
     {
         return Handle(request, cancellationToken);
     }

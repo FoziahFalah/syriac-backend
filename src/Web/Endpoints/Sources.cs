@@ -9,55 +9,28 @@ using SyriacSources.Backend.Application.Sources.Commands.CreateSource;
 using SyriacSources.Backend.Application.Sources.Commands.UpdateSource;
 using SyriacSources.Backend.Application.Sources.Queries;
 using SyriacSources.Backend.Application.Sources.Queries.SearchSources;
+using SyriacSources.Backend.Domain.Common.Interfaces;
+
+using Microsoft.AspNetCore.Http;
+
 namespace SyriacSources.Backend.Web.Endpoints;
 public class Sources : EndpointGroupBase
 {
-
     public override void Map(WebApplication app)
     {
-
-          
         app.MapGroup(this)
             .MapPost(CreateSource, "Create")
             .MapGet(GetSource, "Get/{id}")
             .MapGet(GetSources, "Get")
             .MapPut(UpdateSource, "Update/{id}")
-            .MapDelete(DeleteSource, "Delete/{id}");
-        app.MapPost("/api/Sources/UploadCover", async (HttpRequest request) =>
-        {
-            var file = request.Form.Files["file"];
-            if (file == null || file.Length == 0)
-                return Results.BadRequest("الملف غير موجود");
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
-            if (!Directory.Exists(uploadsFolder))
-                Directory.CreateDirectory(uploadsFolder);
-            var fileName = $"PHOTO-{DateTime.Now:yyyy-MM-dd-HH-mm-ss}-{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(uploadsFolder, fileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-            return Results.Ok(new
-            {
-                FileName = fileName,
-                FilePath = $"/uploads/{fileName}",  
-                FileExtension = Path.GetExtension(file.FileName)
-            });
-        })
- .Accepts<IFormFile>("multipart/form-data")
- .Produces(200)
- .WithName("UploadCoverPhoto");
-
-        app.MapPost("/api/sources/search", async (
-    [FromBody] SearchSources query,
-    ISender sender) =>
-        {
-            var result = await sender.Send(query);
-            return Results.Ok(result);
-        })
-.WithName("SearchSources")
-.Produces<List<SourceDto>>(200);
-
+            .MapDelete(DeleteSource, "Delete/{id}")
+            .MapPost(UploadCover, "upload_cover")
+            .MapPost(SearchSources, "Search");
+        app.MapPost("/api/sources/upload_cover", UploadCover)
+    .Accepts<IFormFile>("multipart/form-data")
+    .Produces(200)
+    .WithName("UploadCoverPhoto")
+    .WithMetadata(new Microsoft.AspNetCore.Mvc.IgnoreAntiforgeryTokenAttribute());  
 
     }
     public async Task<IResult> CreateSource(ISender sender, CreateSource command)
@@ -78,7 +51,7 @@ public class Sources : EndpointGroupBase
         });
         return Results.Ok(result);
     }
-    public async Task<IResult> UpdateSource(ISender sender, int id, UpdateSource command)
+    public async Task<IResult> UpdateSource(ISender sender, int id, UpdateSourceCommand command)
     {
         if (id != command.Id) return Results.BadRequest();
         await sender.Send(command);
@@ -86,10 +59,34 @@ public class Sources : EndpointGroupBase
     }
     public async Task<IResult> DeleteSource(ISender sender, int id)
     {
-        await sender.Send(new DeleteSource(id));
+        await sender.Send(new DeleteSourceCommand(id));
         return Results.NoContent();
     }
 
-
+    public async Task<IResult> UploadCover(HttpContext context, IFileServices fileService)
+    {
+        var file = context.Request.Form.Files["file"];
+        if (file == null || file.Length == 0)
+            return Results.BadRequest("الملف غير موجود");
+        using var stream = file.OpenReadStream();
+        var savedPath = await fileService.SaveFileAsync(file.FileName, stream);
+        return Results.Ok(new
+        {
+            FileName = Path.GetFileName(savedPath),
+            FilePath = $"/{savedPath}",
+            FileExtension = Path.GetExtension(savedPath)
+        });
+    }
+    public async Task<IResult> SearchSources([FromBody] SearchSources query, ISender sender)
+    {
+        var result = await sender.Send(query);
+        return Results.Ok(result);
+    }
 }
+
+
+
+
+
+
 

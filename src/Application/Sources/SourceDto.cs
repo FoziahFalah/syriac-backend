@@ -24,22 +24,16 @@ public class SourceDto
     public string? CreatedBy { get; set; }
     public DateTimeOffset LastModified { get; set; }
     public string? LastModifiedBy { get; set; }
-    private class Mapping : Profile
+    public class Mapping : Profile
     {
         public Mapping()
         {
             CreateMap<Source, SourceDto>()
-                .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author.Name))
-                .ForMember(dest => dest.CenturyName, opt => opt.MapFrom(src => src.Century.Name))
-                .ForMember(dest => dest.IntroductionEditorName, opt => opt.MapFrom(
-                    src => src.IntroductionEditor != null ? src.IntroductionEditor.FullNameAR : null))
-                .ForMember(dest => dest.SourceDates, opt => opt.MapFrom(src => src.SourceDates));
-            CreateMap<Attachment, AttachmentDto>();
-            CreateMap<Publication, PublicationDto>();
-            CreateMap<CoverPhoto, CoverPhotoDto>();
-            CreateMap<SourceDate, SourceDateDto>()
-                .ForMember(dest => dest.Format, opt => opt.MapFrom(src => src.DateFormat != null ? src.DateFormat.Format : null))
-                .ForMember(dest => dest.Period, opt => opt.MapFrom(src => src.DateFormat != null ? src.DateFormat.Period : null));
+             .ForMember(dest => dest.AuthorName, opt => opt.MapFrom(src => src.Author.Name))
+             .ForMember(dest => dest.CenturyName, opt => opt.MapFrom(src => src.Century.Name))
+             .ForMember(dest => dest.IntroductionEditorName, opt => opt.MapFrom(
+                 src => src.IntroductionEditor != null ? src.IntroductionEditor.FullNameAR : null));
+
         }
     }
 }

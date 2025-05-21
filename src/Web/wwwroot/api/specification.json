@@ -7,7 +7,7 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/Sources/UploadCover": {
+    "/api/sources/upload_cover": {
       "post": {
         "operationId": "UploadCoverPhoto",
         "requestBody": {
@@ -27,38 +27,6 @@
         "responses": {
           "200": {
             "description": ""
-          }
-        }
-      }
-    },
-    "/api/sources/search": {
-      "post": {
-        "operationId": "SearchSources",
-        "requestBody": {
-          "x-name": "query",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SearchSources"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SourceDto"
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -1187,7 +1155,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateSource"
+                "$ref": "#/components/schemas/UpdateSourceCommand"
               }
             }
           },
@@ -1219,6 +1187,44 @@
             "x-position": 1
           }
         ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Sources/upload_cover": {
+      "post": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "UploadCover",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Sources/Search": {
+      "post": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "SearchSources",
+        "requestBody": {
+          "x-name": "query",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchSources"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": ""
@@ -1565,234 +1571,6 @@
   },
   "components": {
     "schemas": {
-      "SourceDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "authorId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "authorName": {
-            "type": "string"
-          },
-          "centuryId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "centuryName": {
-            "type": "string"
-          },
-          "introductionEditorId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "introductionEditorName": {
-            "type": "string",
-            "nullable": true
-          },
-          "introduction": {
-            "type": "string",
-            "nullable": true
-          },
-          "sourceTitleInArabic": {
-            "type": "string",
-            "nullable": true
-          },
-          "sourceTitleInSyriac": {
-            "type": "string",
-            "nullable": true
-          },
-          "sourceTitleInForeignLanguage": {
-            "type": "string",
-            "nullable": true
-          },
-          "additionalInfo": {
-            "type": "string",
-            "nullable": true
-          },
-          "publications": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PublicationDto"
-            }
-          },
-          "otherAttachments": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/AttachmentDto"
-            }
-          },
-          "coverPhoto": {
-            "nullable": true,
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/CoverPhotoDto"
-              }
-            ]
-          },
-          "sourceDates": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/SourceDateDto"
-            }
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "createdBy": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastModified": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastModifiedBy": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "PublicationDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "url": {
-            "type": "string"
-          }
-        }
-      },
-      "AttachmentDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "fileName": {
-            "type": "string",
-            "nullable": true
-          },
-          "filePath": {
-            "type": "string",
-            "nullable": true
-          },
-          "fileExtension": {
-            "type": "string",
-            "nullable": true
-          },
-          "created": {
-            "type": "string",
-            "format": "date-time"
-          }
-        }
-      },
-      "CoverPhotoDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "fileName": {
-            "type": "string"
-          },
-          "filePath": {
-            "type": "string"
-          },
-          "fileExtension": {
-            "type": "string"
-          }
-        }
-      },
-      "SourceDateDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "dateFormatId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "fromYear": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "toYear": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "format": {
-            "type": "string",
-            "nullable": true
-          },
-          "period": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "SearchSources": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "sourceTitleInArabic": {
-            "type": "string",
-            "nullable": true
-          },
-          "sourceTitleInSyriac": {
-            "type": "string",
-            "nullable": true
-          },
-          "sourceTitleInForeignLanguage": {
-            "type": "string",
-            "nullable": true
-          },
-          "introduction": {
-            "type": "string",
-            "nullable": true
-          },
-          "authorIds": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "centuryIds": {
-            "type": "array",
-            "nullable": true,
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "introductionEditorId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "fromYear": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "toYear": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          },
-          "period": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
       "CreateDateFormatCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -2249,7 +2027,178 @@
           }
         }
       },
-      "UpdateSource": {
+      "SourceDateDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dateFormatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fromYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "toYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "format": {
+            "type": "string",
+            "nullable": true
+          },
+          "period": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "CoverPhotoDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileName": {
+            "type": "string"
+          },
+          "filePath": {
+            "type": "string"
+          },
+          "fileExtension": {
+            "type": "string"
+          }
+        }
+      },
+      "AttachmentDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "nullable": true
+          },
+          "filePath": {
+            "type": "string",
+            "nullable": true
+          },
+          "fileExtension": {
+            "type": "string",
+            "nullable": true
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PublicationDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "SourceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "authorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "authorName": {
+            "type": "string"
+          },
+          "centuryId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "centuryName": {
+            "type": "string"
+          },
+          "introductionEditorId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "introductionEditorName": {
+            "type": "string",
+            "nullable": true
+          },
+          "introduction": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInArabic": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInSyriac": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInForeignLanguage": {
+            "type": "string",
+            "nullable": true
+          },
+          "additionalInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "publications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PublicationDto"
+            }
+          },
+          "otherAttachments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AttachmentDto"
+            }
+          },
+          "coverPhoto": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CoverPhotoDto"
+              }
+            ]
+          },
+          "sourceDates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SourceDateDto"
+            }
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdBy": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastModifiedBy": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateSourceCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -2318,6 +2267,63 @@
             "items": {
               "$ref": "#/components/schemas/PublicationDto"
             }
+          }
+        }
+      },
+      "SearchSources": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sourceTitleInArabic": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInSyriac": {
+            "type": "string",
+            "nullable": true
+          },
+          "sourceTitleInForeignLanguage": {
+            "type": "string",
+            "nullable": true
+          },
+          "introduction": {
+            "type": "string",
+            "nullable": true
+          },
+          "authorIds": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "centuryIds": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "introductionEditorId": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "fromYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "toYear": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "period": {
+            "type": "string",
+            "nullable": true
           }
         }
       },

@@ -12,8 +12,7 @@ namespace SyriacSources.Backend.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<SourceDate> builder)
         {
-            builder.ToTable("SourceDates");
-            builder.HasKey(sd => sd.Id);
+           
             builder.HasOne(sd => sd.Source)
                    .WithMany(s => s.SourceDates)
                    .HasForeignKey(sd => sd.SourceId)

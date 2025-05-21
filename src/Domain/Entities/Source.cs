@@ -18,4 +18,28 @@ public class Source : BaseAuditableEntity
     public CoverPhoto? CoverPhoto { get; set; }
     public List<Attachment> OtherAttachments { get; set; } = new();
     public string? AdditionalInfo { get; set; }
+
+
+    public void AddCoverPhoto(CoverPhoto? cover)
+    {
+        if (cover == null) return;
+        CoverPhoto = cover;
+    }
+    public void AddAttachments(IEnumerable<Attachment>? attachments)
+    {
+        if (attachments == null) return;
+        OtherAttachments.AddRange(attachments);
+    }
+    public void AddPublications(IEnumerable<Publication>? publications)
+    {
+        if (publications == null) return;
+        Publications.AddRange(publications);
+    }
+    public void AddSourceDates(IEnumerable<SourceDate>? dates)
+    {
+        if (dates == null) return;
+        SourceDates.AddRange(dates);
+    }
+
+
 }
