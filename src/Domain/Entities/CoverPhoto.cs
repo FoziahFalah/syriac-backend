@@ -8,8 +8,8 @@ namespace SyriacSources.Backend.Domain.Entities;
 public class CoverPhoto : BaseAuditableEntity
 {
     public int SourceId { get; set; }
-    public required string FileName { get; set; }
-    public required string FilePath { get; set; }
-    public required string FileExtension { get; set; }
+    public string? FileName { get; set; }
+    public string? FilePath { get; set; }
+    public string? FileExtension { get; set; }
 
 }

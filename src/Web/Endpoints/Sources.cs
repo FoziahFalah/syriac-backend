@@ -9,9 +9,6 @@ using SyriacSources.Backend.Application.Sources.Commands.CreateSource;
 using SyriacSources.Backend.Application.Sources.Commands.UpdateSource;
 using SyriacSources.Backend.Application.Sources.Queries;
 using SyriacSources.Backend.Application.Sources.Queries.SearchSources;
-using SyriacSources.Backend.Domain.Common.Interfaces;
-
-using Microsoft.AspNetCore.Http;
 
 namespace SyriacSources.Backend.Web.Endpoints;
 public class Sources : EndpointGroupBase
@@ -24,14 +21,8 @@ public class Sources : EndpointGroupBase
             .MapGet(GetSources, "Get")
             .MapPut(UpdateSource, "Update/{id}")
             .MapDelete(DeleteSource, "Delete/{id}")
-            .MapPost(UploadCover, "upload_cover")
-            .MapPost(SearchSources, "Search");
-        app.MapPost("/api/sources/upload_cover", UploadCover)
-    .Accepts<IFormFile>("multipart/form-data")
-    .Produces(200)
-    .WithName("UploadCoverPhoto")
-    .WithMetadata(new Microsoft.AspNetCore.Mvc.IgnoreAntiforgeryTokenAttribute());  
-
+            .MapPost(SearchSources, "Search")
+            .MapPost(UploadSourceCover, "UploadSourceCoverPhoto");
     }
     public async Task<IResult> CreateSource(ISender sender, CreateSource command)
     {
@@ -63,20 +54,14 @@ public class Sources : EndpointGroupBase
         return Results.NoContent();
     }
 
-    public async Task<IResult> UploadCover(HttpContext context, IFileServices fileService)
+    [Consumes("multipart/form-data")]
+    public async Task<IResult> UploadSourceCover(ISender sender, int sourceId, [FromForm] UploadCoverPhotoCommand command)
     {
-        var file = context.Request.Form.Files["file"];
-        if (file == null || file.Length == 0)
-            return Results.BadRequest("الملف غير موجود");
-        using var stream = file.OpenReadStream();
-        var savedPath = await fileService.SaveFileAsync(file.FileName, stream);
-        return Results.Ok(new
-        {
-            FileName = Path.GetFileName(savedPath),
-            FilePath = $"/{savedPath}",
-            FileExtension = Path.GetExtension(savedPath)
-        });
+        if (sourceId != command.SourceId) return Results.BadRequest();
+        await sender.Send(command);
+        return Results.NoContent();
     }
+
     public async Task<IResult> SearchSources([FromBody] SearchSources query, ISender sender)
     {
         var result = await sender.Send(query);

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-namespace SyriacSources.Backend.Domain.Common.Interfaces
+namespace SyriacSources.Backend.Application.Common.Interfaces
 {
     public interface IFileServices
     {
