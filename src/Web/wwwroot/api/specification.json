@@ -7,30 +7,6 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/sources/upload_cover": {
-      "post": {
-        "operationId": "UploadCoverPhoto",
-        "requestBody": {
-          "x-name": "IFormFile",
-          "description": "",
-          "content": {
-            "application/octet-stream": {
-              "schema": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/api/DateFormats/Create": {
       "post": {
         "tags": [
@@ -1194,19 +1170,6 @@
         }
       }
     },
-    "/api/Sources/upload_cover": {
-      "post": {
-        "tags": [
-          "Sources"
-        ],
-        "operationId": "UploadCover",
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/api/Sources/Search": {
       "post": {
         "tags": [
@@ -1225,6 +1188,80 @@
           "required": true,
           "x-position": 1
         },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Sources/UploadSourceCoverPhoto": {
+      "post": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "UploadSourceCover",
+        "parameters": [
+          {
+            "name": "command",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UploadCoverPhotoCommand"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Sources/DeleteAttachment/{id}": {
+      "delete": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "DeleteAttachment",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Sources/DeleteCoverPhoto/{sourceId}": {
+      "delete": {
+        "tags": [
+          "Sources"
+        ],
+        "operationId": "DeleteCoverPhoto",
+        "parameters": [
+          {
+            "name": "sourceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
@@ -2322,6 +2359,25 @@
             "nullable": true
           },
           "period": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UploadCoverPhotoCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sourceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "nullable": true
+          },
+          "fileType": {
             "type": "string",
             "nullable": true
           }

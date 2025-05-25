@@ -6,6 +6,7 @@ using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Sources;
 using SyriacSources.Backend.Application.Sources.Commands;
 using SyriacSources.Backend.Application.Sources.Commands.CreateSource;
+using SyriacSources.Backend.Application.Sources.Commands.DeleteFiles;
 using SyriacSources.Backend.Application.Sources.Commands.UpdateSource;
 using SyriacSources.Backend.Application.Sources.Queries;
 using SyriacSources.Backend.Application.Sources.Queries.SearchSources;
@@ -15,15 +16,18 @@ public class Sources : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup(this)
+        app.MapGroup(this).DisableAntiforgery()
             .MapPost(CreateSource, "Create")
             .MapGet(GetSource, "Get/{id}")
             .MapGet(GetSources, "Get")
             .MapPut(UpdateSource, "Update/{id}")
             .MapDelete(DeleteSource, "Delete/{id}")
             .MapPost(SearchSources, "Search")
-            .MapPost(UploadSourceCover, "UploadSourceCoverPhoto");
-    }
+            .MapPost(UploadSourceCover, "UploadSourceCoverPhoto")
+            .MapDelete(DeleteAttachment, "DeleteAttachment/{id}")
+            .MapDelete(DeleteCoverPhoto, "DeleteCoverPhoto/{sourceId}");
+
+    } 
     public async Task<IResult> CreateSource(ISender sender, CreateSource command)
     {
         var id = await sender.Send(command);
@@ -55,17 +59,26 @@ public class Sources : EndpointGroupBase
     }
 
     [Consumes("multipart/form-data")]
-    public async Task<IResult> UploadSourceCover(ISender sender, int sourceId, [FromForm] UploadCoverPhotoCommand command)
+    public async Task<IResult> UploadSourceCover(ISender sender, [FromForm] UploadCoverPhotoCommand command)
     {
-        if (sourceId != command.SourceId) return Results.BadRequest();
-        await sender.Send(command);
-        return Results.NoContent();
+        var result = await sender.Send(command);
+        return Results.Ok(result);
     }
 
     public async Task<IResult> SearchSources([FromBody] SearchSources query, ISender sender)
     {
         var result = await sender.Send(query);
         return Results.Ok(result);
+    }
+    public async Task<IResult> DeleteAttachment(ISender sender, int id)
+    {
+        await sender.Send(new DeleteAttachmentCommand(id));
+        return Results.NoContent();
+    }
+    public async Task<IResult> DeleteCoverPhoto(ISender sender, int sourceId)
+    {
+        await sender.Send(new DeleteCoverPhotoCommand(sourceId));
+        return Results.NoContent();
     }
 }
 

@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
+using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Sources;
 using SyriacSources.Backend.Application.Sources.Commands.CreateSource;
-using SyriacSources.Backend.Domain.Common.Interfaces;
+//using SyriacSources.Backend.Domain.Common.Interfaces;
 using SyriacSources.Backend.Infrastructure.Common.Services;
 using SyriacSources.Backend.Infrastructure.Data;
 using SyriacSources.Backend.Web.Endpoints;
@@ -103,9 +104,11 @@ app.Map("/", () => Results.Redirect("/api"));
 
 
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+
+
 app.MapEndpoints();
 
 app.UseStaticFiles(); 

@@ -5,7 +5,9 @@ using SyriacSources.Backend.Application.Common.Exceptions;
 using SyriacSources.Backend.Application.Common.Interfaces;
 using SyriacSources.Backend.Application.Sources;
 using SyriacSources.Backend.Domain.Entities;
+
 namespace SyriacSources.Backend.Application.Sources.Queries;
+
 public record GetSource(int Id) : IRequest<SourceDto>;
 public class GetSourceHandler : IRequestHandler<GetSource, SourceDto>
 {
@@ -61,9 +63,9 @@ public class GetSourceHandler : IRequestHandler<GetSource, SourceDto>
             CoverPhoto = entity.CoverPhoto != null
                 ? new CoverPhotoDto
                 {
-                    FileName = entity.CoverPhoto.FileName,
-                    FilePath = entity.CoverPhoto.FilePath,
-                    FileExtension = entity.CoverPhoto.FileExtension
+                    FileName = entity.CoverPhoto.FileName!,
+                    FilePath = entity.CoverPhoto.FilePath!,
+                    FileExtension = entity.CoverPhoto.FileExtension!
                 }
                 : null,
             SourceDates = entity.SourceDates.Select(d => new SourceDateDto
