@@ -14,6 +14,12 @@ public class DeleteDateFormatCommandHandler : IRequestHandler<DeleteDateFormatCo
     {
         var entity = await _context.DateFromats.FindAsync(request.Id);
         Guard.Against.NotFound(request.Id, entity);
+        // تحقق إذا فيه SourceDates مرتبطه بهذا الـ DateFormat
+        bool isUsed = await _context.SourceDates.AnyAsync(sd => sd.DateFormatId == request.Id, cancellationToken);
+        if (isUsed)
+        {
+            throw new InvalidOperationException("لا يمكن حذف هذا التاريخ لأنه مرتبط بمصدر.");
+        }
         _context.DateFromats.Remove(entity);
         await _context.SaveChangesAsync(cancellationToken);
         return Unit.Value;

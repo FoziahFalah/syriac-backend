@@ -50,6 +50,25 @@ public class ApplicationDbContext : IdentityDbContext<IdentityApplicationUser, I
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         builder.ApplyConfiguration(new SourceConfiguration());
         builder.ApplyConfiguration(new SourceDateConfiguration());
-
+        builder.Entity<ExcerptText>()
+       .HasOne(et => et.Editor)
+       .WithMany(u => u.EditedExcerpts)
+       .HasForeignKey(et => et.EditorId)
+       .OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<ExcerptText>()
+            .HasOne(et => et.Reviewer)
+            .WithMany(u => u.ReviewedExcerpts)
+            .HasForeignKey(et => et.ReviewerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<ExcerptText>()
+            .HasOne(et => et.Translator)
+            .WithMany(u => u.TranslatedExcerpts)
+            .HasForeignKey(et => et.TranslatorId)
+            .OnDelete(DeleteBehavior.Restrict);
+        builder.Entity<ExcerptDate>()
+    .HasOne<Excerpt>()                  // يربطه بالأب
+    .WithMany(e => e.ExcerptDates)     // من Excerpt إلى ExcerptDates
+    .HasForeignKey(ed => ed.ExcerptId)
+    .OnDelete(DeleteBehavior.Cascade); // يحذف إذا انحذف الأب
     }
 }

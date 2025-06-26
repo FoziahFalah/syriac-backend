@@ -489,6 +489,181 @@
         }
       }
     },
+    "/api/Excerpts/Create": {
+      "post": {
+        "tags": [
+          "Excerpts"
+        ],
+        "operationId": "CreateExcerpt",
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateExcerpt"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Excerpts/GetAll": {
+      "get": {
+        "tags": [
+          "Excerpts"
+        ],
+        "operationId": "GetAllExcerpts",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExcerptDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Excerpts/Get/{id}": {
+      "get": {
+        "tags": [
+          "Excerpts"
+        ],
+        "operationId": "GetExcerptById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExcerptDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Excerpts/Update/{id}": {
+      "put": {
+        "tags": [
+          "Excerpts"
+        ],
+        "operationId": "UpdateExcerpt",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExcerpt"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Excerpts/Delete/{id}": {
+      "delete": {
+        "tags": [
+          "Excerpts"
+        ],
+        "operationId": "DeleteExcerpt",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/Languages/Create": {
       "post": {
         "tags": [
@@ -1785,6 +1960,250 @@
           },
           "name": {
             "type": "string"
+          }
+        }
+      },
+      "CreateExcerpt": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "sourceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "additionalInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "syriacText": {
+            "$ref": "#/components/schemas/ExcerptTextInput"
+          },
+          "arabicTranslation": {
+            "$ref": "#/components/schemas/ExcerptTextInput"
+          },
+          "foreignTranslation": {
+            "$ref": "#/components/schemas/ExcerptTextInput"
+          },
+          "dates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExcerptDateInput"
+            }
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExcerptCommentInput"
+            }
+          }
+        }
+      },
+      "ExcerptTextInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "languageId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "editorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reviewerId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "translatorId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ExcerptDateInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dateFormatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fromYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "toYear": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ExcerptCommentInput": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "applicationUserId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "details": {
+            "type": "string"
+          }
+        }
+      },
+      "ExcerptDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sourceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "additionalInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "syriacText": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ExcerptTextDto"
+              }
+            ]
+          },
+          "arabicTranslation": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ExcerptTextDto"
+              }
+            ]
+          },
+          "foreignTranslation": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ExcerptTextDto"
+              }
+            ]
+          },
+          "dates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExcerptDateDto"
+            }
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExcerptCommentDto"
+            }
+          }
+        }
+      },
+      "ExcerptTextDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "nullable": true
+          },
+          "languageName": {
+            "type": "string",
+            "nullable": true
+          },
+          "editorName": {
+            "type": "string",
+            "nullable": true
+          },
+          "reviewerName": {
+            "type": "string",
+            "nullable": true
+          },
+          "translatorName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "ExcerptDateDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "dateFormatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dateFormatName": {
+            "type": "string"
+          },
+          "fromYear": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "toYear": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ExcerptCommentDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "details": {
+            "type": "string"
+          },
+          "authorName": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateExcerpt": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sourceId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "additionalInfo": {
+            "type": "string",
+            "nullable": true
+          },
+          "syriacText": {
+            "$ref": "#/components/schemas/ExcerptTextInput"
+          },
+          "arabicTranslation": {
+            "$ref": "#/components/schemas/ExcerptTextInput"
+          },
+          "foreignTranslation": {
+            "$ref": "#/components/schemas/ExcerptTextInput"
+          },
+          "dates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExcerptDateInput"
+            }
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExcerptCommentInput"
+            }
           }
         }
       },
