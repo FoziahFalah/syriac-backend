@@ -15,6 +15,7 @@ COPY Application/Application.csproj Application/
 COPY Domain/Domain.csproj Domain/
 COPY Infrastructure/Infrastructure.csproj Infrastructure/
 # ===== Restore =====
+WORKDIR /src
 RUN dotnet restore SyriacSources.Backend.Web/Web.csproj
 # ===== Copy full source code =====
 COPY . .
