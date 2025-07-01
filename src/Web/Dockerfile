@@ -10,28 +10,31 @@ WORKDIR /src
 # ===== Copy project files =====
 COPY Directory.Packages.props ./
 COPY Directory.Build.props ./
-COPY SyriacSources.Backend.Web/SyriacSources.Backend.Web.csproj SyriacSources.Backend.Web/
+COPY SyriacSources.Backend.Web/Web.csproj SyriacSources.Backend.Web/
 COPY Application/Application.csproj Application/
 COPY Domain/Domain.csproj Domain/
 COPY Infrastructure/Infrastructure.csproj Infrastructure/
-# :white_check_mark: ????? ???? ??????? ??? ?????????
-WORKDIR /src/SyriacSources.Backend.Web
 # ===== Restore =====
-RUN dotnet restore SyriacSources.Backend.Web.csproj
+RUN dotnet restore SyriacSources.Backend.Web/Web.csproj
 # ===== Copy full source code =====
-WORKDIR /src
 COPY . .
 # ===== Build =====
 WORKDIR /src/SyriacSources.Backend.Web
-RUN dotnet build SyriacSources.Backend.Web.csproj -c Release -o /app/build
+RUN dotnet build Web.csproj -c Release -o /app/build
 # ===== Publish =====
 FROM build AS publish
-RUN dotnet publish SyriacSources.Backend.Web.csproj -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish Web.csproj -c Release -o /app/publish /p:UseAppHost=false
 # ===== Final Image =====
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SyriacSources.Backend.Web.dll"]
+ENTRYPOINT ["dotnet", "Web.dll"]
+
+
+
+
+
+
 
 
 
