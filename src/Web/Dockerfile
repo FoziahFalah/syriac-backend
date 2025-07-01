@@ -12,7 +12,7 @@ COPY Application/Application.csproj Application/
 COPY Domain/Domain.csproj Domain/
 COPY Infrastructure/Infrastructure.csproj Infrastructure/
 WORKDIR /src/Web
-RUN dotnet restore Web.csproj
+RUN dotnet restore Web - Copy.csproj
 COPY . .
 RUN dotnet build Web.csproj -c Release -o /app/build
 FROM build AS publish
