@@ -1,7 +1,9 @@
 {
   "build": {
     "env": {
-      "DOTNET_VERSION": "8.0.204"
-    }
-  }
+      "DOTNET_CLI_TELEMETRY_OPTOUT": "1"
+    },
+    "command": "dotnet publish src/Web/Web.csproj -c Release -o out"
+  },
+  "start": "dotnet out/Web.dll"
 }
