@@ -14,9 +14,12 @@ COPY SyriacSources.Backend.Web/SyriacSources.Backend.Web.csproj SyriacSources.Ba
 COPY Application/Application.csproj Application/
 COPY Domain/Domain.csproj Domain/
 COPY Infrastructure/Infrastructure.csproj Infrastructure/
+# :white_check_mark: ????? ???? ??????? ??? ?????????
+WORKDIR /src/SyriacSources.Backend.Web
 # ===== Restore =====
 RUN dotnet restore SyriacSources.Backend.Web.csproj
 # ===== Copy full source code =====
+WORKDIR /src
 COPY . .
 # ===== Build =====
 WORKDIR /src/SyriacSources.Backend.Web
